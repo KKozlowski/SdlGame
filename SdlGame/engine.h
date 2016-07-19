@@ -30,7 +30,10 @@ public:
 
 	renderer *get_renderer() const;
 	input* get_input() const;
-
+	
+	///<summary>
+	///Returns time (in seconds) that passed from start to end of the previous frame.
+	///</summary>
 	static float get_delta_time();
 
 	void run();

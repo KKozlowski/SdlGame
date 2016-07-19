@@ -14,8 +14,18 @@ public:
 	draw_base(actor *a);
 	virtual ~draw_base();
 
-	inline int16_t get_layer() const;
-	inline void set_layer(int16_t new_layer);
+	///<summary>
+	///Gets rendering depth of the object. 
+	///The higher the number, the farther drawing plane.
+	///</summary>
+	inline int16_t get_depth() const;
+
+	///<summary>
+	///Gets rendering depth of the object. 
+	///The higher the number, the farther drawing plane.
+	///</summary>
+	inline void set_depth(int16_t new_layer);
+
 	inline actor *get_actor() const;
 
 	virtual void draw(SDL_Renderer *renderer);

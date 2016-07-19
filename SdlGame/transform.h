@@ -11,10 +11,13 @@ private:
 public:
 	explicit transform(actor *a);
 
-	vector2<float> position;
-	vector2<float> scale;
+	vector2f position;
+	vector2f scale;
 	float rotation;
 
+	///<summary>
+	///Returns an SDL_Rect object with zero width/height, but a proper x/y position.
+	///</summary>
 	SDL_Rect *get_rekt();
 	
 	actor *get_actor() const;

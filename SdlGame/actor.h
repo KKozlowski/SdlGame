@@ -9,7 +9,12 @@ protected:
 	draw_base *drawing;
 public:
 	actor();
+
+	///<summary>
+	///Called every frame. In this method, actor's state should be modified.
+	///</summary>
 	virtual void update();
+
 	inline draw_base *get_draw() const;
 	inline transform *get_transform() const;
 };

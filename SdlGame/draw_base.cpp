@@ -14,12 +14,12 @@ draw_base::~draw_base()
 	engine::get_instance()->get_renderer()->remove_draw(this);
 }
 
-int16_t draw_base::get_layer() const
+int16_t draw_base::get_depth() const
 {
 	return layer;
 }
 
-void draw_base::set_layer(int16_t new_layer)
+void draw_base::set_depth(int16_t new_layer)
 {
 	layer = new_layer;
 }

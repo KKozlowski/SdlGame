@@ -1,18 +1,18 @@
 ﻿#pragma once
 #include "type_check.h"
 #include <type_traits>
+#include <sstream>
 template <typename  T>
 class vector2
 {
-	
 public:
-	
-
 	T x;
 	T y;
 
 	vector2(T x, T y);
 	vector2();
+
+	std::string to_string();
 };
 
 template <typename T>
@@ -32,3 +32,14 @@ vector2<T>::vector2()
 {
 }
 
+template <typename T>
+std::string vector2<T>::to_string()
+{
+	std::stringstream ss;
+	ss << "{ x: " << x << ", y: " << y << " } (vector2)";
+	return ss.str();
+}
+
+
+using vector2f = vector2<float>;
+using point = vector2<int>;

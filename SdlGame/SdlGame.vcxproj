@@ -174,7 +174,6 @@
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="point.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="texture.cpp" />
@@ -193,7 +192,6 @@
     <ClInclude Include="scene.h" />
     <ClInclude Include="type_check.h" />
     <ClInclude Include="input.h" />
-    <ClInclude Include="point.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="transform.h" />

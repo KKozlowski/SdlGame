@@ -5,6 +5,7 @@
 #include <chrono>
 #include "ball.h"
 #include "scene.h"
+#include <iostream>
 
 bool engine::initialize()
 {
@@ -74,10 +75,10 @@ void engine::run()
 	get_scene()->add_actor(b);
 
 	ball *b2 = new ball();
-	b2->get_transform()->position = vector2<float>(100.f, 100.f);
+	b2->get_transform()->position = vector2f(100.f, 100.f);
 
 	ball *b3 = new ball();
-	b3->get_transform()->position = vector2<float>(200.f, 100.f);
+	b3->get_transform()->position = vector2f(200.f, 100.f);
 
 	get_scene()->add_actor(b2);
 	get_scene()->add_actor(b3);
@@ -117,8 +118,6 @@ void engine::run()
 
 		auto mainRenderer = render->get_renderer();
 
-		
-
 		render->set_color(255, 0, 0, 255);
 		SDL_RenderDrawPoint(mainRenderer, 100, 100);
 		SDL_RenderDrawPoint(mainRenderer, 101, 100);
@@ -132,4 +131,6 @@ void engine::run()
 		delta_time = (time_since_epoch_temp - time_since_epoch) * num / den;
 		time_since_epoch = time_since_epoch_temp;
 	}
+
+	delete b, b2, b3;
 }

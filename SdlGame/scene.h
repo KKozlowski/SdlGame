@@ -9,7 +9,11 @@ private:
 public:
 	scene();
 
+	///<summary>
+	///It calls update() method on all the gathered actors.
+	///</summary>
 	void update();
+
 	bool add_actor(actor *a);
 	bool remove_actor(actor *a);
 };
