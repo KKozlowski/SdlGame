@@ -132,5 +132,7 @@ void engine::run()
 		time_since_epoch = time_since_epoch_temp;
 	}
 
-	delete b, b2, b3;
+	delete b;
+	delete b2;
+	delete b3;
 }
