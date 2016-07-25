@@ -9,7 +9,7 @@ protected:
 	draw_base *drawing;
 public:
 	actor();
-
+	~actor();
 	///<summary>
 	///Called every frame. In this method, actor's state should be modified.
 	///</summary>

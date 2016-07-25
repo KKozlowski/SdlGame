@@ -54,6 +54,15 @@
     <ClCompile Include="scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="hero.cpp">
+      <Filter>actors</Filter>
+    </ClCompile>
+    <ClCompile Include="rigidbody.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="actor_component.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -93,6 +102,15 @@
       <Filter>actors</Filter>
     </ClInclude>
     <ClInclude Include="scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hero.h">
+      <Filter>actors</Filter>
+    </ClInclude>
+    <ClInclude Include="rigidbody.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="actor_component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

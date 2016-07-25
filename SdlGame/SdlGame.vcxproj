@@ -168,13 +168,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="actor.cpp" />
+    <ClCompile Include="actor_component.cpp" />
     <ClCompile Include="ball.cpp" />
     <ClCompile Include="draw_base.cpp" />
     <ClCompile Include="draw_texture.cpp" />
     <ClCompile Include="engine.cpp" />
+    <ClCompile Include="hero.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="rigidbody.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="transform.cpp" />
@@ -185,10 +188,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="actor.h" />
+    <ClInclude Include="actor_component.h" />
     <ClInclude Include="ball.h" />
     <ClInclude Include="draw_base.h" />
     <ClInclude Include="draw_texture.h" />
     <ClInclude Include="engine.h" />
+    <ClInclude Include="hero.h" />
+    <ClInclude Include="rigidbody.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="type_check.h" />
     <ClInclude Include="input.h" />

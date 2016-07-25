@@ -9,6 +9,10 @@ ball::ball()
 	drawing = dt;
 }
 
+ball::~ball()
+{
+}
+
 void ball::update()
 {
 	get_transform()->position.x += engine::get_delta_time()*100;

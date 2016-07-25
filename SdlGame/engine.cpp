@@ -6,6 +6,7 @@
 #include "ball.h"
 #include "scene.h"
 #include <iostream>
+#include "hero.h"
 
 bool engine::initialize()
 {
@@ -75,10 +76,10 @@ void engine::run()
 	get_scene()->add_actor(b);
 
 	ball *b2 = new ball();
-	b2->get_transform()->position = vector2f(100.f, 100.f);
+	b2->get_transform()->position = vector2f(0.f, 720.f);
 
-	ball *b3 = new ball();
-	b3->get_transform()->position = vector2f(200.f, 100.f);
+	ball *b3 = new hero();
+	b3->get_transform()->position = vector2f(640.f, 360.f);
 
 	get_scene()->add_actor(b2);
 	get_scene()->add_actor(b3);
