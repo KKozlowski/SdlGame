@@ -16,4 +16,5 @@ public:
 
 	bool add_actor(actor *a);
 	bool remove_actor(actor *a);
+	void remove_actors(std::initializer_list<actor *> a);
 };

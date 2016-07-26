@@ -23,3 +23,9 @@ bool scene::remove_actor(actor* a)
 	actors->erase(a);
 	return true;
 }
+
+void scene::remove_actors(std::initializer_list<actor*> a)
+{
+	for (actor *ac : a)
+		remove_actor(ac);
+}

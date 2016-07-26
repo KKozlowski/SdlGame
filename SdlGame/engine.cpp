@@ -132,6 +132,7 @@ void engine::run()
 		delta_time = (time_since_epoch_temp - time_since_epoch) * num / den;
 		time_since_epoch = time_since_epoch_temp;
 	}
+	get_scene()->remove_actors({ b, b2, b3 });
 
 	delete b;
 	delete b2;
