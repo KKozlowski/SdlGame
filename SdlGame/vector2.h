@@ -2,6 +2,7 @@
 #include "type_check.h"
 #include <type_traits>
 #include <sstream>
+
 template <typename  T>
 class vector2
 {

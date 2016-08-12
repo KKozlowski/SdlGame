@@ -3,7 +3,7 @@
 #include "engine.h"
 #include "vector2.h"
 
-std::unique_ptr<texture> texture::instance;
+std::unique_ptr<texture> texture::instance(nullptr);
 
 texture::texture()
 {
@@ -60,6 +60,6 @@ SDL_Texture* texture::get(std::string filename)
 SDL_Texture* texture::get_texture(std::string filename)
 {
 	if (instance.get() == nullptr)
-		instance.reset(new texture());
+		instance = std::unique_ptr<texture>(new texture());
 	return instance.get()->get(filename);
 }

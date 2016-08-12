@@ -19,7 +19,7 @@ public:
 	inline transform *get_transform() const;
 };
 
-inline transform* actor::get_transform() const
+transform* actor::get_transform() const
 {
 	return transform_;
 }
