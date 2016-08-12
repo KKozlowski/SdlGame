@@ -23,3 +23,8 @@ transform* actor::get_transform() const
 {
 	return m_transform;
 }
+
+draw_base* actor::get_draw() const
+{
+	return drawing;
+}

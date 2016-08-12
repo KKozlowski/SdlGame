@@ -33,8 +33,17 @@ void draw_texture::draw(SDL_Renderer *renderer, camera* cam)
 		sum.y -= sum.h / 2;
 	}
 
-	sum = cam->transform_rect(sum);
+	sum = cam->translate_rect(sum);
 
 	SDL_RenderCopy(renderer, thatTexture, nullptr, &sum);
 	//Stuff
+}
+
+bool draw_texture::set_width_height(int W, int H)
+{
+	if (W <= 0 || H <= 0)
+		return false;
+
+	stretchRect.w = W;
+	stretchRect.h = H;
 }

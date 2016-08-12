@@ -23,7 +23,7 @@ public:
 		return  (m_renderer->SCREEN_HEIGHT / 2)/ view_radius;
 	}
 
-	SDL_Rect transform_rect(SDL_Rect origin)
+	SDL_Rect translate_rect(SDL_Rect origin)
 	{
 		float scal = get_scale();
 

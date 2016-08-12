@@ -13,4 +13,6 @@ public:
 	bool centered;
 	explicit draw_texture(actor* a, std::string filename);
 	void draw(SDL_Renderer *renderer, camera *cam) override;
+
+	bool set_width_height(int W, int H);
 };

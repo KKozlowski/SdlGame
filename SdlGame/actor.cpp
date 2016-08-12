@@ -1,5 +1,6 @@
 ﻿#include "actor.h"
 #include <iostream>
+#include "draw_base.h"
 
 actor::actor()
 {
@@ -18,8 +19,5 @@ void actor::update()
 {
 }
 
-draw_base* actor::get_draw() const
-{
-	return drawing;
-}
+
 
