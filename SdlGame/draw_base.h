@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include "transform.h"
 
+class camera;
 class actor;
 
 class draw_base
@@ -28,5 +29,5 @@ public:
 
 	inline actor *get_actor() const;
 
-	virtual void draw(SDL_Renderer *renderer);
+	virtual void draw(SDL_Renderer *renderer, camera *cam);
 };

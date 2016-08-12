@@ -29,6 +29,6 @@ actor* draw_base::get_actor() const
 	return lActor;
 }
 
-void draw_base::draw(SDL_Renderer *renderer)
+void draw_base::draw(SDL_Renderer* renderer, camera* cam)
 {
 }

@@ -4,7 +4,7 @@
 class actor
 {
 private:
-	transform *transform_;
+	transform *m_transform;
 protected:
 	draw_base *drawing;
 public:
@@ -21,5 +21,5 @@ public:
 
 transform* actor::get_transform() const
 {
-	return transform_;
+	return m_transform;
 }

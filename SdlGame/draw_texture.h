@@ -12,5 +12,5 @@ private:
 public:
 	bool centered;
 	explicit draw_texture(actor* a, std::string filename);
-	void draw(SDL_Renderer *renderer) override;
+	void draw(SDL_Renderer *renderer, camera *cam) override;
 };

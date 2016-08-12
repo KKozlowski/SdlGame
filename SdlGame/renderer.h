@@ -4,6 +4,7 @@
 #include <set>
 #include <cstdio>
 
+class camera;
 
 class renderer
 {
@@ -12,6 +13,8 @@ private:
 	SDL_Window* mainWindow = nullptr;
 	SDL_Surface* screenSurface = nullptr;
 	static bool sdl_initialized;
+
+	camera *m_camera;
 
 	std::set<draw_base *> *drawed;
 public:
@@ -25,6 +28,7 @@ public:
 
 	SDL_Renderer *get_renderer() const;
 	SDL_Window *get_window() const;
+	camera *get_camera() const;
 
 	void clear();
 	void clear(Uint8 r, Uint8 g, Uint8 b);

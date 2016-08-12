@@ -1,4 +1,5 @@
 ﻿#include "renderer.h"
+#include "camera.h"
 
 bool renderer::sdl_initialized = false;
 
@@ -34,6 +35,8 @@ void renderer::close_sdl()
 renderer::renderer()
 {
 	initialize_sdl();
+
+	m_camera = new camera(point(640,360), SCREEN_HEIGHT , this);
 
 	mainWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (mainWindow == nullptr)
@@ -79,6 +82,11 @@ SDL_Window* renderer::get_window() const
 	return mainWindow;
 }
 
+camera* renderer::get_camera() const
+{
+	return m_camera;
+}
+
 void renderer::clear()
 {
 	clear(255, 255, 255);
@@ -112,7 +120,7 @@ void renderer::draw()
 	//Clear screen
 	clear();
 	for (draw_base *d : *drawed)
-		d->draw(mainRenderer);
+		d->draw(mainRenderer, m_camera);
 
 	SDL_RenderPresent(mainRenderer);
 }

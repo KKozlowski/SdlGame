@@ -1,6 +1,7 @@
 ﻿#include "hero.h"
 #include "input.h"
 #include "engine.h"
+#include "camera.h"
 
 hero::hero()
 {
@@ -28,4 +29,6 @@ void hero::update()
 		m_rigidbody->velocity += vector2f(engine::get_delta_time()*move_speed, 0);
 
 	m_rigidbody->update();
+
+	engine::get_instance()->get_renderer()->get_camera()->center = point(get_transform()->position.x, get_transform()->position.y);
 }

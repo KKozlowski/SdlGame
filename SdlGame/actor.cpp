@@ -3,14 +3,14 @@
 
 actor::actor()
 {
-	transform_ = new transform(this);
+	m_transform = new transform(this);
 	point *p = new point();
 	delete p;
 }
 
 actor::~actor()
 {
-	delete transform_;
+	delete m_transform;
 	delete drawing;
 }
 

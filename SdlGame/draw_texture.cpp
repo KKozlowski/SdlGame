@@ -1,5 +1,7 @@
 ﻿#include "draw_texture.h"
 #include "actor.h"
+#include "camera.h"
+
 draw_texture::draw_texture(actor* a, std::string filename)
 	: draw_base(a)
 {
@@ -15,9 +17,9 @@ draw_texture::draw_texture(actor* a, std::string filename)
 	stretchRect.h = 120;
 }
 
-void draw_texture::draw(SDL_Renderer *renderer)
+void draw_texture::draw(SDL_Renderer *renderer, camera* cam)
 {
-	draw_base::draw(renderer);
+	draw_base::draw(renderer, cam);
 
 	SDL_Rect *transformRekt = lActor->get_transform()->get_rekt();
 
@@ -30,6 +32,8 @@ void draw_texture::draw(SDL_Renderer *renderer)
 		sum.x -= sum.w / 2;
 		sum.y -= sum.h / 2;
 	}
+
+	sum = cam->transform_rect(sum);
 
 	SDL_RenderCopy(renderer, thatTexture, nullptr, &sum);
 	//Stuff

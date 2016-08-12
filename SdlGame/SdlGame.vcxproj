@@ -170,6 +170,7 @@
     <ClCompile Include="actor.cpp" />
     <ClCompile Include="actor_component.cpp" />
     <ClCompile Include="ball.cpp" />
+    <ClCompile Include="camera.cpp" />
     <ClCompile Include="draw_base.cpp" />
     <ClCompile Include="draw_texture.cpp" />
     <ClCompile Include="engine.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="actor.h" />
     <ClInclude Include="actor_component.h" />
     <ClInclude Include="ball.h" />
+    <ClInclude Include="camera.h" />
     <ClInclude Include="draw_base.h" />
     <ClInclude Include="draw_texture.h" />
     <ClInclude Include="engine.h" />
