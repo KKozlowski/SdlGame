@@ -13,6 +13,11 @@ protected:
 	tile *destination_tile;
 	vector2f previous_dir;
 	float movement_progress;
+	bool falling;
+
+	float speed = 2.f;
+
+	void set_current_tile(tile *t);
 public:
 	hero(tile *start_tile, level_grid * lg);
 	~hero();

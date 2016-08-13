@@ -8,9 +8,18 @@
 #include "level_grid.h"
 #include <iostream>
 
+void hero::set_current_tile(tile* t)
+{
+	current_tile = t;
+	if (current_tile->empty_over_empty())
+		falling = true;
+	else if (current_tile->over_solid())
+		falling = false;
+}
+
 hero::hero(tile *start_tile, level_grid *lg)
 {
-	current_tile = start_tile;
+	set_current_tile(start_tile);
 	float tilesize = lg->get_tilesize();
 
 	static_cast<draw_texture *>(get_draw())->set_width_height(tilesize, tilesize);
@@ -39,6 +48,8 @@ bool hero::can_jump_to_destination() const
 void hero::update()
 {
 	vector2f zero;
+	vector2f position = get_transform()->position;
+	vector2f current_tile_position = current_tile->get_transform()->position;
 	engine::get_instance()->get_renderer()->get_camera()->center = point(get_transform()->position.x, get_transform()->position.y);
 
 	input *inp = engine::get_instance()->get_input();
@@ -46,38 +57,48 @@ void hero::update()
 	vector2f dir;
 	tile *old_destination = destination_tile;
 
-	if (inp->get_key(SDLK_w))
+	if (falling)
 	{
-		if (current_tile->can_up())
+		dir = { 0,1 };
+		destination_tile = current_tile->get_down();
+	}
+	else
+	{
+		if (inp->get_key(SDLK_w))
 		{
-			dir = { 0,-1 };
-			destination_tile = current_tile->get_up();
+			if (current_tile->can_up() || position.y > current_tile_position.y)
+			{
+				dir = { 0,-1 };
+				destination_tile = current_tile->get_up();
+			}
+		}
+		else if (inp->get_key(SDLK_s))
+		{
+			if (current_tile->can_down() || position.y < current_tile_position.y)
+			{
+				dir = { 0,1 };
+				destination_tile = current_tile->get_down();
+			}
+		}
+		else if (inp->get_key(SDLK_a))
+		{
+
+			if (current_tile->can_left() || position.x > current_tile_position.x)
+			{
+				dir = { -1,0 };
+				destination_tile = current_tile->get_left();
+			}
+		}
+		else if (inp->get_key(SDLK_d) )
+		{
+			if (current_tile->can_right() || position.x < current_tile_position.x)
+			{
+				dir = { 1,0 };
+				destination_tile = current_tile->get_right();
+			}
 		}
 	}
-	else if (inp->get_key(SDLK_s))
-	{
-		if (current_tile->can_down())
-		{
-			dir = { 0,1 };
-			destination_tile = current_tile->get_down();
-		}
-	}
-	else if (inp->get_key(SDLK_a))
-	{
-		if (current_tile->can_left())
-		{
-			dir = { -1,0 };
-			destination_tile = current_tile->get_left();
-		}	
-	}
-	else if (inp->get_key(SDLK_d))
-	{
-		if (current_tile->can_right())
-		{
-			dir = { 1,0 };
-			destination_tile = current_tile->get_right();
-		}
-	}
+	
 	
 	if (dir == zero)
 		return;
@@ -85,7 +106,7 @@ void hero::update()
 	if ((previous_dir * dir) == zero) { //movement direction changed completely.
 		if (can_jump_to_destination()) {
 			get_transform()->position = destination_tile->get_transform()->position;
-			current_tile = destination_tile;
+			set_current_tile(destination_tile);
 		}
 			else
 				get_transform()->position = current_tile->get_transform()->position;
@@ -97,14 +118,14 @@ void hero::update()
 		movement_progress = -movement_progress;
 	} else //nothing changed
 	{
-		movement_progress += engine::get_delta_time() * 1;
+		movement_progress += engine::get_delta_time() * speed;
 		if (destination_tile == nullptr)
 			get_transform()->position = current_tile->get_transform()->position;
 		else
 		{
 			if (movement_progress >=1)
 			{
-				current_tile = destination_tile;
+				set_current_tile(destination_tile);
 				get_transform()->position = destination_tile->get_transform()->position;
 				movement_progress -= 1;
 

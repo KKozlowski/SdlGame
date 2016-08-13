@@ -66,6 +66,16 @@ bool tile::can_right()
 	return false;
 }
 
+bool tile::empty_over_empty()
+{
+	return m_type == tile_type::empty && get_down() != nullptr && get_down()->get_type() == tile_type::empty;
+}
+
+bool tile::over_solid()
+{
+	return get_down() == nullptr || get_down()->get_type() == tile_type::wall || get_down()->get_type() == tile_type::ladder;
+}
+
 vector2f tile::poition_lerp(tile* start, tile* end, float percent)
 {
 	vector2f diff = end->get_transform()->position - start->get_transform()->position;

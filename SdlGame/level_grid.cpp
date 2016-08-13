@@ -38,8 +38,11 @@ level_grid::level_grid(std::string filename, float tilesize, point start)
 				break;
 			case '@':
 				tile = new empty_tile(col, row, this);
-				m_hero = new hero(tile, this);
-				engine::get_instance()->get_scene()->add_actor(m_hero);
+				if (m_hero == nullptr)
+				{
+					m_hero = new hero(tile, this);
+					engine::get_instance()->get_scene()->add_actor(m_hero);
+				}
 				break;;
 			default:
 				tile = new empty_tile(col, row, this);

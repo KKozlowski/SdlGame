@@ -55,5 +55,8 @@ public:
 	virtual bool can_left();
 	virtual bool can_right();
 
+	bool empty_over_empty();
+	bool over_solid();
+
 	static vector2f poition_lerp(tile *start, tile *end, float percent);
 };
