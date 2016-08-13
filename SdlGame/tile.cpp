@@ -4,4 +4,6 @@ tile::tile(int x, int y, level_grid* l)
 {
 	indices = point(x, y);
 	m_level = l;
+	drawing = new draw_texture(this, "");
+	get_tex_draw()->centered = true;
 }

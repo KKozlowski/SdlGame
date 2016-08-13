@@ -9,7 +9,7 @@ hero::hero()
 	m_rigidbody = new rigidbody(this);
 	m_rigidbody->drag = 0.7f;
 
-	static_cast<draw_texture *>(get_draw())->set_width_height(200, 200);
+	static_cast<draw_texture *>(get_draw())->set_width_height(160, 160);
 }
 
 hero::~hero()

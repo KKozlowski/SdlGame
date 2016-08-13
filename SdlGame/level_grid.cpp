@@ -5,6 +5,7 @@
 #include "engine.h"
 #include "scene.h"
 #include "draw_texture.h"
+#include "pipe.h"
 
 level_grid::level_grid(std::string filename, float tilesize, point start)
 {
@@ -18,12 +19,27 @@ level_grid::level_grid(std::string filename, float tilesize, point start)
 		for (char c : line)
 		{
 			std::cout << c;
-			if (c != ' ')
+			tile *tile = nullptr;
+
+			switch(c)
 			{
-				ball *b2 = new ball();
-				b2->get_transform()->position = vector2f(tilesize * col, tilesize * row);
-				static_cast<draw_texture *>(b2->get_draw())->set_width_height(tilesize, tilesize);
-				engine::get_instance()->get_scene()->add_actor(b2);
+			case '#':
+				tile = new wall(col, row, this);
+				break;
+			case '=':
+				tile = new ladder(col, row, this);
+				break;
+			case '-':
+				tile = new pipe(col, row, this);
+				break;
+			default:
+				tile = new empty_tile(col, row, this);
+			}
+
+			if (tile != nullptr) {
+				tile->get_transform()->position = vector2f(tilesize * col, tilesize * row);
+				tile->get_tex_draw()->set_width_height(tilesize, tilesize);
+				engine::get_instance()->get_scene()->add_actor(tile);
 			}
 			++col;
 		}

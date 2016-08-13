@@ -177,8 +177,10 @@
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="hero.cpp" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="ladder.cpp" />
     <ClCompile Include="level_grid.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="pipe.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="rigidbody.cpp" />
     <ClCompile Include="scene.cpp" />
@@ -201,10 +203,14 @@
     <ClInclude Include="empty_tile.h" />
     <ClInclude Include="engine.h" />
     <ClInclude Include="hero.h" />
+    <ClInclude Include="ladder.h" />
     <ClInclude Include="level_grid.h" />
+    <ClInclude Include="pipe.h" />
     <ClInclude Include="rigidbody.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="tile.h" />
+    <ClInclude Include="tileset.h" />
+    <ClInclude Include="tile_type.h" />
     <ClInclude Include="type_check.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="renderer.h" />

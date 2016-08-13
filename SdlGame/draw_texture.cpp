@@ -5,10 +5,11 @@
 draw_texture::draw_texture(actor* a, std::string filename)
 	: draw_base(a)
 {
-	if (!set_texture(filename))
-	{
-		printf("Failed to load texture image!\n");
-	}
+	if (filename != "")
+		if (!set_texture(filename))
+		{
+			printf("Failed to load texture image!\n");
+		}
 
 	stretchRect.x = 0;
 	stretchRect.y = 0;

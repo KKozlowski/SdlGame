@@ -1,8 +1,10 @@
 ﻿#pragma once
 #include "actor.h"
 #include "vector2.h"
-#include "level_grid.h"
 #include "draw_texture.h"
+#include "tile_type.h"
+
+class level_grid;
 
 class tile : public actor
 {
@@ -10,6 +12,7 @@ private:
 	level_grid *m_level;
 protected:
 	point indices;
+	tile_type m_type;
 public:
 	int get_Xpos() const
 	{ return indices.x; }
@@ -31,5 +34,10 @@ public:
 	draw_texture *get_tex_draw() const
 	{
 		return static_cast<draw_texture*>(drawing);
+	}
+
+	tile_type get_type() const
+	{
+		return m_type;
 	}
 };

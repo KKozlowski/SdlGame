@@ -81,6 +81,12 @@
     <ClCompile Include="level_grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ladder.cpp">
+      <Filter>actors\tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="pipe.cpp">
+      <Filter>actors\tiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -145,6 +151,18 @@
     </ClInclude>
     <ClInclude Include="level_grid.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tile_type.h">
+      <Filter>actors\tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="tileset.h">
+      <Filter>actors\tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="ladder.h">
+      <Filter>actors\tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="pipe.h">
+      <Filter>actors\tiles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
