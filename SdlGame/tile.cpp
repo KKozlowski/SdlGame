@@ -11,6 +11,26 @@ tile::tile(int x, int y, level_grid* l)
 	get_tex_draw()->set_depth(10);
 }
 
+tile* tile::get_up()
+{
+	return m_level->get(indices.x, indices.y - 1);
+}
+
+tile* tile::get_down()
+{
+	return m_level->get(indices.x, indices.y + 1);
+}
+
+tile* tile::get_left()
+{
+	return m_level->get(indices.x - 1, indices.y);
+}
+
+tile* tile::get_right()
+{
+	return m_level->get(indices.x + 1, indices.y);
+}
+
 bool tile::can_up()
 {
 	return false;
@@ -18,7 +38,7 @@ bool tile::can_up()
 
 bool tile::can_down()
 {
-	tile *down = m_level->get(indices.x, indices.y + 1);
+	tile *down = get_down();
 	//std::cout << (down == nullptr);
 	if (!down) return false;
 	if (down->get_type() != tile_type::wall) return true;
@@ -28,7 +48,7 @@ bool tile::can_down()
 
 bool tile::can_left()
 {
-	tile *t = m_level->get(indices.x-1, indices.y);
+	tile *t = get_left();
 
 	if (!t) return false;
 	if (t->get_type() != tile_type::wall) return true;
@@ -38,7 +58,7 @@ bool tile::can_left()
 
 bool tile::can_right()
 {
-	tile *t = m_level->get(indices.x+1, indices.y);
+	tile *t = get_right();
 
 	if (!t) return false;
 	if (t->get_type() != tile_type::wall) return true;
@@ -46,4 +66,9 @@ bool tile::can_right()
 	return false;
 }
 
+vector2f tile::poition_lerp(tile* start, tile* end, float percent)
+{
+	vector2f diff = end->get_transform()->position - start->get_transform()->position;
+	return start->get_transform()->position + diff*percent;
+}
 

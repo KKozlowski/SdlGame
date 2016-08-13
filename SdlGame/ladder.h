@@ -7,4 +7,5 @@ class ladder : public tile
 {
 public:
 	ladder(int x, int y, level_grid* l);
+	bool can_up() override;
 };

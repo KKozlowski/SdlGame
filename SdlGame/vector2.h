@@ -19,8 +19,15 @@ public:
 	vector2<T> & operator -=(const vector2<T> &);
 
 	vector2<T> operator *(const float & multipl) const;
+	vector2<T> operator *(const vector2<T> & multipl) const;
+
+	bool operator==(const vector2<T>& rhs) const;
+
+	bool operator!=(const vector2<T>& rhs) const;
 
 	vector2<T> normalized();
+
+	float length();
 	
 	void cut_negative();
 
@@ -92,12 +99,36 @@ vector2<T> vector2<T>::operator*(const float& miltipl) const
 }
 
 template <typename T>
+vector2<T> vector2<T>::operator*(const vector2<T>& multipl) const
+{
+	return vector2<T>(this->x * multipl.x, this->y * multipl.y);
+}
+
+template <typename T>
+bool vector2<T>::operator==(const vector2<T>& rhs) const
+{
+	return this->x == rhs.x && this->y == rhs.y;
+}
+
+template <typename T>
+bool vector2<T>::operator!=(const vector2<T>& rhs) const
+{
+	return !(*this == rhs);
+}
+
+template <typename T>
 vector2<T> vector2<T>::normalized()
 {
 	double sum = x + y;
 	if (sum == 0)
 		return vector2<T>(0, 0);
 	return vector2<T>(x / sum, y / sum);
+}
+
+template <typename T>
+float vector2<T>::length()
+{
+	return sqrt(x*x + y*y);
 }
 
 template <typename T>
@@ -115,10 +146,9 @@ std::string vector2<T>::to_string()
 	return ss.str();
 }
 
-
-
 using vector2f = vector2<float>;
 using point = vector2<int>;
 
 const vector2f vector2f_zero(0, 0);
 const vector2f vector2f_one(1, 1);
+

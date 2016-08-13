@@ -25,19 +25,94 @@ hero::~hero()
 
 }
 
+bool hero::can_jump_to_destination() const
+{
+	if (destination_tile == nullptr) return false;
+
+	vector2f position = get_transform()->position;
+	vector2f origin_position = current_tile->get_transform()->position;
+	vector2f destiny_position = destination_tile->get_transform()->position;
+
+	return (destiny_position - position).length() < (origin_position - position).length();
+}
+
 void hero::update()
 {
+	vector2f zero;
+	engine::get_instance()->get_renderer()->get_camera()->center = point(get_transform()->position.x, get_transform()->position.y);
+
 	input *inp = engine::get_instance()->get_input();
-	//get_transform()->position.x += engine::get_delta_time() * 100;
+
+	vector2f dir;
+	tile *old_destination = destination_tile;
 
 	if (inp->get_key(SDLK_w))
-		get_transform()->position -= vector2f(0, engine::get_delta_time()*move_speed);
-	if (inp->get_key(SDLK_s))
-		get_transform()->position += vector2f(0, engine::get_delta_time()*move_speed);
-	if (inp->get_key(SDLK_a))
-		get_transform()->position -= vector2f(engine::get_delta_time()*move_speed,0);
-	if (inp->get_key(SDLK_d))
-		get_transform()->position += vector2f(engine::get_delta_time()*move_speed, 0);
+	{
+		if (current_tile->can_up())
+		{
+			dir = { 0,-1 };
+			destination_tile = current_tile->get_up();
+		}
+	}
+	else if (inp->get_key(SDLK_s))
+	{
+		if (current_tile->can_down())
+		{
+			dir = { 0,1 };
+			destination_tile = current_tile->get_down();
+		}
+	}
+	else if (inp->get_key(SDLK_a))
+	{
+		if (current_tile->can_left())
+		{
+			dir = { -1,0 };
+			destination_tile = current_tile->get_left();
+		}	
+	}
+	else if (inp->get_key(SDLK_d))
+	{
+		if (current_tile->can_right())
+		{
+			dir = { 1,0 };
+			destination_tile = current_tile->get_right();
+		}
+	}
+	
+	if (dir == zero)
+		return;
 
-	engine::get_instance()->get_renderer()->get_camera()->center = point(get_transform()->position.x, get_transform()->position.y);
+	if ((previous_dir * dir) == zero) { //movement direction changed completely.
+		if (can_jump_to_destination()) {
+			get_transform()->position = destination_tile->get_transform()->position;
+			current_tile = destination_tile;
+		}
+			else
+				get_transform()->position = current_tile->get_transform()->position;
+
+		movement_progress = 0;
+	}
+
+	else if (previous_dir != dir && (previous_dir * dir) != zero) { //direction has changed, but not the axis.
+		movement_progress = -movement_progress;
+	} else //nothing changed
+	{
+		movement_progress += engine::get_delta_time() * 1;
+		if (destination_tile == nullptr)
+			get_transform()->position = current_tile->get_transform()->position;
+		else
+		{
+			if (movement_progress >=1)
+			{
+				current_tile = destination_tile;
+				get_transform()->position = destination_tile->get_transform()->position;
+				movement_progress -= 1;
+
+				//destination_tile = nullptr;
+			} else
+				get_transform()->position = tile::poition_lerp(current_tile, destination_tile, movement_progress);
+		}
+	}
+
+	previous_dir = dir;
 }

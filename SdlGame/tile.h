@@ -44,9 +44,16 @@ public:
 		return m_type;
 	}
 
+	tile *get_up();
+	tile *get_down();
+	tile *get_left();
+	tile *get_right();
+
 	virtual bool can_up();
 	virtual bool can_down();
 	
 	virtual bool can_left();
 	virtual bool can_right();
+
+	static vector2f poition_lerp(tile *start, tile *end, float percent);
 };
