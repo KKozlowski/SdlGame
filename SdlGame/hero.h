@@ -11,7 +11,7 @@ protected:
 	float move_speed = 210;
 	tile *current_tile;
 	tile *destination_tile;
-	vector2f previous_dir;
+	point previous_dir;
 	level_grid *m_levelgrid;
 	float movement_progress;
 	bool falling;

@@ -12,7 +12,10 @@ void hero::set_current_tile(tile* t)
 {
 	
 	if (t->empty_over_empty())
+	{
 		falling = true;
+	}
+		
 	else if (t->over_solid())
 		falling = false;
 
@@ -50,14 +53,14 @@ bool hero::can_jump_to_destination() const
 
 void hero::update()
 {
-	vector2f zero;
+	point zero;
 	vector2f position = get_transform()->position;
 	vector2f current_tile_position = current_tile->get_transform()->position;
 	engine::get_instance()->get_renderer()->get_camera()->center = point(get_transform()->position.x, get_transform()->position.y);
 
 	input *inp = engine::get_instance()->get_input();
 
-	vector2f dir;
+	point dir;
 	tile *old_destination = destination_tile;
 
 	if (falling)
@@ -69,59 +72,60 @@ void hero::update()
 	{
 		if (inp->get_key(SDLK_w))
 		{
-			if (current_tile->can_up() || position.y > current_tile_position.y)
+			if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_up())
+			{
+				dir = { 0,-1 };
+				set_current_tile(destination_tile);
+				movement_progress -= 1;
+				destination_tile = current_tile->get_up();
+			} else if (current_tile->can_up() || position.y > current_tile_position.y)
 			{
 				dir = { 0,-1 };
 				destination_tile = current_tile->get_up();
-			} else if (can_jump_to_destination() && destination_tile->can_up())
-			{
-				dir = { 0,-1 };
-				current_tile = destination_tile;
-				destination_tile = current_tile->get_up();
-			}
+			} 
 		}
 		else if (inp->get_key(SDLK_s))
 		{
-			if (current_tile->can_down() || position.y < current_tile_position.y)
+			if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_down())
+			{
+				dir = { 0,1 };
+				set_current_tile(destination_tile);
+				movement_progress -= 1;
+				destination_tile = current_tile->get_down();
+			} else if (current_tile->can_down() || position.y < current_tile_position.y)
 			{
 				dir = { 0,1 };
 				destination_tile = current_tile->get_down();
 				if (destination_tile->get_type() == tile_type::empty)
 					falling = true;
 			}
-			else if (can_jump_to_destination() && destination_tile->can_down())
-			{
-				dir = { 0,1 };
-				current_tile = destination_tile;
-				destination_tile = current_tile->get_down();
-			}
 		}
 		else if (inp->get_key(SDLK_a))
 		{
 
-			if (current_tile->can_left() || position.x > current_tile_position.x)
+			if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_left())
 			{
 				dir = { -1,0 };
+				set_current_tile(destination_tile);
+				movement_progress -= 1;
 				destination_tile = current_tile->get_left();
-			}
-			else if (can_jump_to_destination() && destination_tile->can_left())
+			} else if (current_tile->can_left() || position.x > current_tile_position.x)
 			{
 				dir = { -1,0 };
-				current_tile = destination_tile;
 				destination_tile = current_tile->get_left();
 			}
 		}
 		else if (inp->get_key(SDLK_d) )
 		{
-			if (current_tile->can_right() || position.x < current_tile_position.x)
+			if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_left())
 			{
 				dir = { 1,0 };
+				set_current_tile(destination_tile);
+				movement_progress -=1;
 				destination_tile = current_tile->get_right();
-			}
-			else if (can_jump_to_destination() && destination_tile->can_left())
+			} else if (current_tile->can_right() || position.x < current_tile_position.x)
 			{
 				dir = { 1,0 };
-				current_tile = destination_tile;
 				destination_tile = current_tile->get_right();
 			}
 		}

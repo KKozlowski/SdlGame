@@ -31,6 +31,11 @@ tile* tile::get_right()
 	return m_level->get(indices.x + 1, indices.y);
 }
 
+tile* tile::get_neighbor(point offset)
+{
+	return m_level->get(indices.x + offset.x, indices.y + offset.y);
+}
+
 bool tile::can_up()
 {
 	return false;

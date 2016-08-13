@@ -48,6 +48,7 @@ public:
 	tile *get_down();
 	tile *get_left();
 	tile *get_right();
+	tile *get_neighbor(point offset);
 
 	virtual bool can_up();
 	virtual bool can_down();
