@@ -10,11 +10,13 @@
 
 void hero::set_current_tile(tile* t)
 {
-	current_tile = t;
-	if (current_tile->empty_over_empty())
+	
+	if (t->empty_over_empty())
 		falling = true;
-	else if (current_tile->over_solid())
+	else if (t->over_solid())
 		falling = false;
+
+	current_tile = t;
 }
 
 hero::hero(tile *start_tile, level_grid *lg)
@@ -78,6 +80,8 @@ void hero::update()
 			{
 				dir = { 0,1 };
 				destination_tile = current_tile->get_down();
+				if (destination_tile->get_type() == tile_type::empty)
+					falling = true;
 			}
 		}
 		else if (inp->get_key(SDLK_a))
@@ -131,7 +135,7 @@ void hero::update()
 
 				//destination_tile = nullptr;
 			} else
-				get_transform()->position = tile::poition_lerp(current_tile, destination_tile, movement_progress);
+				get_transform()->position = tile::position_lerp(current_tile, destination_tile, movement_progress);
 		}
 	}
 
