@@ -12,10 +12,12 @@ protected:
 	tile *current_tile;
 	tile *destination_tile;
 	vector2f previous_dir;
+	level_grid *m_levelgrid;
 	float movement_progress;
 	bool falling;
 
 	float speed = 2.f;
+	float adjustment_jump_tolerance = 0.25f;
 
 	void set_current_tile(tile *t);
 public:

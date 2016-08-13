@@ -22,6 +22,7 @@ void hero::set_current_tile(tile* t)
 hero::hero(tile *start_tile, level_grid *lg)
 {
 	set_current_tile(start_tile);
+	m_levelgrid = lg;
 	float tilesize = lg->get_tilesize();
 
 	static_cast<draw_texture *>(get_draw())->set_width_height(tilesize, tilesize);
@@ -44,7 +45,7 @@ bool hero::can_jump_to_destination() const
 	vector2f origin_position = current_tile->get_transform()->position;
 	vector2f destiny_position = destination_tile->get_transform()->position;
 
-	return (destiny_position - position).length() < (origin_position - position).length();
+	return (destiny_position - position).length() < m_levelgrid->get_tilesize()* adjustment_jump_tolerance;
 }
 
 void hero::update()
@@ -72,6 +73,11 @@ void hero::update()
 			{
 				dir = { 0,-1 };
 				destination_tile = current_tile->get_up();
+			} else if (can_jump_to_destination() && destination_tile->can_up())
+			{
+				dir = { 0,-1 };
+				current_tile = destination_tile;
+				destination_tile = current_tile->get_up();
 			}
 		}
 		else if (inp->get_key(SDLK_s))
@@ -83,6 +89,12 @@ void hero::update()
 				if (destination_tile->get_type() == tile_type::empty)
 					falling = true;
 			}
+			else if (can_jump_to_destination() && destination_tile->can_down())
+			{
+				dir = { 0,1 };
+				current_tile = destination_tile;
+				destination_tile = current_tile->get_down();
+			}
 		}
 		else if (inp->get_key(SDLK_a))
 		{
@@ -92,12 +104,24 @@ void hero::update()
 				dir = { -1,0 };
 				destination_tile = current_tile->get_left();
 			}
+			else if (can_jump_to_destination() && destination_tile->can_left())
+			{
+				dir = { -1,0 };
+				current_tile = destination_tile;
+				destination_tile = current_tile->get_left();
+			}
 		}
 		else if (inp->get_key(SDLK_d) )
 		{
 			if (current_tile->can_right() || position.x < current_tile_position.x)
 			{
 				dir = { 1,0 };
+				destination_tile = current_tile->get_right();
+			}
+			else if (can_jump_to_destination() && destination_tile->can_left())
+			{
+				dir = { 1,0 };
+				current_tile = destination_tile;
 				destination_tile = current_tile->get_right();
 			}
 		}
