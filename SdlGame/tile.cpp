@@ -86,9 +86,8 @@ bool tile::over_solid()
 	return get_down() == nullptr || get_down()->get_type() == tile_type::wall || get_down()->get_type() == tile_type::ladder;
 }
 
-vector2f tile::position_lerp(tile* start, tile* end, float percent)
+vector2f tile::position_lerp(tile* start, tile* end, float progress)
 {
-	vector2f diff = end->get_transform()->position - start->get_transform()->position;
-	return start->get_transform()->position + diff*percent;
+	return vector2f::lerp(start->get_transform()->position, end->get_transform()->position, progress);
 }
 

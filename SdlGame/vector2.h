@@ -31,6 +31,8 @@ public:
 	
 	void cut_negative();
 
+	static vector2<T> lerp(vector2<T> origin, vector2<T> destination, float progress);
+
 	std::string to_string();
 };
 
@@ -136,6 +138,13 @@ void vector2<T>::cut_negative()
 {
 	if (x < 0) x = 0;
 	if (y < 0) y = 0;
+}
+
+template <typename T>
+vector2<T> vector2<T>::lerp(vector2<T> origin, vector2<T> destination, float progress)
+{
+	vector2f diff = destination - origin;
+	return origin + diff*progress;
 }
 
 template <typename T>

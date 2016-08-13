@@ -19,6 +19,8 @@ protected:
 	float speed = 2.f;
 	float adjustment_jump_tolerance = 0.25f;
 
+	void go_by_direction(point dir, bool with_jump);
+
 	void set_current_tile(tile *t);
 public:
 	hero(tile *start_tile, level_grid * lg);
