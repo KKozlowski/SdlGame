@@ -7,6 +7,7 @@
 #include "scene.h"
 #include <iostream>
 #include "hero.h"
+#include "level_grid.h"
 
 bool engine::initialize()
 {
@@ -70,18 +71,16 @@ void engine::run()
 		return;
 	}
 
+	level_grid("level_one.txt", 160, point());
+
 	SDL_Event e;
 
 	ball *b = new ball();
 	get_scene()->add_actor(b);
 
-	ball *b2 = new ball();
-	b2->get_transform()->position = vector2f(0.f, 720.f);
-
 	ball *b3 = new hero();
 	b3->get_transform()->position = vector2f(640.f, 360.f);
 
-	get_scene()->add_actor(b2);
 	get_scene()->add_actor(b3);
 	
 	time_since_epoch = std::chrono::high_resolution_clock::now().time_since_epoch().count();
@@ -132,9 +131,8 @@ void engine::run()
 		delta_time = (time_since_epoch_temp - time_since_epoch) * num / den;
 		time_since_epoch = time_since_epoch_temp;
 	}
-	get_scene()->remove_actors({ b, b2, b3 });
+	get_scene()->remove_actors({ b, b3 });
 
 	delete b;
-	delete b2;
 	delete b3;
 }

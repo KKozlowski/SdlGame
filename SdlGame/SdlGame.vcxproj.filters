@@ -16,6 +16,9 @@
     <Filter Include="actors">
       <UniqueIdentifier>{eab2392a-ff7a-484f-a54f-bd8ab113c2d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="actors\tiles">
+      <UniqueIdentifier>{dfcd273d-0b02-499f-bd38-1fd3d0b35456}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -64,6 +67,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tile.cpp">
+      <Filter>actors\tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="wall.cpp">
+      <Filter>actors\tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="empty_tile.cpp">
+      <Filter>actors\tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="level_grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -119,10 +134,27 @@
     <ClInclude Include="camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tile.h">
+      <Filter>actors\tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="wall.h">
+      <Filter>actors\tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="empty_tile.h">
+      <Filter>actors\tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="level_grid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="texture.png">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="level_one.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

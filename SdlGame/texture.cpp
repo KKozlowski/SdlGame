@@ -46,7 +46,7 @@ SDL_Texture* texture::loadTexture(std::string path)
 
 SDL_Texture* texture::get(std::string filename)
 {
-	if (loaded->find("filename") == loaded->end())
+	if (loaded->find(filename) == loaded->end())
 	{
 		SDL_Texture *t = loadTexture(filename);
 		if (t != nullptr)
@@ -61,5 +61,6 @@ SDL_Texture* texture::get_texture(std::string filename)
 {
 	if (instance.get() == nullptr)
 		instance = std::unique_ptr<texture>(new texture());
+
 	return instance.get()->get(filename);
 }

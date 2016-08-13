@@ -118,7 +118,7 @@ bool renderer::remove_draw(draw_base* d)
 void renderer::draw()
 {
 	//Clear screen
-	clear();
+	clear(0,0,0);
 	for (draw_base *d : *drawed)
 		d->draw(mainRenderer, m_camera);
 

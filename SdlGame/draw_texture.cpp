@@ -5,8 +5,7 @@
 draw_texture::draw_texture(actor* a, std::string filename)
 	: draw_base(a)
 {
-	thatTexture = texture::get_texture(filename);
-	if (thatTexture == nullptr)
+	if (!set_texture(filename))
 	{
 		printf("Failed to load texture image!\n");
 	}
@@ -46,4 +45,18 @@ bool draw_texture::set_width_height(int W, int H)
 
 	stretchRect.w = W;
 	stretchRect.h = H;
+}
+
+bool draw_texture::set_texture(std::string filename)
+{
+	SDL_Texture *tex = texture::get_texture(filename);
+	if (tex == nullptr)
+	{
+		return false;
+	}
+	else
+	{
+		thatTexture = tex;
+		return true;
+	}
 }

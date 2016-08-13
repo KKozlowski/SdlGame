@@ -15,6 +15,6 @@ ball::~ball()
 
 void ball::update()
 {
-	get_transform()->position.x += engine::get_delta_time()*100;
+	//get_transform()->position.x += engine::get_delta_time()*100;
 	//printf("%s\n", get_transform()->position.to_string().c_str());
 }
