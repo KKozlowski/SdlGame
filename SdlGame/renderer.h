@@ -5,6 +5,7 @@
 #include <cstdio>
 
 class camera;
+struct cmpStruct;
 
 class renderer
 {
@@ -38,4 +39,11 @@ public:
 	bool remove_draw(draw_base *);
 
 	void draw();
+};
+
+struct cmpStruct {
+	bool operator() (draw_base * const & lhs, draw_base * const & rhs) const
+	{
+		return lhs->get_depth() <= rhs->get_depth();
+	}
 };

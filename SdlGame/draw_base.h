@@ -31,3 +31,18 @@ public:
 
 	virtual void draw(SDL_Renderer *renderer, camera *cam);
 };
+
+int16_t draw_base::get_depth() const
+{
+	return layer;
+}
+
+void draw_base::set_depth(int16_t new_layer)
+{
+	layer = new_layer;
+}
+
+actor* draw_base::get_actor() const
+{
+	return lActor;
+}

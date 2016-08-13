@@ -10,6 +10,7 @@ hero::hero()
 	m_rigidbody->drag = 0.7f;
 
 	static_cast<draw_texture *>(get_draw())->set_width_height(160, 160);
+	get_draw()->set_depth(-10);
 }
 
 hero::~hero()

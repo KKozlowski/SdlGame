@@ -1,5 +1,7 @@
 ﻿#include "renderer.h"
 #include "camera.h"
+#include <vector>
+#include <algorithm>
 
 bool renderer::sdl_initialized = false;
 
@@ -117,10 +119,23 @@ bool renderer::remove_draw(draw_base* d)
 
 void renderer::draw()
 {
-	//Clear screen
 	clear(0,0,0);
-	for (draw_base *d : *drawed)
+
+	std::vector<draw_base *> *to_draw = new std::vector<draw_base*>(drawed->begin(), drawed->end());
+
+	struct {
+		bool operator()(draw_base * a, draw_base * b)
+		{
+			return a->get_depth() > b->get_depth();
+		}
+	} depthComparator;
+
+	sort(to_draw->begin(), to_draw->end(), depthComparator);
+
+	for (draw_base *d : *to_draw)
 		d->draw(mainRenderer, m_camera);
+
+	delete to_draw;
 
 	SDL_RenderPresent(mainRenderer);
 }
