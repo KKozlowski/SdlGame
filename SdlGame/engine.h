@@ -4,6 +4,7 @@
 #include "renderer.h"
 #include "input.h"
 #include <ctime>
+#include "level_grid.h"
 
 class scene;
 
@@ -21,6 +22,7 @@ private:
 	renderer *render;
 	input *inputer;
 	scene *sceneManager;
+	level_grid *level;
 
 	SDL_Texture* thatTexture = nullptr;
 public:

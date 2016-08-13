@@ -4,18 +4,25 @@
 #include "camera.h"
 #include "draw_texture.h"
 
-hero::hero()
-{
-	m_rigidbody = new rigidbody(this);
-	m_rigidbody->drag = 0.7f;
+#include "tile.h"
+#include "level_grid.h"
+#include <iostream>
 
-	static_cast<draw_texture *>(get_draw())->set_width_height(160, 160);
+hero::hero(tile *start_tile, level_grid *lg)
+{
+	current_tile = start_tile;
+	float tilesize = lg->get_tilesize();
+
+	static_cast<draw_texture *>(get_draw())->set_width_height(tilesize, tilesize);
+
+	get_transform()->position = vector2f(start_tile->get_Xpos()*tilesize, start_tile->get_Ypos()*tilesize);
+
 	get_draw()->set_depth(-10);
 }
 
 hero::~hero()
 {
-	delete m_rigidbody;
+
 }
 
 void hero::update()
@@ -24,15 +31,13 @@ void hero::update()
 	//get_transform()->position.x += engine::get_delta_time() * 100;
 
 	if (inp->get_key(SDLK_w))
-		m_rigidbody->velocity -= vector2f(0, engine::get_delta_time()*move_speed);
+		get_transform()->position -= vector2f(0, engine::get_delta_time()*move_speed);
 	if (inp->get_key(SDLK_s))
-		m_rigidbody->velocity += vector2f(0, engine::get_delta_time()*move_speed);
+		get_transform()->position += vector2f(0, engine::get_delta_time()*move_speed);
 	if (inp->get_key(SDLK_a))
-		m_rigidbody->velocity -= vector2f(engine::get_delta_time()*move_speed,0);
+		get_transform()->position -= vector2f(engine::get_delta_time()*move_speed,0);
 	if (inp->get_key(SDLK_d))
-		m_rigidbody->velocity += vector2f(engine::get_delta_time()*move_speed, 0);
-
-	m_rigidbody->update();
+		get_transform()->position += vector2f(engine::get_delta_time()*move_speed, 0);
 
 	engine::get_instance()->get_renderer()->get_camera()->center = point(get_transform()->position.x, get_transform()->position.y);
 }

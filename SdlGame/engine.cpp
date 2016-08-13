@@ -34,6 +34,7 @@ engine::~engine()
 {
 	delete inputer;
 	delete render;
+	delete level;
 	renderer::close_sdl();
 }
 
@@ -71,17 +72,12 @@ void engine::run()
 		return;
 	}
 
-	level_grid("level_one.txt", 160, point());
+	level = new level_grid("level_one.txt", 160, point());
 
 	SDL_Event e;
 
 	ball *b = new ball();
 	get_scene()->add_actor(b);
-
-	ball *b3 = new hero();
-	b3->get_transform()->position = vector2f(640.f, 360.f);
-
-	get_scene()->add_actor(b3);
 	
 	time_since_epoch = std::chrono::high_resolution_clock::now().time_since_epoch().count();
 	uint64_t time_since_epoch_temp = time_since_epoch;
@@ -131,8 +127,7 @@ void engine::run()
 		delta_time = (time_since_epoch_temp - time_since_epoch) * num / den;
 		time_since_epoch = time_since_epoch_temp;
 	}
-	get_scene()->remove_actors({ b, b3 });
+	get_scene()->remove_actors({ b });
 
 	delete b;
-	delete b3;
 }
