@@ -14,6 +14,7 @@ private:
 	std::vector<std::vector<tile*> *> *tile_grid = new std::vector<std::vector<tile*>*>();
 public:
 	level_grid(std::string filename, float tilesize, point start);
+	~level_grid();
 	hero *get_hero() const { return m_hero; }
 	float get_tilesize() const { return m_tilesize; }
 

@@ -11,7 +11,7 @@ draw_base::draw_base(actor* a)
 
 draw_base::~draw_base()
 {
-	engine::get_instance()->get_renderer()->remove_draw(this);
+	
 }
 
 

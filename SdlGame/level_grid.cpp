@@ -78,6 +78,23 @@ level_grid::level_grid(std::string filename, float tilesize, point start)
 	}
 }
 
+level_grid::~level_grid()
+{
+	std::vector<tile *> to_remove;
+	for (int i = 0;i < tile_grid->size();i++)
+	{
+		for (std::vector<tile *>::iterator it = tile_grid->at(i)->begin(); it != tile_grid->at(i)->end(); ++it) {
+			to_remove.push_back(*it);
+		}
+		tile_grid->at(i)->clear();
+	}
+
+	for (std::vector<tile *>::iterator it = to_remove.begin(); it != to_remove.end(); it++) {
+		engine::get_instance()->get_scene()->remove_actor(*it);
+		delete *it;
+	}
+}
+
 tile* level_grid::get(int column, int row)
 {
 	if (row >= tile_grid->size()) return nullptr;
@@ -91,5 +108,14 @@ void level_grid::at_gold_disappearance()
 	if (gold::get_existing_count() == 0)
 	{
 		std::cout << "UNLOCK\n";
+
+		//CHANGING SOME RANDOM TILE, TO BE REPLACED LATER
+		engine::get_instance()->get_scene()->remove_actor(tile_grid->at(8)->at(1));
+		delete tile_grid->at(8)->at(1);
+
+		tile_grid->at(8)->at(1) = new ladder(1, 8, this);
+		engine::get_instance()->get_scene()->add_actor(tile_grid->at(8)->at(1));
+		tile_grid->at(8)->at(1)->get_transform()->position = vector2f(160 * 1, 160 * 8);
+		tile_grid->at(8)->at(1)->get_tex_draw()->set_width_height(160, 160);
 	}
 }

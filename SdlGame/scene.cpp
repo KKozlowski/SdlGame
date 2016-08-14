@@ -4,10 +4,20 @@
 scene::scene()
 {
 	actors = new std::set<actor *>();
+	to_add = new std::set<actor *>();
+	to_delete = new std::set<actor *>();
 }
 
 void scene::update()
 {
+	for (actor *a : *to_add)
+		actors->insert(a);
+	for (actor *a : *to_delete)
+		actors->erase(a);
+
+	to_add->clear();
+	to_delete->clear();
+
 	for (actor *a : *actors)
 		a->update();
 }

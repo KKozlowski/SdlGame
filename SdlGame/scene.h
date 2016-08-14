@@ -6,6 +6,9 @@ class scene
 {
 private:
 	std::set<actor *> *actors;
+
+	std::set<actor *> *to_add;
+	std::set<actor *> *to_delete;
 public:
 	scene();
 

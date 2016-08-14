@@ -1,18 +1,17 @@
 ﻿#include "actor.h"
 #include <iostream>
 #include "draw_base.h"
+#include "engine.h"
 
 actor::actor()
 {
 	m_transform = new transform(this);
-	point *p = new point();
-	delete p;
 }
 
 actor::~actor()
 {
 	delete m_transform;
-	delete drawing;
+	drawing->set_visible(false);
 }
 
 void actor::update()

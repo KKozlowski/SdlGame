@@ -3,6 +3,7 @@
 #include "draw_base.h"
 #include <set>
 #include <cstdio>
+#include <vector>
 
 class camera;
 struct cmpStruct;

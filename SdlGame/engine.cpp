@@ -33,8 +33,13 @@ engine::engine()
 engine::~engine()
 {
 	delete inputer;
+	inputer = nullptr;
+
 	delete render;
+	render == nullptr;
+
 	delete level;
+	level == nullptr;
 	renderer::close_sdl();
 }
 
