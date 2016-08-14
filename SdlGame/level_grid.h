@@ -10,8 +10,12 @@ class level_grid
 private:
 	hero *m_hero;
 	float m_tilesize;
+	std::vector<point> hidden_ladders;
+	point final_ladder;
 
 	std::vector<std::vector<tile*> *> *tile_grid = new std::vector<std::vector<tile*>*>();
+
+	void unhide_ladder(point indices, bool finalizing);
 public:
 	level_grid(std::string filename, float tilesize, point start);
 	~level_grid();

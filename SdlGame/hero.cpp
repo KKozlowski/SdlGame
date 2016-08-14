@@ -51,6 +51,11 @@ void hero::set_current_tile(tile* t)
 		t->pop_gold();
 	}
 
+	if (t->ends_the_level())
+	{
+		std::cout << "\nENDING\n";
+	}
+
 	if (t->empty_over_empty())
 	{
 		falling = true;

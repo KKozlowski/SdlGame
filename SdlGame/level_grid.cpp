@@ -8,6 +8,21 @@
 #include "pipe.h"
 #include "gold.h"
 
+void level_grid::unhide_ladder(point indices, bool finalizing)
+{
+	engine::get_instance()->get_scene()->remove_actor(
+		tile_grid->at(indices.y)->at(indices.x)
+		);
+	delete tile_grid->at(indices.y)->at(indices.x);
+
+	ladder *l = new ladder(indices.x, indices.y, this, finalizing);
+
+	tile_grid->at(indices.y)->at(indices.x) = l;
+	engine::get_instance()->get_scene()->add_actor(l);
+	l->get_transform()->position = vector2f(m_tilesize * indices.x, m_tilesize * indices.y);
+	l->get_tex_draw()->set_width_height(m_tilesize, m_tilesize);
+}
+
 level_grid::level_grid(std::string filename, float tilesize, point start)
 {
 	std::ifstream read(filename);
@@ -39,7 +54,7 @@ level_grid::level_grid(std::string filename, float tilesize, point start)
 			case '-':
 				tile = new pipe(col, row, this);
 				break;
-			case '@':
+			case '@': // HERO SPAWN
 				tile = new empty_tile(col, row, this);
 				if (m_hero == nullptr)
 				{
@@ -47,9 +62,17 @@ level_grid::level_grid(std::string filename, float tilesize, point start)
 					engine::get_instance()->get_scene()->add_actor(m_hero);
 				}
 				break;
-			case '^':
+			case '^': // PILE OF GOLD
 				tile = new empty_tile(col, row, this);
 				add_gold = true;
+				break;
+			case '!':
+				tile = new empty_tile(col, row, this);
+				hidden_ladders.push_back({ col, row });
+				break;
+			case '?':
+				tile = new empty_tile(col, row, this);
+				final_ladder = { col,row };
 				break;
 			default:
 				tile = new empty_tile(col, row, this);
@@ -110,12 +133,9 @@ void level_grid::at_gold_disappearance()
 		std::cout << "UNLOCK\n";
 
 		//CHANGING SOME RANDOM TILE, TO BE REPLACED LATER
-		engine::get_instance()->get_scene()->remove_actor(tile_grid->at(8)->at(1));
-		delete tile_grid->at(8)->at(1);
+		for (point p : hidden_ladders)
+			unhide_ladder(p, false);
 
-		tile_grid->at(8)->at(1) = new ladder(1, 8, this);
-		engine::get_instance()->get_scene()->add_actor(tile_grid->at(8)->at(1));
-		tile_grid->at(8)->at(1)->get_transform()->position = vector2f(160 * 1, 160 * 8);
-		tile_grid->at(8)->at(1)->get_tex_draw()->set_width_height(160, 160);
+		unhide_ladder(final_ladder, true);
 	}
 }
