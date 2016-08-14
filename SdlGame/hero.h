@@ -24,7 +24,9 @@ protected:
 	float adjustment_jump_tolerance = 0.25f;
 
 	void go_by_direction(point dir, bool with_jump);
-	//vector2f temporal_offset;
+	vector2f temporal_offset;
+	float offset_reduction_speed = 1.f;
+	void reduce_offset();
 
 	void set_current_tile(tile *t);
 

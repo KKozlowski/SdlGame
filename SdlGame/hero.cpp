@@ -10,12 +10,36 @@
 
 void hero::go_by_direction(point dir, bool with_jump = false)
 {
+	
 	if (with_jump)
 	{
 		set_current_tile(destination_tile);
 		movement_progress -= 1;
-	}
+	} 
 	destination_tile = current_tile->get_neighbor(dir);
+	
+}
+
+void hero::reduce_offset()
+{
+	if (temporal_offset == vector2f())
+		return;
+
+	float speed = m_levelgrid->get_tilesize() * offset_reduction_speed;
+
+	vector2f old_offset = temporal_offset;
+
+	if (temporal_offset.x != 0)
+		temporal_offset.x -= (temporal_offset.x / abs(temporal_offset.x))*speed*engine::get_delta_time();
+	if (temporal_offset.y != 0)
+		temporal_offset.y -= (temporal_offset.y / abs(temporal_offset.y))*speed*engine::get_delta_time();
+
+	if (old_offset.x*temporal_offset.x < 0) temporal_offset.x = 0;
+	if (old_offset.y*temporal_offset.y < 0) temporal_offset.y = 0;
+
+	get_transform()->position += (old_offset - temporal_offset);
+
+	std::cout << temporal_offset.to_string() << std::endl;
 }
 
 void hero::set_current_tile(tile* t)
@@ -54,6 +78,8 @@ void hero::continue_movement()
 		else
 			get_transform()->position = tile::position_lerp(current_tile, destination_tile, movement_progress);
 	}
+
+	get_transform()->position -= temporal_offset;
 }
 
 bool hero::dig(point direction)
@@ -111,6 +137,7 @@ tile* hero::get_current_tile() const
 
 void hero::update()
 {
+	reduce_offset();
 	point zero;
 	vector2f position = get_transform()->position;
 	vector2f current_tile_position = current_tile->get_transform()->position;
@@ -120,6 +147,8 @@ void hero::update()
 
 	point dir;
 	tile *old_destination = destination_tile;
+
+	
 
 	if (falling)
 	{
@@ -186,13 +215,17 @@ void hero::update()
 		return;
 
 	if ((previous_dir * dir) == zero) { //movement direction changed completely.
+
+		temporal_offset = current_tile->get_transform()->position - get_transform()->position;
+
 		if (can_jump_to_destination()) 
 		{
 			go_by_direction(dir = { 0,0 }, true);
 		}
 		else
-			get_transform()->position = current_tile->get_transform()->position;
-
+		{
+			get_transform()->position = current_tile->get_transform()->position + temporal_offset;
+		}
 		movement_progress = 0;
 	}
 
