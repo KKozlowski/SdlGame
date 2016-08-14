@@ -6,6 +6,7 @@
 #include "scene.h"
 #include "draw_texture.h"
 #include "pipe.h"
+#include "gold.h"
 
 level_grid::level_grid(std::string filename, float tilesize, point start)
 {
@@ -16,12 +17,14 @@ level_grid::level_grid(std::string filename, float tilesize, point start)
 
 	int row = 0;
 	int col = 0;
+	
 	while (std::getline(read, line))
 	{
 		tile_grid->push_back(new std::vector<tile*>());
 		col = 0;
 		for (char c : line)
 		{
+			bool add_gold = false;
 			std::cout << c;
 			tile *tile = nullptr;
 
@@ -43,7 +46,11 @@ level_grid::level_grid(std::string filename, float tilesize, point start)
 					m_hero = new hero(tile, this);
 					engine::get_instance()->get_scene()->add_actor(m_hero);
 				}
-				break;;
+				break;
+			case '^':
+				tile = new empty_tile(col, row, this);
+				add_gold = true;
+				break;
 			default:
 				tile = new empty_tile(col, row, this);
 			}
@@ -53,7 +60,16 @@ level_grid::level_grid(std::string filename, float tilesize, point start)
 			engine::get_instance()->get_scene()->add_actor(tile);
 
 			tile_grid->at(row)->push_back(tile);
-
+			if (add_gold)
+			{
+				gold *go = new gold(100);
+				if (go->set_tile(tile, this))
+				{
+					engine::get_instance()->get_scene()->add_actor(go);
+				}
+				else
+					delete go;
+			}
 			++col;
 		}
 

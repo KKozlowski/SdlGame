@@ -175,6 +175,7 @@
     <ClCompile Include="draw_texture.cpp" />
     <ClCompile Include="empty_tile.cpp" />
     <ClCompile Include="engine.cpp" />
+    <ClCompile Include="gold.cpp" />
     <ClCompile Include="hero.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="ladder.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="draw_texture.h" />
     <ClInclude Include="empty_tile.h" />
     <ClInclude Include="engine.h" />
+    <ClInclude Include="gold.h" />
     <ClInclude Include="hero.h" />
     <ClInclude Include="ladder.h" />
     <ClInclude Include="level_grid.h" />

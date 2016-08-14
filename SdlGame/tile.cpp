@@ -1,6 +1,9 @@
 ﻿#include "tile.h"
 #include "level_grid.h"
 #include <iostream>
+#include "gold.h"
+#include "engine.h"
+#include "scene.h"
 
 tile::tile(int x, int y, level_grid* l)
 {
@@ -84,6 +87,32 @@ bool tile::empty_over_empty()
 bool tile::over_solid()
 {
 	return get_down() == nullptr || get_down()->get_type() == tile_type::wall || get_down()->get_type() == tile_type::ladder;
+}
+
+bool tile::set_gold(gold* g)
+{
+	if (m_gold == nullptr)
+	{
+		m_gold = g;
+		return true;
+	}
+	else
+		return false;
+}
+
+gold* tile::get_gold() const
+{
+	return m_gold;
+}
+
+void tile::pop_gold()
+{
+	if (m_gold != nullptr)
+	{
+		engine::get_instance()->get_scene()->remove_actor(m_gold);
+		delete m_gold;
+		m_gold = nullptr;
+	}
 }
 
 vector2f tile::position_lerp(tile* start, tile* end, float progress)

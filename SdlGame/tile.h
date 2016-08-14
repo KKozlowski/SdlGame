@@ -5,12 +5,14 @@
 #include "tile_type.h"
 #include <iostream>
 
+class gold;
 class level_grid;
 
 class tile : public actor
 {
 private:
 	level_grid *m_level;
+	gold *m_gold;
 protected:
 	point indices;
 	tile_type m_type;
@@ -59,6 +61,10 @@ public:
 	bool over_empty();
 	bool empty_over_empty();
 	bool over_solid();
+
+	bool set_gold(gold *);
+	gold *get_gold() const;
+	void pop_gold();
 
 	static vector2f position_lerp(tile *start, tile *end, float percent);
 };

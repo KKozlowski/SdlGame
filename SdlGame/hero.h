@@ -16,6 +16,8 @@ protected:
 	float movement_progress;
 	bool falling;
 
+	int points = 0;
+
 	float speed = 2.f;
 	float adjustment_jump_tolerance = 0.25f;
 
@@ -26,5 +28,9 @@ public:
 	hero(tile *start_tile, level_grid * lg);
 	~hero();
 	bool can_jump_to_destination() const;
+
+	int get_points() const { return points; }
+	void add_points(int to_add) { points += to_add; }
+
 	virtual void update() override;
 };

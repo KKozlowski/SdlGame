@@ -3,7 +3,7 @@
 #include "engine.h"
 #include "camera.h"
 #include "draw_texture.h"
-
+#include "gold.h"
 #include "tile.h"
 #include "level_grid.h"
 #include <iostream>
@@ -20,7 +20,13 @@ void hero::go_by_direction(point dir, bool with_jump = false)
 
 void hero::set_current_tile(tile* t)
 {
-	
+	if (t->get_gold() != nullptr)
+	{
+		std::cout << "GOLD ENCOUNTERED\n";
+		add_points(t->get_gold()->get_value());
+		t->pop_gold();
+	}
+
 	if (t->empty_over_empty())
 	{
 		falling = true;
