@@ -79,6 +79,18 @@ bool hero::can_jump_to_destination() const
 	return (destiny_position - position).length() < m_levelgrid->get_tilesize()* adjustment_jump_tolerance;
 }
 
+void hero::die()
+{
+	alive = false;
+	drawing->set_visible(false);
+	std::cout << "DEATH";
+}
+
+tile* hero::get_current_tile() const
+{
+	return current_tile;
+}
+
 void hero::update()
 {
 	point zero;
@@ -96,7 +108,7 @@ void hero::update()
 		dir = { 0,1 };
 		destination_tile = current_tile->get_down();
 	}
-	else
+	else if (is_alive())
 	{
 		if (inp->get_key(SDLK_q))
 			dig({ -1,0 });

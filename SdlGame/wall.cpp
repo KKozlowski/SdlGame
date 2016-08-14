@@ -6,6 +6,8 @@ void wall::refill()
 {
 	get_draw()->set_visible(true);
 	digged = false;
+	if (get_level()->get_hero()->get_current_tile() == this)
+		get_level()->get_hero()->die();
 }
 
 wall::wall(int x, int y, level_grid* l)

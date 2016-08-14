@@ -54,11 +54,11 @@ public:
 
 	virtual bool is_empty() { return false; }
 
-	virtual bool can_up();
+	virtual bool can_up(bool for_ai = false);
 	virtual bool can_down(bool for_ai = false);
 	
-	virtual bool can_left();
-	virtual bool can_right();
+	virtual bool can_left(bool for_ai = false);
+	virtual bool can_right(bool for_ai = false);
 
 	bool over_empty();
 	bool empty_over_empty();

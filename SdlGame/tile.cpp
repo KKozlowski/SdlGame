@@ -39,7 +39,7 @@ tile* tile::get_neighbor(point offset)
 	return m_level->get(indices.x + offset.x, indices.y + offset.y);
 }
 
-bool tile::can_up()
+bool tile::can_up(bool for_ai)
 {
 	return false;
 }
@@ -55,21 +55,23 @@ bool tile::can_down(bool for_ai)
 	return false;
 }
 
-bool tile::can_left()
+bool tile::can_left(bool for_ai)
 {
 	tile *t = get_left();
 
 	if (!t) return false;
+	if (!for_ai && t->is_empty()) return true;
 	if (t->get_type() != tile_type::wall) return true;
 
 	return false;
 }
 
-bool tile::can_right()
+bool tile::can_right(bool for_ai)
 {
 	tile *t = get_right();
 
 	if (!t) return false;
+	if (!for_ai && t->is_empty()) return true;
 	if (t->get_type() != tile_type::wall) return true;
 
 	return false;
