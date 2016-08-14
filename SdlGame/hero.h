@@ -25,7 +25,7 @@ protected:
 
 	void go_by_direction(point dir, bool with_jump);
 	vector2f temporal_offset;
-	float offset_reduction_speed = 1.f;
+	float offset_reduction_speed = 4.f;
 	void reduce_offset();
 
 	void set_current_tile(tile *t);

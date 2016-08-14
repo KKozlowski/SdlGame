@@ -222,10 +222,7 @@ void hero::update()
 		{
 			go_by_direction(dir = { 0,0 }, true);
 		}
-		else
-		{
-			get_transform()->position = current_tile->get_transform()->position + temporal_offset;
-		}
+
 		movement_progress = 0;
 	}
 
