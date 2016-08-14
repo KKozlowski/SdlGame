@@ -8,6 +8,8 @@ class actor;
 
 class draw_base
 {
+private:
+	bool visible = true;
 protected:
 	int16_t layer;
 	actor *lActor;
@@ -28,6 +30,9 @@ public:
 	inline void set_depth(int16_t new_layer);
 
 	inline actor *get_actor() const;
+
+	void set_visible(bool visible) { this->visible = visible; }
+	bool is_visible() const { return visible; }
 
 	virtual void draw(SDL_Renderer *renderer, camera *cam);
 };

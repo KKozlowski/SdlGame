@@ -38,6 +38,18 @@ void hero::set_current_tile(tile* t)
 	current_tile = t;
 }
 
+bool hero::dig(point direction)
+{
+	tile *one = current_tile->get_neighbor(direction);
+	if (one == nullptr) 
+		return false;
+
+	tile *two = one->get_neighbor({ 0,1 });
+	if (two == nullptr || two->get_type() != tile_type::wall) 
+		return false;
+	static_cast<wall *>(two)->dig();
+}
+
 hero::hero(tile *start_tile, level_grid *lg)
 {
 	set_current_tile(start_tile);
@@ -86,6 +98,11 @@ void hero::update()
 	}
 	else
 	{
+		if (inp->get_key(SDLK_q))
+			dig({ -1,0 });
+		else if (inp->get_key(SDLK_e))
+			dig({ 1,0 });
+
 		if (inp->get_key(SDLK_w))
 		{
 			if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_up())
@@ -106,7 +123,7 @@ void hero::update()
 			else if (current_tile->can_down() || position.y < current_tile_position.y)
 			{
 				go_by_direction(dir = { 0,1 });
-				if (destination_tile->get_type() == tile_type::empty)
+				if (destination_tile->is_empty())
 					falling = true;
 			}
 		}

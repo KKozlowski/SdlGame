@@ -6,7 +6,7 @@ draw_base::draw_base(actor* a)
 {
 	lActor = a;
 	engine::get_instance()->get_renderer()->add_draw(this);
-
+	set_visible(true);
 }
 
 draw_base::~draw_base()

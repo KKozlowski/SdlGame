@@ -24,6 +24,8 @@ protected:
 	void go_by_direction(point dir, bool with_jump);
 
 	void set_current_tile(tile *t);
+
+	bool dig(point direction);
 public:
 	hero(tile *start_tile, level_grid * lg);
 	~hero();

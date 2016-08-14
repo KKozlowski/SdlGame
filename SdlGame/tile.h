@@ -52,8 +52,10 @@ public:
 	tile *get_right();
 	tile *get_neighbor(point offset);
 
+	virtual bool is_empty() { return false; }
+
 	virtual bool can_up();
-	virtual bool can_down();
+	virtual bool can_down(bool for_ai = false);
 	
 	virtual bool can_left();
 	virtual bool can_right();

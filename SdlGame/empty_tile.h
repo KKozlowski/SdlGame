@@ -5,4 +5,6 @@ class empty_tile : public tile
 {
 public:
 	empty_tile(int x, int y, level_grid* l);
+
+	bool is_empty() override { return true; }
 };

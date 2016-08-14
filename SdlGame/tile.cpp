@@ -44,12 +44,13 @@ bool tile::can_up()
 	return false;
 }
 
-bool tile::can_down()
+bool tile::can_down(bool for_ai)
 {
 	tile *down = get_down();
 	//std::cout << (down == nullptr);
 	if (!down) return false;
 	if (down->get_type() != tile_type::wall) return true;
+	if (!for_ai && down->is_empty()) return true;
 	
 	return false;
 }
@@ -76,12 +77,12 @@ bool tile::can_right()
 
 bool tile::over_empty()
 {
-	return get_down() != nullptr && get_down()->get_type() == tile_type::empty;
+	return get_down() != nullptr && get_down()->is_empty();
 }
 
 bool tile::empty_over_empty()
 {
-	return m_type == tile_type::empty && get_down() != nullptr && get_down()->get_type() == tile_type::empty;
+	return is_empty() && get_down() != nullptr && get_down()->is_empty();
 }
 
 bool tile::over_solid()
