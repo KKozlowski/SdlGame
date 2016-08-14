@@ -22,24 +22,24 @@ void hero::go_by_direction(point dir, bool with_jump = false)
 
 void hero::reduce_offset()
 {
-	if (temporal_offset == vector2f())
+	if (position_offset == vector2f())
 		return;
 
 	float speed = m_levelgrid->get_tilesize() * offset_reduction_speed;
 
-	vector2f old_offset = temporal_offset;
+	vector2f old_offset = position_offset;
 
-	if (temporal_offset.x != 0)
-		temporal_offset.x -= (temporal_offset.x / abs(temporal_offset.x))*speed*engine::get_delta_time();
-	if (temporal_offset.y != 0)
-		temporal_offset.y -= (temporal_offset.y / abs(temporal_offset.y))*speed*engine::get_delta_time();
+	if (position_offset.x != 0)
+		position_offset.x -= (position_offset.x / abs(position_offset.x))*speed*engine::get_delta_time();
+	if (position_offset.y != 0)
+		position_offset.y -= (position_offset.y / abs(position_offset.y))*speed*engine::get_delta_time();
 
-	if (old_offset.x*temporal_offset.x < 0) temporal_offset.x = 0;
-	if (old_offset.y*temporal_offset.y < 0) temporal_offset.y = 0;
+	if (old_offset.x*position_offset.x < 0) position_offset.x = 0;
+	if (old_offset.y*position_offset.y < 0) position_offset.y = 0;
 
-	get_transform()->position += (old_offset - temporal_offset);
+	get_transform()->position += (old_offset - position_offset);
 
-	std::cout << temporal_offset.to_string() << std::endl;
+	std::cout << position_offset.to_string() << std::endl;
 }
 
 void hero::set_current_tile(tile* t)
@@ -79,13 +79,13 @@ void hero::continue_movement()
 			get_transform()->position = tile::position_lerp(current_tile, destination_tile, movement_progress);
 	}
 
-	get_transform()->position -= temporal_offset;
+	get_transform()->position -= position_offset;
 }
 
 bool hero::dig(point direction)
 {
 	tile *one = current_tile->get_neighbor(direction);
-	if (one == nullptr) 
+	if (one == nullptr || !(one->is_empty() || one->get_type() == tile_type::ladder)) 
 		return false;
 
 	tile *two = one->get_neighbor({ 0,1 });
@@ -148,8 +148,6 @@ void hero::update()
 	point dir;
 	tile *old_destination = destination_tile;
 
-	
-
 	if (falling)
 	{
 		dir = { 0,1 };
@@ -209,14 +207,13 @@ void hero::update()
 			}
 		}
 	}
-	
-	
+
 	if (dir == zero)
 		return;
 
 	if ((previous_dir * dir) == zero) { //movement direction changed completely.
 
-		temporal_offset = current_tile->get_transform()->position - get_transform()->position;
+		position_offset = current_tile->get_transform()->position - get_transform()->position;
 
 		if (can_jump_to_destination()) 
 		{
