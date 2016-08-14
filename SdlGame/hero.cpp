@@ -39,7 +39,7 @@ void hero::reduce_offset()
 
 	get_transform()->position += (old_offset - position_offset);
 
-	std::cout << position_offset.to_string() << std::endl;
+	//std::cout << position_offset.to_string() << std::endl;
 }
 
 void hero::set_current_tile(tile* t)

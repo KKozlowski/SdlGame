@@ -85,3 +85,11 @@ tile* level_grid::get(int column, int row)
 
 	return tile_grid->at(row)->at(column);
 }
+
+void level_grid::at_gold_disappearance()
+{
+	if (gold::get_existing_count() == 0)
+	{
+		std::cout << "UNLOCK\n";
+	}
+}

@@ -1,13 +1,24 @@
 ﻿#include "gold.h"
 #include "level_grid.h"
 
+int gold::count = 0;
+
 gold::gold(int points)
 {
 	set_value(points);
 	drawing = new draw_texture(this, "gold.png");
 	drawing->set_depth(-20);
 	static_cast<draw_texture*>(drawing)->centered = true;
+
+	++count;
 }
+
+gold::~gold()
+{
+	--count;
+	m_levelgrid->at_gold_disappearance();
+}
+
 //
 //gold::gold(tile* tile, int points)
 //	: gold(points)
@@ -18,6 +29,7 @@ gold::gold(int points)
 
 bool gold::set_tile(tile* new_parent, level_grid *lg)
 {
+	m_levelgrid = lg;
 	if (new_parent->get_gold() != nullptr) //If there's already a pile of gold on the tile, we just make it bigger.
 	{
 		new_parent->get_gold()->set_value(new_parent->get_gold()->get_value() + this->get_value());
@@ -40,4 +52,9 @@ int gold::get_value()
 void gold::set_value(int pts)
 {
 	point_value = pts;
+}
+
+int gold::get_existing_count()
+{
+	return count;
 }

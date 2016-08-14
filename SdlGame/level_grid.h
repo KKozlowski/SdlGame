@@ -18,4 +18,6 @@ public:
 	float get_tilesize() const { return m_tilesize; }
 
 	tile *get(int column, int row);
+
+	void at_gold_disappearance();
 };
