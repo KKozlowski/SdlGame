@@ -38,6 +38,24 @@ void hero::set_current_tile(tile* t)
 	current_tile = t;
 }
 
+void hero::continue_movement()
+{
+	movement_progress += engine::get_delta_time() * speed;
+	if (destination_tile == nullptr)
+		get_transform()->position = current_tile->get_transform()->position;
+	else
+	{
+		if (movement_progress >= 1)
+		{
+			set_current_tile(destination_tile);
+			get_transform()->position = destination_tile->get_transform()->position;
+			movement_progress -= 1;
+		}
+		else
+			get_transform()->position = tile::position_lerp(current_tile, destination_tile, movement_progress);
+	}
+}
+
 bool hero::dig(point direction)
 {
 	tile *one = current_tile->get_neighbor(direction);
@@ -170,8 +188,7 @@ void hero::update()
 	if ((previous_dir * dir) == zero) { //movement direction changed completely.
 		if (can_jump_to_destination()) 
 		{
-			get_transform()->position = destination_tile->get_transform()->position;
-			set_current_tile(destination_tile);
+			go_by_direction(dir = { 0,0 }, true);
 		}
 		else
 			get_transform()->position = current_tile->get_transform()->position;
@@ -183,19 +200,7 @@ void hero::update()
 		movement_progress = -movement_progress;
 	} else //nothing changed
 	{
-		movement_progress += engine::get_delta_time() * speed;
-		if (destination_tile == nullptr)
-			get_transform()->position = current_tile->get_transform()->position;
-		else
-		{
-			if (movement_progress >=1)
-			{
-				set_current_tile(destination_tile);
-				get_transform()->position = destination_tile->get_transform()->position;
-				movement_progress -= 1;
-			} else
-				get_transform()->position = tile::position_lerp(current_tile, destination_tile, movement_progress);
-		}
+		continue_movement();
 	}
 
 	previous_dir = dir;
