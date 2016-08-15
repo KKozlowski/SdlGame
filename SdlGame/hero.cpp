@@ -54,7 +54,7 @@ void hero::set_current_tile(tile* t)
 
 	if (t->ends_the_level())
 	{
-		std::cout << "\nENDING\n";
+		winning = true;
 	}
 
 	if (t->empty_over_empty())

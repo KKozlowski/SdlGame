@@ -98,7 +98,6 @@ void engine::run()
 			//User requests quit
 			if (e.type == SDL_QUIT)
 			{
-				printf("MMMM");
 				quit = true;
 			}
 			else
@@ -112,9 +111,17 @@ void engine::run()
 
 		// DO ADDITIONAL STUFF BOLOW THIS LINE
 		//////////////////////
-
-		if (!m_levelman->get_current()->get_hero()->is_alive())
-			m_levelman->reset_level();
+		hero *he = nullptr;
+		if (m_levelman->get_current())
+			he = m_levelman->get_current()->get_hero();
+		if (he != nullptr)
+		{
+			if (!he->is_alive())
+				m_levelman->reset_level();
+			if (he->has_won())
+				m_levelman->load_next_level();
+		}
+		
 		if (inputer->get_key(SDLK_ESCAPE)) quit = true;
 
 		//////////////////////

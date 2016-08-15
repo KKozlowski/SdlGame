@@ -27,18 +27,16 @@ void level_grid::unhide_ladder(point indices, bool finalizing)
 	l->get_tex_draw()->set_width_height(m_tilesize, m_tilesize);
 }
 
-level_grid::level_grid(std::string filename, float tilesize, level_manager *manager)
+level_grid::level_grid(file_reader_line_by_line *li, float tilesize, level_manager *manager)
 {
 	m_levelmanager = manager;
-	std::ifstream read(filename);
-	std::string line;
 
 	m_tilesize = tilesize;
 
 	int row = 0;
 	int col = 0;
 	
-	while (std::getline(read, line))
+	for(std::string line: li->content)
 	{
 		tile_grid->push_back(new std::vector<tile*>());
 		col = 0;

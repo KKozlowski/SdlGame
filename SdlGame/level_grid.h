@@ -4,6 +4,7 @@
 #include "tileset.h"
 #include "hero.h"
 #include <vector>
+#include "file_reader_line_by_line.h"
 
 class level_manager;
 
@@ -24,7 +25,7 @@ private:
 
 	void unhide_ladder(point indices, bool finalizing);
 public:
-	level_grid(std::string filename, float tilesize, level_manager *manager);
+	level_grid(file_reader_line_by_line *li, float tilesize, level_manager *manager);
 	~level_grid();
 	hero *get_hero() const { return m_hero; }
 	float get_tilesize() const { return m_tilesize; }

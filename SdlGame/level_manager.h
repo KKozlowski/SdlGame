@@ -15,7 +15,8 @@ public:
 	bool load_level(int id, int tilesize);
 	bool close_level();
 	bool reset_level();
+	bool load_next_level();
 
-	void update();
+	int get_current_id() const { return current_level_id; }
 };
 

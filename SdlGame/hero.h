@@ -17,6 +17,7 @@ protected:
 
 	bool falling;
 	bool alive = true;
+	bool winning = false;
 
 	int points = 0;
 
@@ -40,6 +41,7 @@ public:
 	~hero();
 	bool can_jump_to_destination() const;
 	bool is_alive() const { return alive; }
+	bool has_won() const { return winning; }
 
 	int get_points() const { return points; }
 	void add_points(int to_add) { points += to_add; }

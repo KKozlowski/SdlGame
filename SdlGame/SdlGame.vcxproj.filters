@@ -93,6 +93,9 @@
     <ClCompile Include="level_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="file_reader_line_by_line.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -174,6 +177,9 @@
       <Filter>actors</Filter>
     </ClInclude>
     <ClInclude Include="level_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="file_reader_line_by_line.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
