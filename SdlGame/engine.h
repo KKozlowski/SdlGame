@@ -7,6 +7,7 @@
 #include "level_grid.h"
 
 class scene;
+class level_manager;
 
 class engine
 {
@@ -21,8 +22,9 @@ private:
 
 	renderer *render;
 	input *inputer;
-	scene *sceneManager;
-	level_grid *level;
+	scene *actor_manager;
+
+	level_manager *m_levelman;
 
 	SDL_Texture* thatTexture = nullptr;
 public:

@@ -8,6 +8,7 @@
 #include <iostream>
 #include "hero.h"
 #include "level_grid.h"
+#include "level_manager.h"
 
 bool engine::initialize()
 {
@@ -27,7 +28,8 @@ engine::engine()
 {
 	render = new renderer();
 	inputer = new input();
-	sceneManager = new scene();
+	actor_manager = new scene();
+	m_levelman = new level_manager();
 }
 
 engine::~engine()
@@ -38,8 +40,8 @@ engine::~engine()
 	delete render;
 	render == nullptr;
 
-	delete level;
-	level == nullptr;
+	delete m_levelman;
+	m_levelman == nullptr;
 	renderer::close_sdl();
 }
 
@@ -51,7 +53,7 @@ engine* engine::get_instance()
 
 scene* engine::get_scene()
 {
-	return get_instance()->sceneManager;
+	return get_instance()->actor_manager;
 }
 
 renderer* engine::get_renderer() const
@@ -77,7 +79,7 @@ void engine::run()
 		return;
 	}
 
-	level = new level_grid("level_one.txt", 160, point());
+	m_levelman->load_level(0, 160);
 
 	SDL_Event e;
 	
@@ -105,26 +107,14 @@ void engine::run()
 			}
 		}
 
-		sceneManager->update();
+		actor_manager->update();
 		render->draw();
 
 		// DO ADDITIONAL STUFF BOLOW THIS LINE
 		//////////////////////
 
-		if (inputer->get_key(SDLK_UP)) {
-			if (level != nullptr)
-			{
-				delete level;
-				level = nullptr;
-			}
-		}
-
-		if (inputer->get_key(SDLK_DOWN)) {
-			if (level == nullptr)
-			{
-				level = new level_grid("level_one.txt", 160, point());
-			}
-		}
+		if (!m_levelman->get_current()->get_hero()->is_alive())
+			m_levelman->reset_level();
 		if (inputer->get_key(SDLK_ESCAPE)) quit = true;
 
 		//////////////////////

@@ -6,6 +6,7 @@
 #include "gold.h"
 #include "tile.h"
 #include "level_grid.h"
+#include "level_manager.h"
 #include <iostream>
 
 void hero::go_by_direction(point dir, bool with_jump = false)

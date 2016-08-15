@@ -7,6 +7,7 @@
 #include "draw_texture.h"
 #include "pipe.h"
 #include "gold.h"
+#include "level_manager.h"
 
 void level_grid::unhide_ladder(point indices, bool finalizing)
 {
@@ -26,8 +27,9 @@ void level_grid::unhide_ladder(point indices, bool finalizing)
 	l->get_tex_draw()->set_width_height(m_tilesize, m_tilesize);
 }
 
-level_grid::level_grid(std::string filename, float tilesize, point start)
+level_grid::level_grid(std::string filename, float tilesize, level_manager *manager)
 {
+	m_levelmanager = manager;
 	std::ifstream read(filename);
 	std::string line;
 
@@ -100,6 +102,7 @@ level_grid::level_grid(std::string filename, float tilesize, point start)
 
 level_grid::~level_grid()
 {
+	during_deconstruction = true;
 	//REMOVE TILES
 	for (int i = 0;i < tile_grid->size();i++)
 	{
@@ -113,8 +116,8 @@ level_grid::~level_grid()
 	//REMOVE GOLD
 
 	for (std::vector<gold *>::iterator it = gold_piles.begin(); it != gold_piles.end(); ++it) {
-		engine::get_instance()->get_scene()->remove_actor(*it);
-		delete *it;
+			engine::get_instance()->get_scene()->remove_actor(*it);
+			delete *it;
 	}
 
 	engine::get_instance()->get_scene()->remove_actor(m_hero);
@@ -141,16 +144,24 @@ void level_grid::put_gold_on_tile(tile* tile, int value)
 		delete go;
 }
 
-void level_grid::at_gold_disappearance()
+void level_grid::at_gold_disappearance(gold *g)
 {
-	if (gold::get_existing_count() == 0)
+	if (!during_deconstruction)
 	{
-		std::cout << "UNLOCK\n";
+		std::vector<gold *>::iterator looking_for_instance = std::find(gold_piles.begin(), gold_piles.end(), g);
+		if (looking_for_instance != gold_piles.end())
+			gold_piles.erase(looking_for_instance);
 
-		//CHANGING SOME RANDOM TILE, TO BE REPLACED LATER
-		for (point p : hidden_ladders)
-			unhide_ladder(p, false);
+		if (gold::get_existing_count() == 0)
+		{
+			std::cout << "UNLOCK\n";
 
-		unhide_ladder(final_ladder, true);
+			//CHANGING SOME RANDOM TILE, TO BE REPLACED LATER
+			for (point p : hidden_ladders)
+				unhide_ladder(p, false);
+
+			unhide_ladder(final_ladder, true);
+		}
 	}
+	
 }
