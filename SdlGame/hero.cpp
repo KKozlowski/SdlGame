@@ -9,16 +9,14 @@
 #include "level_manager.h"
 #include <iostream>
 
-void hero::go_by_direction(point dir, bool with_jump = false)
+void hero::set_direction(point dir, bool with_jump = false)
 {
-	
 	if (with_jump)
 	{
 		set_current_tile(destination_tile);
 		movement_progress -= 1;
 	} 
 	destination_tile = current_tile->get_neighbor(dir);
-	
 }
 
 void hero::reduce_offset()
@@ -39,15 +37,12 @@ void hero::reduce_offset()
 	if (old_offset.y*position_offset.y < 0) position_offset.y = 0;
 
 	get_transform()->position += (old_offset - position_offset);
-
-	//std::cout << position_offset.to_string() << std::endl;
 }
 
 void hero::set_current_tile(tile* t)
 {
 	if (t->get_gold() != nullptr)
 	{
-		std::cout << "GOLD ENCOUNTERED\n";
 		add_points(t->get_gold()->get_value());
 		t->pop_gold();
 	}
@@ -62,15 +57,20 @@ void hero::set_current_tile(tile* t)
 		falling = true;
 	}
 		
-	else if (t->over_solid())
+	else if (falling && (t->over_solid() || t->get_type() == tile_type::pipe))
+	{
 		falling = false;
+		//destination_tile = t;
+		//previous_dir = { 0,0 };
+	}
+		
 
 	current_tile = t;
 }
 
 void hero::continue_movement()
 {
-	movement_progress += engine::get_delta_time() * speed;
+	movement_progress += engine::get_delta_time() * m_speed;
 	if (destination_tile == nullptr)
 		get_transform()->position = current_tile->get_transform()->position;
 	else
@@ -79,7 +79,8 @@ void hero::continue_movement()
 		{
 			set_current_tile(destination_tile);
 			get_transform()->position = destination_tile->get_transform()->position;
-			movement_progress -= 1;
+			if (falling)
+				movement_progress -= 1;
 		}
 		else
 			get_transform()->position = tile::position_lerp(current_tile, destination_tile, movement_progress);
@@ -105,6 +106,9 @@ hero::hero(tile *start_tile, level_grid *lg)
 	draw_texture *dt = new draw_texture(this, "texture.png");
 	dt->centered = true;
 	drawing = dt;
+
+	m_speed = 4.f;
+	adjustment_jump_tolerance = 0.33f;
 
 	set_current_tile(start_tile);
 	m_levelgrid = lg;
@@ -147,6 +151,7 @@ tile* hero::get_current_tile() const
 
 void hero::update()
 {
+	std::cout << current_tile->get_Xpos() << " " << current_tile->get_Ypos() << " " << movement_progress << std::endl;
 	reduce_offset();
 	point zero;
 	vector2f position = get_transform()->position;
@@ -174,22 +179,22 @@ void hero::update()
 		{
 			if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_up())
 			{
-				go_by_direction(dir = { 0,-1 }, true);
+				set_direction(dir = { 0,-1 }, true);
 			} 
 			else if (current_tile->can_up() || position.y > current_tile_position.y)
 			{
-				go_by_direction(dir = { 0,-1 });
+				set_direction(dir = { 0,-1 });
 			} 
 		}
 		else if (inp->get_key(SDLK_s))
 		{
 			if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_down())
 			{
-				go_by_direction(dir = { 0,1 }, true);
+				set_direction(dir = { 0,1 }, true);
 			} 
 			else if (current_tile->can_down() || position.y < current_tile_position.y)
 			{
-				go_by_direction(dir = { 0,1 });
+				set_direction(dir = { 0,1 });
 				if (destination_tile->is_empty())
 					falling = true;
 			}
@@ -198,22 +203,22 @@ void hero::update()
 		{
 			if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_left())
 			{
-				go_by_direction(dir = { -1,0 },true);
+				set_direction(dir = { -1,0 },true);
 			} 
 			else if (current_tile->can_left() || position.x > current_tile_position.x)
 			{
-				go_by_direction(dir = { -1,0 });
+				set_direction(dir = { -1,0 });
 			}
 		}
 		else if (inp->get_key(SDLK_d) )
 		{
 			if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_left())
 			{
-				go_by_direction(dir = { 1,0 }, true);
+				set_direction(dir = { 1,0 }, true);
 			} 
 			else if (current_tile->can_right() || position.x < current_tile_position.x)
 			{
-				go_by_direction(dir = { 1,0 });
+				set_direction(dir = { 1,0 });
 			}
 		}
 	}
@@ -227,7 +232,7 @@ void hero::update()
 
 		if (can_jump_to_destination()) 
 		{
-			go_by_direction(dir = { 0,0 }, true);
+			set_direction(dir = { 0,0 }, true);
 		}
 
 		movement_progress = 0;

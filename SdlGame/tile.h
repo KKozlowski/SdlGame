@@ -29,7 +29,7 @@ public:
 
 	tile(int x, int y, level_grid* l);
 
-	virtual ~tile() { std::cout << "HUE"; }
+	virtual ~tile() {  }
 
 	virtual bool is_accessible()
 	{

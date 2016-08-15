@@ -119,7 +119,11 @@ void engine::run()
 			if (!he->is_alive())
 				m_levelman->reset_level();
 			if (he->has_won())
-				m_levelman->load_next_level();
+			{
+				if (!m_levelman->load_next_level())
+					quit = true;
+			}
+				
 		}
 		
 		if (inputer->get_key(SDLK_ESCAPE)) quit = true;

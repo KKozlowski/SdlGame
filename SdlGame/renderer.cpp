@@ -38,7 +38,7 @@ renderer::renderer()
 {
 	initialize_sdl();
 
-	m_camera = new camera(point(640,360), SCREEN_HEIGHT , this);
+	m_camera = new camera(point(640,360), SCREEN_HEIGHT*1.6f , this);
 
 	mainWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (mainWindow == nullptr)

@@ -1,12 +1,17 @@
 ﻿#include "level_manager.h"
 #include "file_reader_line_by_line.h"
 
+std::vector<std::string> level_manager::filenames {"level_one.txt", "level_two.txt" };
+
 bool level_manager::load_level(int id, int tilesize)
 {
 	if (current_level != nullptr)
 		close_level();
 
-	file_reader_line_by_line *li = new file_reader_line_by_line("level_one.txt");
+	if (id >= filenames.size())
+		return false;
+
+	file_reader_line_by_line *li = new file_reader_line_by_line(filenames[id]);
 	if (li->is_empty()) 
 		return false;
 

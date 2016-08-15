@@ -21,10 +21,10 @@ protected:
 
 	int points = 0;
 
-	float speed = 2.f;
-	float adjustment_jump_tolerance = 0.25f;
+	float m_speed;
+	float adjustment_jump_tolerance;
 
-	void go_by_direction(point dir, bool with_jump);
+	void set_direction(point dir, bool with_jump);
 
 	// OFFSET
 	vector2f position_offset;

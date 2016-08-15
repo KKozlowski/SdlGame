@@ -7,6 +7,7 @@ private:
 	level_grid *current_level = nullptr;
 	int current_level_id;
 	int last_tilesize;
+	static std::vector<std::string> filenames;
 
 	
 public:

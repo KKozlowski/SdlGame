@@ -43,7 +43,7 @@ level_grid::level_grid(file_reader_line_by_line *li, float tilesize, level_manag
 		for (char c : line)
 		{
 			bool add_gold = false;
-			std::cout << c;
+			//w << c;
 			tile *tile = nullptr;
 
 			switch(c)
@@ -96,7 +96,7 @@ level_grid::level_grid(file_reader_line_by_line *li, float tilesize, level_manag
 			++col;
 		}
 
-		std::cout << std::endl;
+		//std::cout << std::endl;
 		++row;
 	}
 }

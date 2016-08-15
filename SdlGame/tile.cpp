@@ -47,7 +47,6 @@ bool tile::can_up(bool for_ai)
 bool tile::can_down(bool for_ai)
 {
 	tile *down = get_down();
-	//std::cout << (down == nullptr);
 	if (!down) return false;
 	if (down->get_type() != tile_type::wall) return true;
 	if (!for_ai && down->is_empty()) return true;
