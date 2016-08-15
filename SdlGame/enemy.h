@@ -18,7 +18,14 @@ private:
 
 	void set_current_tile(tile *t);
 
+	point previous_dir;
+
+	bool falling_into_trap;
+
 	point get_2d_distance_to_tile(tile *t);
+	point find_move_to(tile *t);
+
+	void die();
 public:
 	enemy(tile *start_tile, level_grid *lg);
 	void update() override;
