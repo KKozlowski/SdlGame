@@ -10,19 +10,27 @@ void wall::refill()
 		get_level()->get_hero()->die();
 }
 
-wall::wall(int x, int y, level_grid* l)
+wall::wall(int x, int y, level_grid* l, bool destructible)
 	:tile(x, y, l)
 {
 	digged = false;
 	m_type = tile_type::wall;
-	get_tex_draw()->set_texture("wall.png");
+
+	this->destructible = destructible;
+	if (destructible)
+		get_tex_draw()->set_texture("wall.png");
+	else 
+		get_tex_draw()->set_texture("super_wall.png");
 }
 
 void wall::dig()
 {
-	get_draw()->set_visible(false);
-	digged = true;
-	time_to_refill = 5.f;
+	if (destructible)
+	{
+		get_draw()->set_visible(false);
+		digged = true;
+		time_to_refill = 5.f;
+	}
 }
 
 bool wall::is_empty()

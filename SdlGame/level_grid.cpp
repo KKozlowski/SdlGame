@@ -51,6 +51,9 @@ level_grid::level_grid(file_reader_line_by_line *li, float tilesize, level_manag
 			case '#':
 				tile = new wall(col, row, this);
 				break;
+			case '0':
+				tile = new wall(col, row, this, false);
+				break;
 			case '=':
 				tile = new ladder(col, row, this);
 				break;
