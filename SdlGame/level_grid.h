@@ -11,6 +11,7 @@ private:
 	hero *m_hero;
 	float m_tilesize;
 	std::vector<point> hidden_ladders;
+	std::vector<gold *> gold_piles;
 	point final_ladder;
 
 	std::vector<std::vector<tile*> *> *tile_grid = new std::vector<std::vector<tile*>*>();
@@ -23,6 +24,7 @@ public:
 	float get_tilesize() const { return m_tilesize; }
 
 	tile *get(int column, int row);
+	void put_gold_on_tile(tile * tile, int value);
 
 	void at_gold_disappearance();
 };

@@ -101,6 +101,10 @@ bool hero::dig(point direction)
 
 hero::hero(tile *start_tile, level_grid *lg)
 {
+	draw_texture *dt = new draw_texture(this, "texture.png");
+	dt->centered = true;
+	drawing = dt;
+
 	set_current_tile(start_tile);
 	m_levelgrid = lg;
 	float tilesize = lg->get_tilesize();

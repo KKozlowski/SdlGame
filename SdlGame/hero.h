@@ -5,7 +5,7 @@
 class tile;
 class level_grid;
 
-class hero : public ball
+class hero : public actor
 {
 protected:
 	float move_speed = 210;
