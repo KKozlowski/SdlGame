@@ -60,8 +60,6 @@ void hero::set_current_tile(tile* t)
 	else if (falling && (t->over_solid() || t->get_type() == tile_type::pipe))
 	{
 		falling = false;
-		//destination_tile = t;
-		//previous_dir = { 0,0 };
 	}
 		
 
@@ -151,7 +149,7 @@ tile* hero::get_current_tile() const
 
 void hero::update()
 {
-	std::cout << current_tile->get_Xpos() << " " << current_tile->get_Ypos() << " " << movement_progress << std::endl;
+	//std::cout << current_tile->get_Xpos() << " " << current_tile->get_Ypos() << " " << movement_progress << std::endl;
 	reduce_offset();
 	point zero;
 	vector2f position = get_transform()->position;
