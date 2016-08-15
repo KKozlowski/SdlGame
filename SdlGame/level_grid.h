@@ -7,6 +7,7 @@
 #include "file_reader_line_by_line.h"
 
 class level_manager;
+class enemy;
 
 class level_grid
 {
@@ -17,6 +18,7 @@ private:
 
 	std::vector<point> hidden_ladders;
 	std::vector<gold *> gold_piles;
+	std::vector<enemy *> enemies;
 	point final_ladder;
 
 	bool during_deconstruction = false;
@@ -33,6 +35,7 @@ public:
 
 	tile *get(int column, int row);
 	void put_gold_on_tile(tile * tile, int value);
+	void put_enemy_on_tile(tile *tile);
 
 	void at_gold_disappearance(gold *g);
 };

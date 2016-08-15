@@ -14,13 +14,6 @@ bool engine::initialize()
 {
 	bool success = true;
 
-	thatTexture = texture::get_texture("texture.png");
-	if (thatTexture == nullptr)
-	{
-		printf("Failed to load texture image!\n");
-		success = false;
-	}
-
 	return success;
 }
 
@@ -79,7 +72,7 @@ void engine::run()
 		return;
 	}
 
-	m_levelman->load_level(0, 160);
+	m_levelman->load_level(1, 160);
 
 	SDL_Event e;
 	
@@ -118,7 +111,7 @@ void engine::run()
 		{
 			if (!he->is_alive())
 				m_levelman->reset_level();
-			if (he->has_won())
+			else if (he->has_won())
 			{
 				if (!m_levelman->load_next_level())
 					quit = true;

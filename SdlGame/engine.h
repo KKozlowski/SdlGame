@@ -25,8 +25,6 @@ private:
 	scene *actor_manager;
 
 	level_manager *m_levelman;
-
-	SDL_Texture* thatTexture = nullptr;
 public:
 	~engine();
 	static engine* get_instance();

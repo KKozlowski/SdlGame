@@ -8,6 +8,7 @@
 #include "pipe.h"
 #include "gold.h"
 #include "level_manager.h"
+#include "enemy.h"
 
 void level_grid::unhide_ladder(point indices, bool finalizing)
 {
@@ -43,6 +44,7 @@ level_grid::level_grid(file_reader_line_by_line *li, float tilesize, level_manag
 		for (char c : line)
 		{
 			bool add_gold = false;
+			bool add_enemy = false;
 			//w << c;
 			tile *tile = nullptr;
 
@@ -72,6 +74,10 @@ level_grid::level_grid(file_reader_line_by_line *li, float tilesize, level_manag
 				tile = new empty_tile(col, row, this);
 				add_gold = true;
 				break;
+			case 'X': // ENEMY
+				tile = new empty_tile(col, row, this);
+				add_enemy = true;
+				break;
 			case '!':
 				tile = new empty_tile(col, row, this);
 				hidden_ladders.push_back({ col, row });
@@ -92,6 +98,9 @@ level_grid::level_grid(file_reader_line_by_line *li, float tilesize, level_manag
 			if (add_gold)
 			{
 				put_gold_on_tile(tile, 100);
+			} else if (add_enemy)
+			{
+				put_enemy_on_tile(tile);
 			}
 			++col;
 		}
@@ -121,6 +130,12 @@ level_grid::~level_grid()
 			delete *it;
 	}
 
+	//REMOVE ENEMIES
+	for (std::vector<enemy *>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
+		engine::get_instance()->get_scene()->remove_actor(*it);
+		delete *it;
+	}
+
 	engine::get_instance()->get_scene()->remove_actor(m_hero);
 	delete m_hero;
 }
@@ -143,6 +158,13 @@ void level_grid::put_gold_on_tile(tile* tile, int value)
 	}
 	else
 		delete go;
+}
+
+void level_grid::put_enemy_on_tile(tile* tile)
+{
+	enemy *enem = new enemy(tile, this);
+	engine::get_instance()->get_scene()->add_actor(enem);
+	enemies.push_back(enem);
 }
 
 void level_grid::at_gold_disappearance(gold *g)

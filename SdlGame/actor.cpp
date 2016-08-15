@@ -16,6 +16,7 @@ actor::~actor()
 
 void actor::update()
 {
+
 }
 
 

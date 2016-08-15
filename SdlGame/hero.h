@@ -9,8 +9,10 @@ class hero : public actor
 {
 protected:
 	float move_speed = 210;
+
 	tile *current_tile;
 	tile *destination_tile;
+
 	point previous_dir;
 	level_grid *m_levelgrid;
 	float movement_progress;
