@@ -9,16 +9,6 @@
 #include "level_manager.h"
 #include <iostream>
 
-void hero::set_direction(point dir, bool with_jump = false)
-{
-	if (with_jump)
-	{
-		set_current_tile(destination_tile);
-		movement_progress -= 1;
-	} 
-	destination_tile = current_tile->get_neighbor(dir);
-}
-
 void hero::reduce_offset()
 {
 	if (position_offset == vector2f())
@@ -37,6 +27,16 @@ void hero::reduce_offset()
 	if (old_offset.y*position_offset.y < 0) position_offset.y = 0;
 
 	get_transform()->position += (old_offset - position_offset);
+}
+
+void hero::set_direction(point dir, bool with_jump = false)
+{
+	if (with_jump)
+	{
+		set_current_tile(destination_tile);
+		movement_progress -= 1;
+	}
+	destination_tile = current_tile->get_neighbor(dir);
 }
 
 void hero::set_current_tile(tile* t)
@@ -99,7 +99,13 @@ bool hero::dig(point direction)
 	tile *two = one->get_neighbor({ 0,1 });
 	if (two == nullptr || two->get_type() != tile_type::wall) 
 		return false;
-	static_cast<wall *>(two)->dig();
+
+	bool success = static_cast<wall *>(two)->dig(m_diggingTime);
+	if (success)
+	{
+		m_timeOfDiggingStop = engine::get_time_from_start() + 0.25f;
+		static_cast<draw_texture *>(get_draw())->set_texture("texture_shovel.png");
+	}
 }
 
 hero::hero(tile *start_tile, level_grid *lg)
@@ -138,6 +144,12 @@ bool hero::can_jump_to_destination() const
 	return (destiny_position - position).length() < m_levelgrid->get_tilesize()* adjustment_jump_tolerance;
 }
 
+void hero::stop_digging()
+{
+	m_timeOfDiggingStop = 0;
+	static_cast<draw_texture *>(get_draw())->set_texture("texture.png");
+}
+
 void hero::die()
 {
 	m_alive = false;
@@ -163,12 +175,15 @@ void hero::update()
 	point dir;
 	tile *old_destination = destination_tile;
 
+	if (is_digging() && m_timeOfDiggingStop < engine::get_time_from_start())
+		stop_digging();
+
 	if (m_falling)
 	{
 		dir = { 0,1 };
 		destination_tile = current_tile->get_down();
 	}
-	else if (is_alive())
+	else if (is_alive() && !is_digging())
 	{
 		if (inp->get_key(SDLK_q))
 			dig({ -1,0 });
