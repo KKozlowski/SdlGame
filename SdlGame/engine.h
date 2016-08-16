@@ -13,15 +13,14 @@ class engine
 {
 private: 
 	bool quit = false;
-	float delta_time = 0.00000001f;
+	float delta_time = 0.016f;
+	float time_from_start = 0;
 
 	engine();
 
 	renderer *m_renderer;
 	input *m_input;
 	scene *m_actormanager;
-
-	level_manager *m_levelmanager;
 public:
 	~engine();
 	static engine* get_instance();
@@ -35,6 +34,8 @@ public:
 	///<para/>It is accurate to nanoseconds.
 	///</summary>
 	static float get_delta_time();
+
+	static float get_time_from_start();
 
 	void run();
 };

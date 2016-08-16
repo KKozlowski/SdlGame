@@ -167,7 +167,7 @@ void renderer::draw()
 
 	delete to_draw;
 	if (bottom_text != "")
-		print_text(bottom_text, point(0,SCREEN_HEIGHT-50), 50);
+		print_text(bottom_text, point(10,SCREEN_HEIGHT-50), 50);
 
 	SDL_RenderPresent(mainRenderer);
 }
