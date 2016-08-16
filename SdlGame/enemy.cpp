@@ -7,6 +7,7 @@
 
 void enemy::set_current_tile(tile* t)
 {
+	if (t == nullptr) return;
 	if (t->can_down() && !t->can_down(true)) //TRAP!
 	{
 		falling_into_trap = true;
@@ -16,6 +17,17 @@ void enemy::set_current_tile(tile* t)
 		wall *our_doom = static_cast<wall *>(destination_tile);
 		if (our_doom != nullptr)
 			our_doom->enemy_in_the_hole = this;
+	}
+
+	if (t->can_down(true) && t->empty_over_empty())
+	{
+		falling = true;
+		destination_tile = t->get_down();
+	}
+
+	if (falling && !t->empty_over_empty())
+	{
+		falling = false;
 	}
 
 	try_steal_gold(t);
@@ -49,6 +61,37 @@ bool enemy::try_drop_gold(tile* t)
 	return false;
 }
 
+tile* enemy::find_vertical_passage(point dir)
+{
+	tile *next_tile = current_tile;
+
+	do {
+		if (next_tile->can_right(true))
+		{
+			next_tile = next_tile->get_right();
+			if (dir.y<0 &&next_tile->can_up())
+				return next_tile;
+			if (dir.y>0 &&next_tile->can_down())
+				return next_tile;
+		}
+		else break;
+	} while (true);
+
+	do {
+		if (next_tile->can_left(true))
+		{
+			next_tile = next_tile->get_left();
+			if (dir.y<0 &&next_tile->can_up())
+				return next_tile;
+			if (dir.y>0 &&next_tile->can_down())
+				return next_tile;
+		}
+		else break;
+	} while (true);
+
+	return nullptr;
+}
+
 point enemy::get_2d_distance_to_tile(tile* t)
 {
 	return point(
@@ -61,6 +104,8 @@ point enemy::find_move_to(tile* t)
 {
 	point result(0, 0);
 	point where_to_go = get_2d_distance_to_tile(t);
+	if (falling)
+		return{ 0,1 };
 	if (where_to_go.y == 0) //WE ARE ON THE SAME LEVEL!
 	{
 		tile *next_tile = current_tile;
@@ -96,7 +141,34 @@ point enemy::find_move_to(tile* t)
 				result = { 1,0 };
 		}
 	}
-	//if (result != point()) std::cout << result.to_string() << std::endl;
+	else //WE HAVE TO MOVE VERTICALLY!
+	{
+		tile *passage = nullptr;
+		if (where_to_go.y < 0)
+		{
+			if (current_tile->can_up()) result = { 0,-1 };
+			else
+				passage = find_vertical_passage({0,-1});
+			
+		}
+			
+		else
+		{
+			if (current_tile->can_down()) result = { 0,1 };
+			else
+				passage = find_vertical_passage({ 0,1 });
+		}
+			
+
+		if (passage != nullptr)
+		{
+			if (passage->get_Xpos() < current_tile->get_Xpos())
+				result = { -1,0 };
+			if (passage->get_Xpos() > current_tile->get_Xpos());
+			result = { 1,0 };
+		}
+	}
+
 	return result;
 }
 
@@ -128,7 +200,7 @@ void enemy::update()
 	}
 
 	movement_progress += m_speed * engine::get_delta_time();
-	if (movement_progress > 1) {
+	if (movement_progress > 1 && destination_tile!= nullptr) {
 		set_current_tile(destination_tile);
 		get_transform()->position = current_tile->get_transform()->position;
 	}
