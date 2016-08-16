@@ -32,6 +32,13 @@ tile* level_grid::get_respawner_tile()
 	return get(spawner.x, spawner.y);
 }
 
+void level_grid::set_score_text(int pts)
+{
+	std::stringstream ss;
+	ss << "SCORE: " << pts;
+	engine::get_instance()->get_renderer()->bottom_text = ss.str();
+}
+
 level_grid::level_grid(file_reader_line_by_line *li, float tilesize, level_manager *manager)
 {
 	m_levelmanager = manager;
@@ -121,7 +128,7 @@ level_grid::level_grid(file_reader_line_by_line *li, float tilesize, level_manag
 	for (gold *g : gold_piles)
 		required_gold += g->get_value();
 
-	engine::get_instance()->get_renderer()->bottom_text = "SCORE: 0";
+	set_score_text(0);
 }
 
 level_grid::~level_grid()
@@ -188,13 +195,11 @@ int level_grid::get_required_gold()
 	return required_gold;
 }
 
-bool level_grid::on_hero_gold_take(int pts)
+bool level_grid::on_hero_gold_take(int golden_points, int killer_points)
 {
-	std::stringstream ss;
-	ss << "SCORE: " << pts;
-	engine::get_instance()->get_renderer()->bottom_text = ss.str();
+	set_score_text(golden_points + killer_points);
 
-	if (pts == required_gold)
+	if (golden_points == required_gold)
 	{
 		std::cout << "UNLOCK\n";
 	
@@ -237,6 +242,10 @@ void level_grid::on_enemy_death(enemy* e)
 		engine::get_instance()->get_scene()->remove_actor(*looking_for_instance);
 		delete *looking_for_instance;
 		enemies.erase(looking_for_instance);
+
+		get_hero()->add_killer_points(120);
+
+		set_score_text(get_hero()->get_total_points());
 
 		put_enemy_on_tile(get_respawner_tile());
 	}

@@ -19,7 +19,12 @@ protected:
 	///<summary>
 	///Points gathered by player by collecting gold piles.
 	///</summary>
-	int m_points = 0;
+	int m_goldenPoints = 0;
+
+	///<summary>
+	///Points gathered by player by killing the enemies.
+	///</summary>
+	int m_killerPoints = 0;
 
 	float adjustment_jump_tolerance;
 	///<summary>
@@ -70,8 +75,13 @@ public:
 
 	void stop_digging();
 
-	int get_points() const { return m_points; }
-	void add_points(int to_add) { m_points += to_add; }
+	int get_golden_points() const { return m_goldenPoints; }
+	void add_golden_points(int to_add) { m_goldenPoints += to_add; }
+
+	int get_killer_points() const { return m_killerPoints; }
+	void add_killer_points(int to_add) { m_killerPoints += to_add; }
+
+	int get_total_points() const { return m_goldenPoints + m_killerPoints; }
 
 	void die();
 	tile *get_current_tile() const;

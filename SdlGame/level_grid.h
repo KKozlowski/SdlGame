@@ -31,6 +31,8 @@ private:
 	void unhide_ladder(point indices, bool finalizing);
 
 	tile *get_respawner_tile();
+
+	void set_score_text(int pts);
 public:
 	level_grid(file_reader_line_by_line *li, float tilesize, level_manager *manager);
 	~level_grid();
@@ -43,7 +45,7 @@ public:
 	void put_enemy_on_tile(tile *tile);
 
 	int get_required_gold();
-	bool on_hero_gold_take(int pts);
+	bool on_hero_gold_take(int golden_points, int killer_points);
 	void on_gold_disappearance(gold *g);
 	void on_enemy_death(enemy *e);
 };
