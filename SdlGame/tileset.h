@@ -3,4 +3,4 @@
 #include "empty_tile.h"
 #include "wall.h"
 #include "ladder.h"
-#include "tile.h"
+#include "pipe.h"

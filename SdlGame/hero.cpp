@@ -93,7 +93,7 @@ void hero::continue_movement()
 bool hero::dig(point direction)
 {
 	tile *one = current_tile->get_neighbor(direction);
-	if (one == nullptr || !(one->is_empty() || one->get_type() == tile_type::ladder)) 
+	if (one == nullptr || !(one->is_empty() || one->get_type() == tile_type::ladder || one->get_type() == tile_type::pipe))
 		return false;
 
 	tile *two = one->get_neighbor({ 0,1 });
