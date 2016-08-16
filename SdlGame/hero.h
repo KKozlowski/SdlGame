@@ -84,4 +84,11 @@ public:
 	tile *get_current_tile() const;
 
 	virtual void update() override;
+
+	///<summary>
+	/// Reads player input, calculates wanted direction from input.
+	/// Calls set_direction for calculated direction.
+    /// Also starts falling process when it's possible and wanted by player.
+	///</summary>
+	point read_and_apply_input();
 };

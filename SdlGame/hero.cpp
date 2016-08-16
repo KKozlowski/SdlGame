@@ -166,11 +166,8 @@ void hero::update()
 {
 	reduce_offset();
 	point zero;
-	vector2f position = get_transform()->position;
-	vector2f current_tile_position = current_tile->get_transform()->position;
+	
 	engine::get_instance()->get_renderer()->get_camera()->center = point(get_transform()->position.x, get_transform()->position.y);
-
-	input *inp = engine::get_instance()->get_input();
 
 	point dir;
 	tile *old_destination = destination_tile;
@@ -185,57 +182,7 @@ void hero::update()
 	}
 	else if (is_alive() && !is_digging())
 	{
-		if (inp->get_key(SDLK_q))
-			dig({ -1,0 });
-		else if (inp->get_key(SDLK_e))
-			dig({ 1,0 });
-
-		if (inp->get_key(SDLK_w))
-		{
-			if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_up())
-			{
-				set_direction(dir = { 0,-1 }, true);
-			} 
-			else if (current_tile->can_up() || position.y > current_tile_position.y)
-			{
-				set_direction(dir = { 0,-1 });
-			} 
-		}
-		else if (inp->get_key(SDLK_s))
-		{
-			if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_down())
-			{
-				set_direction(dir = { 0,1 }, true);
-			} 
-			else if (current_tile->can_down() || position.y < current_tile_position.y)
-			{
-				set_direction(dir = { 0,1 });
-				if (destination_tile->is_empty())
-					m_falling = true;
-			}
-		}
-		else if (inp->get_key(SDLK_a))
-		{
-			if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_left())
-			{
-				set_direction(dir = { -1,0 },true);
-			} 
-			else if (current_tile->can_left() || position.x > current_tile_position.x)
-			{
-				set_direction(dir = { -1,0 });
-			}
-		}
-		else if (inp->get_key(SDLK_d) )
-		{
-			if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_left())
-			{
-				set_direction(dir = { 1,0 }, true);
-			} 
-			else if (current_tile->can_right() || position.x < current_tile_position.x)
-			{
-				set_direction(dir = { 1,0 });
-			}
-		}
+		dir = read_and_apply_input();
 	}
 
 	if (dir == zero)
@@ -268,4 +215,67 @@ void hero::update()
 	}
 
 	previous_dir = dir;
+}
+
+point hero::read_and_apply_input()
+{
+	input *inp = engine::get_instance()->get_input();
+
+	vector2f position = get_transform()->position;
+	vector2f current_tile_position = current_tile->get_transform()->position;
+
+	point result;
+
+	if (inp->get_key(SDLK_q))
+		dig({ -1,0 });
+	else if (inp->get_key(SDLK_e))
+		dig({ 1,0 });
+	else if (inp->get_key(SDLK_w))
+	{
+		if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_up())
+		{
+			set_direction(result = { 0,-1 }, true);
+		}
+		else if (current_tile->can_up() || position.y > current_tile_position.y)
+		{
+			set_direction(result = { 0,-1 });
+		}
+	}
+	else if (inp->get_key(SDLK_s))
+	{
+		if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_down())
+		{
+			set_direction(result = { 0,1 }, true);
+		}
+		else if (current_tile->can_down() || position.y < current_tile_position.y)
+		{
+			set_direction(result = { 0,1 });
+			if (destination_tile->is_empty())
+				m_falling = true;
+		}
+	}
+	else if (inp->get_key(SDLK_a))
+	{
+		if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_left())
+		{
+			set_direction(result = { -1,0 }, true);
+		}
+		else if (current_tile->can_left() || position.x > current_tile_position.x)
+		{
+			set_direction(result = { -1,0 });
+		}
+	}
+	else if (inp->get_key(SDLK_d))
+	{
+		if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_left())
+		{
+			set_direction(result = { 1,0 }, true);
+		}
+		else if (current_tile->can_right() || position.x < current_tile_position.x)
+		{
+			set_direction(result = { 1,0 });
+		}
+	}
+
+	return result;
 }
