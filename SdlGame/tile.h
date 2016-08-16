@@ -21,6 +21,7 @@ public:
 	{ return indices.x; }
 	int get_Ypos() const
 	{ return indices.y; }
+	point get_indices() const { return indices; }
 
 	level_grid *get_level() const
 	{
