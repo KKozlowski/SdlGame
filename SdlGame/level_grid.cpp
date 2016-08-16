@@ -158,6 +158,8 @@ void level_grid::put_gold_on_tile(tile* tile, int value)
 	if (go->set_tile(tile, this))
 	{
 		engine::get_instance()->get_scene()->add_actor(go);
+		
+		
 		gold_piles.push_back(go);
 	}
 	else

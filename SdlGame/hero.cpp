@@ -46,6 +46,7 @@ void hero::set_current_tile(tile* t)
 		add_points(t->get_gold()->get_value());
 		t->pop_gold();
 
+		std::cout << "HERO TAKES GOLD\n";
 		m_levelgrid->on_hero_gold_take(points);
 	}
 

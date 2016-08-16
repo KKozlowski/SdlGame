@@ -3,20 +3,50 @@
 #include "tile.h"
 #include "level_grid.h"
 #include "engine.h"
+#include "gold.h"
 
 void enemy::set_current_tile(tile* t)
 {
 	if (t->can_down() && !t->can_down(true)) //TRAP!
 	{
 		falling_into_trap = true;
+		try_drop_gold(t);
+
 		destination_tile = t->get_down();
 		wall *our_doom = static_cast<wall *>(destination_tile);
 		if (our_doom != nullptr)
 			our_doom->enemy_in_the_hole = this;
 	}
 
+	try_steal_gold(t);
+
 	current_tile = t;
+
 	movement_progress -= 1;
+}
+
+bool enemy::try_steal_gold(tile* t)
+{
+	if (!falling_into_trap && t->get_gold() != nullptr)
+	{
+		held_points += t->get_gold()->get_value();
+		t->pop_gold();
+		return true;
+	}
+
+	return false;
+}
+
+bool enemy::try_drop_gold(tile* t)
+{
+	
+	if (held_points > 0)
+	{
+		//std::cout << held_points << std::endl;
+		m_levelgrid->put_gold_on_tile(t, held_points);
+		return true;
+	}
+	return false;
 }
 
 point enemy::get_2d_distance_to_tile(tile* t)
