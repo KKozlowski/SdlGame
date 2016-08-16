@@ -99,6 +99,9 @@
     <ClCompile Include="draw_title_screen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="tile_traveller.cpp">
+      <Filter>actors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -187,6 +190,9 @@
     </ClInclude>
     <ClInclude Include="draw_title_screen.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tile_traveller.h">
+      <Filter>actors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

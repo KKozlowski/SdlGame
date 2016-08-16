@@ -190,6 +190,7 @@
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="tile.cpp" />
+    <ClCompile Include="tile_traveller.cpp" />
     <ClCompile Include="transform.cpp" />
     <ClCompile Include="vector2.cpp" />
     <ClCompile Include="wall.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="scene.h" />
     <ClInclude Include="tile.h" />
     <ClInclude Include="tileset.h" />
+    <ClInclude Include="tile_traveller.h" />
     <ClInclude Include="tile_type.h" />
     <ClInclude Include="type_check.h" />
     <ClInclude Include="input.h" />

@@ -1,34 +1,22 @@
 ﻿#pragma once
 #include "actor.h"
+#include "tile_traveller.h"
 
 class level_grid;
 class tile;
 
-class enemy : public actor
+class enemy : public tile_traveller
 {
 private:
-	level_grid *m_levelgrid;
-
-	tile *current_tile;
-	tile *destination_tile;
-
-	point current_tile_indices;
-	point destination_tile_indices;
-
-	float m_speed;
-	float movement_progress = 0;
 
 	float killing_range = 0.5f;
 
 	int held_points = 0;
 
-	void set_current_tile(tile *t);
-	void set_destination_tile(tile *t);
-
-	point previous_dir;
-
 	bool falling_into_trap;
 	bool falling = false;
+
+	virtual void set_current_tile(tile *t) override;
 
 	bool try_steal_gold(tile *t);
 	bool try_drop_gold(tile *t);
@@ -43,5 +31,4 @@ private:
 public:
 	enemy(tile *start_tile, level_grid *lg);
 	void update() override;
-	void reload_key_tiles();
 };

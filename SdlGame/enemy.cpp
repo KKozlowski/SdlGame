@@ -13,7 +13,7 @@ void enemy::set_current_tile(tile* t)
 		try_drop_gold(t);
 
 		set_destination_tile(t->get_down());
-		wall *our_doom = static_cast<wall *>(destination_tile);
+		wall *our_doom = static_cast<wall *>(m_destinationTile);
 		if (our_doom != nullptr)
 			our_doom->enemy_in_the_hole = this;
 	}
@@ -30,20 +30,12 @@ void enemy::set_current_tile(tile* t)
 			falling = false;
 		}
 	}
-	
 
 	try_steal_gold(t);
 
-	current_tile = t;
+	m_movementProgress -= 1;
 
-	movement_progress -= 1;
-	current_tile_indices = current_tile->get_indices();
-}
-
-void enemy::set_destination_tile(tile* t)
-{
-	destination_tile = t;
-	destination_tile_indices = destination_tile->get_indices();
+	tile_traveller::set_current_tile(t);
 }
 
 bool enemy::try_steal_gold(tile* t)
@@ -72,7 +64,7 @@ bool enemy::try_drop_gold(tile* t)
 
 tile* enemy::find_vertical_passage(point dir)
 {
-	tile *next_tile = current_tile;
+	tile *next_tile = m_currentTile;
 
 	do {
 		if (dir.x > 0 && next_tile->can_right(true)) {
@@ -116,8 +108,8 @@ tile* enemy::find_closest_vertical_passage(point dir)
 
 	if (passage_one != nullptr && passage_two != nullptr)
 	{
-		if (abs(current_tile->get_Xpos() - passage_one->get_Xpos()) 
-			< abs(current_tile->get_Xpos() - passage_two->get_Xpos()))
+		if (abs(m_currentTile->get_Xpos() - passage_one->get_Xpos()) 
+			< abs(m_currentTile->get_Xpos() - passage_two->get_Xpos()))
 		{
 			return passage_one;
 		}
@@ -130,8 +122,8 @@ tile* enemy::find_closest_vertical_passage(point dir)
 point enemy::get_2d_distance_to_tile(tile* t)
 {
 	return point(
-		t->get_Xpos() - current_tile->get_Xpos(),
-		t->get_Ypos() - current_tile->get_Ypos()
+		t->get_Xpos() - m_currentTile->get_Xpos(),
+		t->get_Ypos() - m_currentTile->get_Ypos()
 		);
 }
 
@@ -143,7 +135,7 @@ point enemy::find_move_to(tile* t)
 		return{ 0,1 };
 	if (where_to_go.y == 0) //WE ARE ON THE SAME LEVEL!
 	{
-		tile *next_tile = current_tile;
+		tile *next_tile = m_currentTile;
 		bool found = false;
 
 		if (where_to_go.x < 0) //go left
@@ -182,7 +174,7 @@ point enemy::find_move_to(tile* t)
 		tile *passage = nullptr;
 		if (where_to_go.y < 0)
 		{
-			if (current_tile->can_up()) result = { 0,-1 };
+			if (m_currentTile->can_up()) result = { 0,-1 };
 
 			else
 			{
@@ -191,7 +183,7 @@ point enemy::find_move_to(tile* t)
 		}
 		else
 		{
-			if (current_tile->can_down()) result = { 0,1 };
+			if (m_currentTile->can_down()) result = { 0,1 };
 			else
 			{
 				passage = find_closest_vertical_passage({ 0,1 });
@@ -200,9 +192,9 @@ point enemy::find_move_to(tile* t)
 
 		if (passage != nullptr)
 		{
-			if (passage->get_Xpos() > current_tile->get_Xpos())
+			if (passage->get_Xpos() > m_currentTile->get_Xpos())
 				result = { 1,0 };
-			if (passage->get_Xpos() < current_tile->get_Xpos()) //; in memory of the most evil semicolon ever.
+			if (passage->get_Xpos() < m_currentTile->get_Xpos()) //; in memory of the most evil semicolon ever.
 				result = { -1,0 };
 
 				//std::cout << "\n\nPASSAGE LOCATION: " << passage->get_indices().to_string() << "\nCURRENT TILE: " << current_tile->get_indices().to_string() << "\nRESULT: " << result.to_string() << std::endl;
@@ -221,6 +213,7 @@ void enemy::die()
 }
 
 enemy::enemy(tile* start_tile, level_grid* lg)
+	:tile_traveller(lg, 2.f)
 {
 	m_levelgrid = lg;
 	draw_texture *dt = new draw_texture(this, "enemy.png");
@@ -228,10 +221,8 @@ enemy::enemy(tile* start_tile, level_grid* lg)
 	dt->centered = true;
 	m_draw = dt;
 
-	set_current_tile(start_tile);
+	enemy::set_current_tile(start_tile);
 	get_transform()->position = start_tile->get_transform()->position;
-
-	m_speed = 2.f;
 }
 
 void enemy::update()
@@ -242,17 +233,17 @@ void enemy::update()
 		he->die();
 	}
 
-	movement_progress += m_speed * engine::get_delta_time();
-	if (movement_progress >= 1 && destination_tile != nullptr) {
-		set_current_tile(destination_tile);
+	m_movementProgress += m_movementSpeed * engine::get_delta_time();
+	if (m_movementProgress >= 1 && m_destinationTile != nullptr) {
+		set_current_tile(m_destinationTile);
 		if (!falling_into_trap)
-			set_destination_tile(current_tile->get_neighbor(previous_dir));
-		get_transform()->position = current_tile->get_transform()->position;
+			set_destination_tile(m_currentTile->get_neighbor(m_previousDirection));
+		get_transform()->position = m_currentTile->get_transform()->position;
 	}
 
-	if (destination_tile != nullptr)
+	if (m_destinationTile != nullptr)
 	{
-		get_transform()->position = tile::position_lerp(current_tile, destination_tile, movement_progress);
+		get_transform()->position = tile::position_lerp(m_currentTile, m_destinationTile, m_movementProgress);
 	}
 
 	if (!falling_into_trap)
@@ -260,24 +251,18 @@ void enemy::update()
 		tile *hero_tile = he->get_current_tile();
 		point dir = find_move_to(hero_tile);
 
-		tile * new_destination = current_tile->get_neighbor(dir);
+		tile * new_destination = m_currentTile->get_neighbor(dir);
 
-		if (dir * previous_dir == point())
-			movement_progress = 0;
-		else if (destination_tile != new_destination && dir * previous_dir != point())
+		if (dir * m_previousDirection == point())
+			m_movementProgress = 0;
+		else if (m_destinationTile != new_destination && dir * m_previousDirection != point())
 		{
-			movement_progress = -movement_progress;
+			m_movementProgress = -m_movementProgress;
 		}
 
 		set_destination_tile(new_destination);
 
-		previous_dir = dir;
+		m_previousDirection = dir;
 	}
 
-}
-
-void enemy::reload_key_tiles()
-{
-	current_tile = m_levelgrid->get(current_tile_indices.x, current_tile_indices.y);
-	destination_tile = m_levelgrid->get(destination_tile_indices.x, destination_tile_indices.y);
 }

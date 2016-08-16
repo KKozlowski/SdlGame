@@ -33,10 +33,10 @@ void hero::set_direction(point dir, bool with_jump = false)
 {
 	if (with_jump)
 	{
-		set_current_tile(destination_tile);
-		movement_progress -= 1;
+		set_current_tile(m_destinationTile);
+		m_movementProgress -= 1;
 	}
-	set_destination_tile(current_tile->get_neighbor(dir));
+	set_destination_tile(m_currentTile->get_neighbor(dir));
 }
 
 void hero::set_current_tile(tile* t)
@@ -70,32 +70,25 @@ void hero::set_current_tile(tile* t)
 		m_falling = false;
 	}
 		
-	current_tile = t;
-	current_tile_indices = current_tile->get_indices();
-}
-
-void hero::set_destination_tile(tile* t)
-{
-	destination_tile = t;
-	destination_tile_indices = destination_tile->get_indices();
+	tile_traveller::set_current_tile(t);
 }
 
 void hero::continue_movement()
 {
-	movement_progress += engine::get_delta_time() * m_movementSpeed;
+	m_movementProgress += engine::get_delta_time() * m_movementSpeed;
 
-	if (destination_tile == nullptr)
-		get_transform()->position = current_tile->get_transform()->position;
+	if (m_destinationTile == nullptr)
+		get_transform()->position = m_currentTile->get_transform()->position;
 	else
 	{
-		if (movement_progress >= 1.f)
+		if (m_movementProgress >= 1.f)
 		{
-			set_current_tile(destination_tile);
-			get_transform()->position = destination_tile->get_transform()->position;
-			movement_progress -=1.f;
+			set_current_tile(m_destinationTile);
+			get_transform()->position = m_destinationTile->get_transform()->position;
+			m_movementProgress -=1.f;
 		}
 		else
-			get_transform()->position = tile::position_lerp(current_tile, destination_tile, movement_progress);
+			get_transform()->position = tile::position_lerp(m_currentTile, m_destinationTile, m_movementProgress);
 	}
 
 	get_transform()->position -= position_offset;
@@ -103,7 +96,7 @@ void hero::continue_movement()
 
 bool hero::dig(point direction)
 {
-	tile *one = current_tile->get_neighbor(direction);
+	tile *one = m_currentTile->get_neighbor(direction);
 	if (one == nullptr || !(one->is_empty() || one->get_type() == tile_type::ladder || one->get_type() == tile_type::pipe))
 		return false;
 
@@ -117,19 +110,20 @@ bool hero::dig(point direction)
 		m_timeOfDiggingStop = engine::get_time_from_start() + 0.25f;
 		static_cast<draw_texture *>(get_draw())->set_texture("texture_shovel.png");
 	}
+
+	return success;
 }
 
 hero::hero(tile *start_tile, level_grid *lg)
+	: tile_traveller(lg, 4.f)
 {
 	draw_texture *dt = new draw_texture(this, "texture.png");
 	dt->centered = true;
 	m_draw = dt;
 
-	m_movementSpeed = 4.f;
 	adjustment_jump_tolerance = 0.33f;
 
 	set_current_tile(start_tile);
-	m_levelgrid = lg;
 	float tilesize = lg->get_tilesize();
 
 	static_cast<draw_texture *>(get_draw())->set_width_height(tilesize, tilesize);
@@ -146,11 +140,11 @@ hero::~hero()
 
 bool hero::can_jump_to_destination() const
 {
-	if (destination_tile == nullptr) return false;
+	if (m_destinationTile == nullptr) return false;
 
 	vector2f position = get_transform()->position;
-	vector2f origin_position = current_tile->get_transform()->position;
-	vector2f destiny_position = destination_tile->get_transform()->position;
+	vector2f origin_position = m_currentTile->get_transform()->position;
+	vector2f destiny_position = m_destinationTile->get_transform()->position;
 
 	return (destiny_position - position).length() < m_levelgrid->get_tilesize()* adjustment_jump_tolerance;
 }
@@ -170,7 +164,7 @@ void hero::die()
 
 tile* hero::get_current_tile() const
 {
-	return current_tile;
+	return m_currentTile;
 }
 
 void hero::update()
@@ -181,7 +175,7 @@ void hero::update()
 	engine::get_instance()->get_renderer()->get_camera()->center = point(get_transform()->position.x, get_transform()->position.y);
 
 	point dir;
-	tile *old_destination = destination_tile;
+	tile *old_destination = m_destinationTile;
 
 	if (is_digging() && m_timeOfDiggingStop < engine::get_time_from_start())
 		stop_digging();
@@ -189,7 +183,7 @@ void hero::update()
 	if (m_falling)
 	{
 		dir = { 0,1 };
-		set_destination_tile(current_tile->get_down());
+		set_destination_tile(m_currentTile->get_down());
 	}
 	else if (is_alive() && !is_digging())
 	{
@@ -199,26 +193,26 @@ void hero::update()
 	if (dir == zero)
 		return;
 
-	if ((previous_dir * dir) == zero) { //movement direction changed completely.
+	if ((m_previousDirection * dir) == zero) { //movement direction changed completely.
 
-		position_offset = current_tile->get_transform()->position - get_transform()->position;
+		position_offset = m_currentTile->get_transform()->position - get_transform()->position;
 
 		if (can_jump_to_destination()) 
 		{
 			set_direction(dir = { 0,0 }, true);
 		}
 
-		movement_progress = 0;
+		m_movementProgress = 0;
 	}
 
-	else if (previous_dir != dir && (previous_dir * dir) != zero) { //direction has changed, but not the axis.
-			movement_progress = -movement_progress;
+	else if (m_previousDirection != dir && (m_previousDirection * dir) != zero) { //direction has changed, but not the axis.
+			m_movementProgress = -m_movementProgress;
 	} else //nothing changed
 	{
 		continue_movement();
 	}
 
-	previous_dir = dir;
+	m_previousDirection = dir;
 }
 
 point hero::read_and_apply_input()
@@ -226,7 +220,7 @@ point hero::read_and_apply_input()
 	input *inp = engine::get_instance()->get_input();
 
 	vector2f position = get_transform()->position;
-	vector2f current_tile_position = current_tile->get_transform()->position;
+	vector2f current_tile_position = m_currentTile->get_transform()->position;
 
 	point result;
 
@@ -236,56 +230,50 @@ point hero::read_and_apply_input()
 		dig({ 1,0 });
 	else if (inp->get_key(SDLK_w))
 	{
-		if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_up())
+		if (can_jump_to_destination() && !m_destinationTile->empty_over_empty() && m_destinationTile->can_up())
 		{
 			set_direction(result = { 0,-1 }, true);
 		}
-		else if (current_tile->can_up() || position.y > current_tile_position.y)
+		else if (m_currentTile->can_up() || position.y > current_tile_position.y)
 		{
 			set_direction(result = { 0,-1 });
 		}
 	}
 	else if (inp->get_key(SDLK_s))
 	{
-		if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_down())
+		if (can_jump_to_destination() && !m_destinationTile->empty_over_empty() && m_destinationTile->can_down())
 		{
 			set_direction(result = { 0,1 }, true);
 		}
-		else if (current_tile->can_down() || position.y < current_tile_position.y)
+		else if (m_currentTile->can_down() || position.y < current_tile_position.y)
 		{
 			set_direction(result = { 0,1 });
-			if (destination_tile->is_empty())
+			if (m_destinationTile->is_empty())
 				m_falling = true;
 		}
 	}
 	else if (inp->get_key(SDLK_a))
 	{
-		if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_left())
+		if (can_jump_to_destination() && !m_destinationTile->empty_over_empty() && m_destinationTile->can_left())
 		{
 			set_direction(result = { -1,0 }, true);
 		}
-		else if (current_tile->can_left() || position.x > current_tile_position.x)
+		else if (m_currentTile->can_left() || position.x > current_tile_position.x)
 		{
 			set_direction(result = { -1,0 });
 		}
 	}
 	else if (inp->get_key(SDLK_d))
 	{
-		if (can_jump_to_destination() && !destination_tile->empty_over_empty() && destination_tile->can_left())
+		if (can_jump_to_destination() && !m_destinationTile->empty_over_empty() && m_destinationTile->can_left())
 		{
 			set_direction(result = { 1,0 }, true);
 		}
-		else if (current_tile->can_right() || position.x < current_tile_position.x)
+		else if (m_currentTile->can_right() || position.x < current_tile_position.x)
 		{
 			set_direction(result = { 1,0 });
 		}
 	}
 
 	return result;
-}
-
-void hero::reload_key_tiles()
-{
-	current_tile = m_levelgrid->get(current_tile_indices.x, current_tile_indices.y);
-	destination_tile = m_levelgrid->get(destination_tile_indices.x, destination_tile_indices.y);
 }
