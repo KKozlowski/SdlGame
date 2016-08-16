@@ -194,7 +194,12 @@ bool level_grid::on_hero_gold_take(int pts)
 			unhide_ladder(p, false);
 	
 		unhide_ladder(final_ladder, true);
+
 		m_hero->reload_key_tiles();
+
+		for (enemy *e : enemies)
+			e->reload_key_tiles();
+
 		return true;
 	}
 

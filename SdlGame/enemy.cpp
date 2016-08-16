@@ -12,7 +12,7 @@ void enemy::set_current_tile(tile* t)
 		falling_into_trap = true;
 		try_drop_gold(t);
 
-		destination_tile = t->get_down();
+		set_destination_tile(t->get_down());
 		wall *our_doom = static_cast<wall *>(destination_tile);
 		if (our_doom != nullptr)
 			our_doom->enemy_in_the_hole = this;
@@ -22,7 +22,7 @@ void enemy::set_current_tile(tile* t)
 		if (t->can_down(true) && t->empty_over_empty())
 		{
 			falling = true;
-			destination_tile = t->get_down();
+			set_destination_tile(t->get_down());
 		}
 
 		if (falling && !t->empty_over_empty())
@@ -37,6 +37,13 @@ void enemy::set_current_tile(tile* t)
 	current_tile = t;
 
 	movement_progress -= 1;
+	current_tile_indices = current_tile->get_indices();
+}
+
+void enemy::set_destination_tile(tile* t)
+{
+	destination_tile = t;
+	destination_tile_indices = destination_tile->get_indices();
 }
 
 bool enemy::try_steal_gold(tile* t)
@@ -239,7 +246,7 @@ void enemy::update()
 	if (movement_progress >= 1 && destination_tile != nullptr) {
 		set_current_tile(destination_tile);
 		if (!falling_into_trap)
-			destination_tile = current_tile->get_neighbor(previous_dir);
+			set_destination_tile(current_tile->get_neighbor(previous_dir));
 		get_transform()->position = current_tile->get_transform()->position;
 	}
 
@@ -262,10 +269,15 @@ void enemy::update()
 			movement_progress = -movement_progress;
 		}
 
-		destination_tile = new_destination;
-
+		set_destination_tile(new_destination);
 
 		previous_dir = dir;
 	}
 
+}
+
+void enemy::reload_key_tiles()
+{
+	current_tile = m_levelgrid->get(current_tile_indices.x, current_tile_indices.y);
+	destination_tile = m_levelgrid->get(destination_tile_indices.x, destination_tile_indices.y);
 }

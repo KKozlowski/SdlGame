@@ -82,7 +82,7 @@ void hero::set_destination_tile(tile* t)
 
 void hero::continue_movement()
 {
-	movement_progress += engine::get_delta_time() * movement_speed;
+	movement_progress += engine::get_delta_time() * m_movementSpeed;
 
 	if (destination_tile == nullptr)
 		get_transform()->position = current_tile->get_transform()->position;
@@ -125,7 +125,7 @@ hero::hero(tile *start_tile, level_grid *lg)
 	dt->centered = true;
 	m_draw = dt;
 
-	movement_speed = 4.f;
+	m_movementSpeed = 4.f;
 	adjustment_jump_tolerance = 0.33f;
 
 	set_current_tile(start_tile);

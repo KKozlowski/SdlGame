@@ -7,9 +7,13 @@ class tile;
 class enemy : public actor
 {
 private:
+	level_grid *m_levelgrid;
+
 	tile *current_tile;
 	tile *destination_tile;
-	level_grid *m_levelgrid;
+
+	point current_tile_indices;
+	point destination_tile_indices;
 
 	float m_speed;
 	float movement_progress = 0;
@@ -19,6 +23,7 @@ private:
 	int held_points = 0;
 
 	void set_current_tile(tile *t);
+	void set_destination_tile(tile *t);
 
 	point previous_dir;
 
@@ -38,4 +43,5 @@ private:
 public:
 	enemy(tile *start_tile, level_grid *lg);
 	void update() override;
+	void reload_key_tiles();
 };

@@ -19,7 +19,7 @@ protected:
 	point previous_dir;
 	float movement_progress;
 
-	float movement_speed = 4.f;
+	float m_movementSpeed = 4.f;
 	float m_diggingTime = 0.25f;
 
 	bool m_falling;
