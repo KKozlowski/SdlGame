@@ -35,7 +35,7 @@ void wall::dig()
 
 bool wall::is_empty()
 {
-	return digged;
+	return digged && enemy_in_the_hole == nullptr;
 }
 
 void wall::update()

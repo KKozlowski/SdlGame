@@ -21,6 +21,8 @@ private:
 	std::vector<enemy *> enemies;
 	point final_ladder;
 
+	int required_gold;
+
 	bool during_deconstruction = false;
 
 	std::vector<std::vector<tile*> *> *tile_grid = new std::vector<std::vector<tile*>*>();
@@ -37,5 +39,7 @@ public:
 	void put_gold_on_tile(tile * tile, int value);
 	void put_enemy_on_tile(tile *tile);
 
+	int get_required_gold();
+	bool on_hero_gold_take(int pts);
 	void at_gold_disappearance(gold *g);
 };

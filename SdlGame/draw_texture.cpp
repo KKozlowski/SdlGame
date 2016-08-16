@@ -21,24 +21,21 @@ void draw_texture::draw(SDL_Renderer *renderer, camera* cam)
 {
 	draw_base::draw(renderer, cam);
 
-	if (is_visible())
+	SDL_Rect *transformRekt = lActor->get_transform()->get_rekt();
+
+	SDL_Rect sum = stretchRect;
+	sum.x += transformRekt->x;
+	sum.y += transformRekt->y;
+
+	if (centered)
 	{
-		SDL_Rect *transformRekt = lActor->get_transform()->get_rekt();
-
-		SDL_Rect sum = stretchRect;
-		sum.x += transformRekt->x;
-		sum.y += transformRekt->y;
-
-		if (centered)
-		{
-			sum.x -= sum.w / 2;
-			sum.y -= sum.h / 2;
-		}
-
-		sum = cam->translate_rect(sum);
-
-		SDL_RenderCopy(renderer, thatTexture, nullptr, &sum);
+		sum.x -= sum.w / 2;
+		sum.y -= sum.h / 2;
 	}
+
+	sum = cam->translate_rect(sum);
+
+	SDL_RenderCopy(renderer, thatTexture, nullptr, &sum);
 }
 
 bool draw_texture::set_width_height(int W, int H)

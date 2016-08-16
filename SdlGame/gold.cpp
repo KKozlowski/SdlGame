@@ -1,21 +1,16 @@
 ﻿#include "gold.h"
 #include "level_grid.h"
 
-int gold::count = 0;
-
 gold::gold(int points)
 {
 	set_value(points);
 	drawing = new draw_texture(this, "gold.png");
 	drawing->set_depth(-20);
 	static_cast<draw_texture*>(drawing)->centered = true;
-
-	++count;
 }
 
 gold::~gold()
 {
-	--count;
 	m_levelgrid->at_gold_disappearance(this);
 }
 
@@ -52,9 +47,4 @@ int gold::get_value()
 void gold::set_value(int pts)
 {
 	point_value = pts;
-}
-
-int gold::get_existing_count()
-{
-	return count;
 }

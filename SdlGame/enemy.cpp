@@ -6,10 +6,13 @@
 
 void enemy::set_current_tile(tile* t)
 {
-	if (t->can_down() && !t->can_down(true))
+	if (t->can_down() && !t->can_down(true)) //TRAP!
 	{
 		falling_into_trap = true;
 		destination_tile = t->get_down();
+		wall *our_doom = static_cast<wall *>(destination_tile);
+		if (our_doom != nullptr)
+			our_doom->enemy_in_the_hole = this;
 	}
 
 	current_tile = t;

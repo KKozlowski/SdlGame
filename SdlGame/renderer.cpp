@@ -133,7 +133,8 @@ void renderer::draw()
 	sort(to_draw->begin(), to_draw->end(), depthComparator);
 
 	for (draw_base *d : *to_draw)
-		d->draw(mainRenderer, m_camera);
+		if (d->is_visible())
+			d->draw(mainRenderer, m_camera);
 
 	delete to_draw;
 

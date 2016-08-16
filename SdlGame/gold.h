@@ -8,7 +8,6 @@ class gold : public actor
 private:
 	tile *parent = nullptr;
 	int point_value;
-	static int count;
 	level_grid *m_levelgrid;
 
 public:
@@ -18,6 +17,4 @@ public:
 	bool set_tile(tile *new_parent, level_grid *lg);
 	int get_value();
 	void set_value(int pts);
-
-	static int get_existing_count();
 };

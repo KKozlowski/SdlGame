@@ -108,6 +108,10 @@ level_grid::level_grid(file_reader_line_by_line *li, float tilesize, level_manag
 		//std::cout << std::endl;
 		++row;
 	}
+
+	required_gold = 0;
+	for (gold *g : gold_piles)
+		required_gold += g->get_value();
 }
 
 level_grid::~level_grid()
@@ -167,6 +171,28 @@ void level_grid::put_enemy_on_tile(tile* tile)
 	enemies.push_back(enem);
 }
 
+int level_grid::get_required_gold()
+{
+	return required_gold;
+}
+
+bool level_grid::on_hero_gold_take(int pts)
+{
+	if (pts == required_gold)
+	{
+		std::cout << "UNLOCK\n";
+	
+		//CHANGING SOME RANDOM TILE, TO BE REPLACED LATER
+		for (point p : hidden_ladders)
+			unhide_ladder(p, false);
+	
+		unhide_ladder(final_ladder, true);
+		return true;
+	}
+
+	return false;
+}
+
 void level_grid::at_gold_disappearance(gold *g)
 {
 	if (!during_deconstruction)
@@ -174,17 +200,6 @@ void level_grid::at_gold_disappearance(gold *g)
 		std::vector<gold *>::iterator looking_for_instance = std::find(gold_piles.begin(), gold_piles.end(), g);
 		if (looking_for_instance != gold_piles.end())
 			gold_piles.erase(looking_for_instance);
-
-		if (gold::get_existing_count() == 0)
-		{
-			std::cout << "UNLOCK\n";
-
-			//CHANGING SOME RANDOM TILE, TO BE REPLACED LATER
-			for (point p : hidden_ladders)
-				unhide_ladder(p, false);
-
-			unhide_ladder(final_ladder, true);
-		}
 	}
 	
 }
