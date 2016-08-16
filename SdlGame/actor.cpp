@@ -11,7 +11,7 @@ actor::actor()
 actor::~actor()
 {
 	delete m_transform;
-	drawing->set_visible(false);
+	engine::get_instance()->get_renderer()->remove_draw(drawing);
 }
 
 void actor::update()

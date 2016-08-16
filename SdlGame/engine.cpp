@@ -30,12 +30,13 @@ engine::~engine()
 	delete inputer;
 	inputer = nullptr;
 
-	delete render;
-	render == nullptr;
-
 	delete m_levelman;
 	m_levelman == nullptr;
+
 	renderer::close_sdl();
+	delete render;
+	render == nullptr;
+	
 }
 
 engine* engine::get_instance()
