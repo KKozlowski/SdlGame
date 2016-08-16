@@ -112,6 +112,8 @@ level_grid::level_grid(file_reader_line_by_line *li, float tilesize, level_manag
 	required_gold = 0;
 	for (gold *g : gold_piles)
 		required_gold += g->get_value();
+
+	engine::get_instance()->get_renderer()->bottom_text = "SCORE: 0";
 }
 
 level_grid::~level_grid()
@@ -180,6 +182,10 @@ int level_grid::get_required_gold()
 
 bool level_grid::on_hero_gold_take(int pts)
 {
+	std::stringstream ss;
+	ss << "SCORE: " << pts;
+	engine::get_instance()->get_renderer()->bottom_text = ss.str();
+
 	if (pts == required_gold)
 	{
 		std::cout << "UNLOCK\n";

@@ -42,7 +42,7 @@ bool enemy::try_drop_gold(tile* t)
 	
 	if (held_points > 0)
 	{
-		//std::cout << held_points << std::endl;
+		//wwwstd::cout << held_points << std::endl;
 		m_levelgrid->put_gold_on_tile(t, held_points);
 		return true;
 	}

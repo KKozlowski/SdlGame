@@ -21,6 +21,8 @@ bool renderer::initialize_sdl()
 			printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 			success = false;
 		}
+
+		TTF_Init();
 		return success;
 	}
 	else
@@ -89,6 +91,30 @@ camera* renderer::get_camera() const
 	return m_camera;
 }
 
+void renderer::print_text(std::string content, point position, int height)
+{
+	if (font == nullptr)
+		font = TTF_OpenFont("PrStart.ttf", 24); //this opens a font style and sets a size
+
+	SDL_Color White = { 255, 255, 255 };  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
+
+	SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, content.c_str(), White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+
+	SDL_Texture* Message = SDL_CreateTextureFromSurface(mainRenderer, surfaceMessage); //now you can convert it into a texture
+
+	SDL_Rect Message_rect; //create a rect
+	Message_rect.x = position.x;  //controls the rect's x coordinate 
+	Message_rect.y = position.y; // controls the rect's y coordinte
+	Message_rect.w = height*content.size(); // controls the width of the rect
+	Message_rect.h = height; // controls the height of the rect
+
+						  //Mind you that (0,0) is on the top left of the window/screen, think a rect as the text's box, that way it would be very simple to understance
+
+						  //Now since it's a texture, you have to put RenderCopy in your game loop area, the area where the whole code executes
+
+	SDL_RenderCopy(mainRenderer, Message, NULL, &Message_rect); //you put the renderer's name first, the Message, the crop size(you can ignore this if you don't want to dabble with cropping), and the rect which is the size and coordinate of your texture
+}
+
 void renderer::clear()
 {
 	clear(255, 255, 255);
@@ -137,6 +163,8 @@ void renderer::draw()
 			d->draw(mainRenderer, m_camera);
 
 	delete to_draw;
+	if (bottom_text != "")
+		print_text(bottom_text, point(0,SCREEN_HEIGHT-50), 50);
 
 	SDL_RenderPresent(mainRenderer);
 }
