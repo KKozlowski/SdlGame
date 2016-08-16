@@ -209,7 +209,7 @@ point enemy::find_move_to(tile* t)
 
 void enemy::die()
 {
-	m_draw->set_visible(false);
+	m_levelgrid->on_enemy_death(this);
 }
 
 enemy::enemy(tile* start_tile, level_grid* lg)

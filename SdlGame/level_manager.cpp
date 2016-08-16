@@ -84,7 +84,7 @@ void level_manager::update()
 			{
 				reset_level_after_time(2.f);
 			}
-			else if (he->has_won())
+			else if (he->has_won() || engine::get_instance()->get_input()->get_key_down(SDLK_DOWN))
 			{
 				if (!load_next_level())
 				{

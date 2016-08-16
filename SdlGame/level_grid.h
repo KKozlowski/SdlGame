@@ -20,6 +20,7 @@ private:
 	std::vector<gold *> gold_piles;
 	std::vector<enemy *> enemies;
 	point final_ladder;
+	point spawner;
 
 	int required_gold;
 
@@ -28,6 +29,8 @@ private:
 	std::vector<std::vector<tile*> *> *tile_grid = new std::vector<std::vector<tile*>*>();
 
 	void unhide_ladder(point indices, bool finalizing);
+
+	tile *get_respawner_tile();
 public:
 	level_grid(file_reader_line_by_line *li, float tilesize, level_manager *manager);
 	~level_grid();
@@ -41,5 +44,6 @@ public:
 
 	int get_required_gold();
 	bool on_hero_gold_take(int pts);
-	void at_gold_disappearance(gold *g);
+	void on_gold_disappearance(gold *g);
+	void on_enemy_death(enemy *e);
 };

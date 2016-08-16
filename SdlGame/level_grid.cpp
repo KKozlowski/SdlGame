@@ -27,6 +27,11 @@ void level_grid::unhide_ladder(point indices, bool finalizing)
 	l->get_tex_draw()->set_width_height(m_tilesize, m_tilesize);
 }
 
+tile* level_grid::get_respawner_tile()
+{
+	return get(spawner.x, spawner.y);
+}
+
 level_grid::level_grid(file_reader_line_by_line *li, float tilesize, level_manager *manager)
 {
 	m_levelmanager = manager;
@@ -68,6 +73,10 @@ level_grid::level_grid(file_reader_line_by_line *li, float tilesize, level_manag
 					m_hero = new hero(tile, this);
 					engine::get_instance()->get_scene()->add_actor(m_hero);
 				}
+				break;
+			case 'S': //ENEMY SPAWNER (RESPAWNER?)
+				tile = new empty_tile(col, row, this);
+				spawner = point(col, row);
 				break;
 			case '^': // PILE OF GOLD
 				tile = new empty_tile(col, row, this);
@@ -206,13 +215,30 @@ bool level_grid::on_hero_gold_take(int pts)
 	return false;
 }
 
-void level_grid::at_gold_disappearance(gold *g)
+void level_grid::on_gold_disappearance(gold *g)
 {
 	if (!during_deconstruction)
 	{
 		std::vector<gold *>::iterator looking_for_instance = std::find(gold_piles.begin(), gold_piles.end(), g);
 		if (looking_for_instance != gold_piles.end())
+		{
 			gold_piles.erase(looking_for_instance);
+		}
+			
 	}
 	
+}
+
+void level_grid::on_enemy_death(enemy* e)
+{
+	std::vector<enemy *>::iterator looking_for_instance = std::find(enemies.begin(), enemies.end(), e);
+	if (looking_for_instance != enemies.end())
+	{
+		engine::get_instance()->get_scene()->remove_actor(*looking_for_instance);
+		delete *looking_for_instance;
+		enemies.erase(looking_for_instance);
+
+		put_enemy_on_tile(get_respawner_tile());
+	}
+		
 }

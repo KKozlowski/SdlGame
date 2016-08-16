@@ -27,8 +27,9 @@ private:
 	point get_2d_distance_to_tile(tile *t);
 	point find_move_to(tile *t);
 
-	void die();
+	
 public:
+	void die();
 	enemy(tile *start_tile, level_grid *lg);
 	void update() override;
 };

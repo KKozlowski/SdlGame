@@ -11,7 +11,7 @@ gold::gold(int points)
 
 gold::~gold()
 {
-	m_levelgrid->at_gold_disappearance(this);
+	m_levelgrid->on_gold_disappearance(this);
 }
 
 //

@@ -1,6 +1,7 @@
 ﻿#include "wall.h"
 #include <iostream>
 #include "engine.h"
+#include "enemy.h"
 
 float wall::rebuilding_time = 4.f;
 
@@ -8,6 +9,10 @@ void wall::refill()
 {
 	get_draw()->set_visible(true);
 	digged = false;
+
+	if (enemy_in_the_hole)
+		enemy_in_the_hole->die();
+
 	if (get_level()->get_hero()->get_current_tile() == this)
 		get_level()->get_hero()->die();
 }
