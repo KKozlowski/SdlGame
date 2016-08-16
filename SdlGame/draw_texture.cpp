@@ -21,7 +21,7 @@ void draw_texture::draw(SDL_Renderer *renderer, camera* cam)
 {
 	draw_base::draw(renderer, cam);
 
-	SDL_Rect *transformRekt = lActor->get_transform()->get_rekt();
+	SDL_Rect *transformRekt = m_actor->get_transform()->get_rekt();
 
 	SDL_Rect sum = stretchRect;
 	sum.x += transformRekt->x;

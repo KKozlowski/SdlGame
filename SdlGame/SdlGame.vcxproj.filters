@@ -96,6 +96,9 @@
     <ClCompile Include="enemy.cpp">
       <Filter>actors</Filter>
     </ClCompile>
+    <ClCompile Include="draw_title_screen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -181,6 +184,9 @@
     </ClInclude>
     <ClInclude Include="enemy.h">
       <Filter>actors</Filter>
+    </ClInclude>
+    <ClInclude Include="draw_title_screen.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

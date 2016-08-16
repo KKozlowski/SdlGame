@@ -12,7 +12,7 @@ private:
 	bool visible = true;
 protected:
 	int16_t layer;
-	actor *lActor;
+	actor *m_actor;
 public:
 	draw_base(actor *a);
 	virtual ~draw_base();
@@ -49,5 +49,5 @@ void draw_base::set_depth(int16_t new_layer)
 
 actor* draw_base::get_actor() const
 {
-	return lActor;
+	return m_actor;
 }
