@@ -212,7 +212,7 @@ point enemy::find_move_to(tile* t)
 
 void enemy::die()
 {
-	drawing->set_visible(false);
+	m_draw->set_visible(false);
 }
 
 enemy::enemy(tile* start_tile, level_grid* lg)
@@ -221,7 +221,7 @@ enemy::enemy(tile* start_tile, level_grid* lg)
 	draw_texture *dt = new draw_texture(this, "enemy.png");
 	dt->set_width_height(lg->get_tilesize(), lg->get_tilesize());
 	dt->centered = true;
-	drawing = dt;
+	m_draw = dt;
 
 	set_current_tile(start_tile);
 	get_transform()->position = start_tile->get_transform()->position;

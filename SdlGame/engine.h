@@ -12,19 +12,16 @@ class level_manager;
 class engine
 {
 private: 
-	bool initialize();
 	bool quit = false;
 	float delta_time = 0.00000001f;
 
-	uint64_t time_since_epoch;
-	clock_t delta_clock;
 	engine();
 
-	renderer *render;
-	input *inputer;
-	scene *actor_manager;
+	renderer *m_renderer;
+	input *m_input;
+	scene *m_actormanager;
 
-	level_manager *m_levelman;
+	level_manager *m_levelmanager;
 public:
 	~engine();
 	static engine* get_instance();
@@ -35,6 +32,7 @@ public:
 	
 	///<summary>
 	///Returns time (in seconds) that passed from start to end of the previous frame.
+	///<para/>It is accurate to nanoseconds.
 	///</summary>
 	static float get_delta_time();
 

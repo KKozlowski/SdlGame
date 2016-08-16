@@ -1,7 +1,6 @@
 ﻿#include "level_grid.h"
 #include <fstream>
 #include <iostream>
-#include "ball.h"
 #include "engine.h"
 #include "scene.h"
 #include "draw_texture.h"

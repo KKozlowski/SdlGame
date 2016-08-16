@@ -7,7 +7,6 @@
 #include <vector>
 
 class camera;
-struct cmpStruct;
 
 class renderer
 {
@@ -47,11 +46,4 @@ public:
 	std::string bottom_text = "";
 
 	void draw();
-};
-
-struct cmpStruct {
-	bool operator() (draw_base * const & lhs, draw_base * const & rhs) const
-	{
-		return lhs->get_depth() <= rhs->get_depth();
-	}
 };

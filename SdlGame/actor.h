@@ -6,7 +6,7 @@ class actor
 private:
 	transform *m_transform;
 protected:
-	draw_base *drawing;
+	draw_base *m_draw;
 public:
 	actor();
 	virtual ~actor();
@@ -26,5 +26,5 @@ transform* actor::get_transform() const
 
 draw_base* actor::get_draw() const
 {
-	return drawing;
+	return m_draw;
 }

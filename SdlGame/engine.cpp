@@ -3,39 +3,31 @@
 #include <SDL_image.h>
 #include "texture.h"
 #include <chrono>
-#include "ball.h"
 #include "scene.h"
 #include <iostream>
 #include "hero.h"
 #include "level_grid.h"
 #include "level_manager.h"
 
-bool engine::initialize()
-{
-	bool success = true;
-
-	return success;
-}
-
 engine::engine()
 {
-	render = new renderer();
-	inputer = new input();
-	actor_manager = new scene();
-	m_levelman = new level_manager();
+	m_renderer = new renderer();
+	m_input = new input();
+	m_actormanager = new scene();
+	m_levelmanager = new level_manager();
 }
 
 engine::~engine()
 {
-	delete inputer;
-	inputer = nullptr;
+	delete m_input;
+	m_input = nullptr;
 
-	delete m_levelman;
-	m_levelman == nullptr;
+	delete m_levelmanager;
+	m_levelmanager == nullptr;
 
 	renderer::close_sdl();
-	delete render;
-	render == nullptr;
+	delete m_renderer;
+	m_renderer == nullptr;
 	
 }
 
@@ -47,17 +39,17 @@ engine* engine::get_instance()
 
 scene* engine::get_scene()
 {
-	return get_instance()->actor_manager;
+	return get_instance()->m_actormanager;
 }
 
 renderer* engine::get_renderer() const
 {
-	return render;
+	return m_renderer;
 }
 
 input* engine::get_input() const
 {
-	return inputer;
+	return m_input;
 }
 
 float engine::get_delta_time()
@@ -67,17 +59,11 @@ float engine::get_delta_time()
 
 void engine::run()
 {
-	if (!initialize())
-	{
-		printf("Failed to initialize!\n");
-		return;
-	}
-
-	m_levelman->load_level(1, 160);
+	m_levelmanager->load_level(1, 160);
 
 	SDL_Event e;
 	
-	time_since_epoch = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+	uint64_t time_since_epoch = std::chrono::high_resolution_clock::now().time_since_epoch().count();
 	uint64_t time_since_epoch_temp = time_since_epoch;
 
 	const double num = std::chrono::high_resolution_clock::period::num;
@@ -86,7 +72,7 @@ void engine::run()
 	//MAIN LOOP
 	while (!quit)
 	{
-		inputer->next_frame();
+		m_input->next_frame();
 		while (SDL_PollEvent(&e) != 0)
 		{
 			//User requests quit
@@ -96,32 +82,31 @@ void engine::run()
 			}
 			else
 			{
-				inputer->handle_event(e);
+				m_input->handle_event(e);
 			}
 		}
 
-		actor_manager->update();
-		render->draw();
+		m_actormanager->update();
+		m_renderer->draw();
 
 		// DO ADDITIONAL STUFF BOLOW THIS LINE
 		//////////////////////
 		hero *he = nullptr;
-		if (m_levelman->get_current())
-			he = m_levelman->get_current()->get_hero();
+		if (m_levelmanager->get_current())
+			he = m_levelmanager->get_current()->get_hero();
 		if (he != nullptr)
 		{
 			if (!he->is_alive())
-				m_levelman->reset_level();
+				m_levelmanager->reset_level();
 			else if (he->has_won())
 			{
-				if (!m_levelman->load_next_level())
+				if (!m_levelmanager->load_next_level())
 					quit = true;
 			}
-				
 		}
 		
-		if (inputer->get_key(SDLK_ESCAPE)) quit = true;
-
+		if (m_input->get_key(SDLK_ESCAPE)) quit = true;
+		
 		//////////////////////
 		// AND ABOVE THIS LINE
 

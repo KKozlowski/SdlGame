@@ -39,7 +39,7 @@ public:
 
 	draw_texture *get_tex_draw() const
 	{
-		return static_cast<draw_texture*>(drawing);
+		return static_cast<draw_texture*>(m_draw);
 	}
 
 	tile_type get_type() const

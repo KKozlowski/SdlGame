@@ -4,9 +4,9 @@
 gold::gold(int points)
 {
 	set_value(points);
-	drawing = new draw_texture(this, "gold.png");
-	drawing->set_depth(-20);
-	static_cast<draw_texture*>(drawing)->centered = true;
+	m_draw = new draw_texture(this, "gold.png");
+	m_draw->set_depth(-20);
+	static_cast<draw_texture*>(m_draw)->centered = true;
 }
 
 gold::~gold()
@@ -34,7 +34,7 @@ bool gold::set_tile(tile* new_parent, level_grid *lg)
 		parent = new_parent;
 		parent->set_gold(this);
 		get_transform()->position = parent->get_transform()->position;
-		static_cast<draw_texture*>(drawing)->set_width_height(lg->get_tilesize(), lg->get_tilesize());
+		static_cast<draw_texture*>(m_draw)->set_width_height(lg->get_tilesize(), lg->get_tilesize());
 		return true;
 	}
 }

@@ -47,22 +47,22 @@ void hero::set_current_tile(tile* t)
 		t->pop_gold();
 
 		std::cout << "HERO TAKES GOLD\n";
-		m_levelgrid->on_hero_gold_take(points);
+		m_levelgrid->on_hero_gold_take(m_points);
 	}
 
 	if (t->ends_the_level())
 	{
-		winning = true;
+		m_winning = true;
 	}
 
 	if (t->empty_over_empty())
 	{
-		falling = true;
+		m_falling = true;
 	}
 		
-	else if (falling && (t->over_solid() || t->get_type() == tile_type::pipe))
+	else if (m_falling && (t->over_solid() || t->get_type() == tile_type::pipe))
 	{
-		falling = false;
+		m_falling = false;
 	}
 		
 
@@ -71,7 +71,7 @@ void hero::set_current_tile(tile* t)
 
 void hero::continue_movement()
 {
-	movement_progress += engine::get_delta_time() * m_speed;
+	movement_progress += engine::get_delta_time() * movement_speed;
 	if (destination_tile == nullptr)
 		get_transform()->position = current_tile->get_transform()->position;
 	else
@@ -80,7 +80,7 @@ void hero::continue_movement()
 		{
 			set_current_tile(destination_tile);
 			get_transform()->position = destination_tile->get_transform()->position;
-			if (falling)
+			if (m_falling)
 				movement_progress -= 1;
 		}
 		else
@@ -106,9 +106,9 @@ hero::hero(tile *start_tile, level_grid *lg)
 {
 	draw_texture *dt = new draw_texture(this, "texture.png");
 	dt->centered = true;
-	drawing = dt;
+	m_draw = dt;
 
-	m_speed = 4.f;
+	movement_speed = 4.f;
 	adjustment_jump_tolerance = 0.33f;
 
 	set_current_tile(start_tile);
@@ -140,8 +140,8 @@ bool hero::can_jump_to_destination() const
 
 void hero::die()
 {
-	alive = false;
-	drawing->set_visible(false);
+	m_alive = false;
+	m_draw->set_visible(false);
 	std::cout << "DEATH";
 }
 
@@ -152,7 +152,6 @@ tile* hero::get_current_tile() const
 
 void hero::update()
 {
-	//std::cout << current_tile->get_Xpos() << " " << current_tile->get_Ypos() << " " << movement_progress << std::endl;
 	reduce_offset();
 	point zero;
 	vector2f position = get_transform()->position;
@@ -164,7 +163,7 @@ void hero::update()
 	point dir;
 	tile *old_destination = destination_tile;
 
-	if (falling)
+	if (m_falling)
 	{
 		dir = { 0,1 };
 		destination_tile = current_tile->get_down();
@@ -197,7 +196,7 @@ void hero::update()
 			{
 				set_direction(dir = { 0,1 });
 				if (destination_tile->is_empty())
-					falling = true;
+					m_falling = true;
 			}
 		}
 		else if (inp->get_key(SDLK_a))

@@ -7,10 +7,11 @@
 class texture
 {
 private:
-	std::map<std::string, SDL_Texture*> *loaded;
+	std::map<std::string, SDL_Texture*> *m_loaded;
+	static std::unique_ptr<texture> m_instance;
+
 	texture();
-	static std::unique_ptr<texture> instance;
-	SDL_Texture* loadTexture(std::string path);
+	SDL_Texture* load_texture(std::string path);
 
 public:
 	SDL_Texture* get(std::string filename);

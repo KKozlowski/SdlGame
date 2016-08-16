@@ -3,25 +3,25 @@
 #include "engine.h"
 #include "vector2.h"
 
-std::unique_ptr<texture> texture::instance(nullptr);
+std::unique_ptr<texture> texture::m_instance(nullptr);
 
 texture::texture()
 {
-	loaded = new std::map<std::string, SDL_Texture*>();
+	m_loaded = new std::map<std::string, SDL_Texture*>();
 }
 
 texture::~texture()
 {
-	for (auto kvp : *loaded)
+	for (auto kvp : *m_loaded)
 	{
 		SDL_DestroyTexture(kvp.second);
 	}
 
-	loaded->clear();
-	delete loaded;
+	m_loaded->clear();
+	delete m_loaded;
 }
 
-SDL_Texture* texture::loadTexture(std::string path)
+SDL_Texture* texture::load_texture(std::string path)
 {
 	SDL_Texture* newTexture = nullptr;
 
@@ -46,21 +46,21 @@ SDL_Texture* texture::loadTexture(std::string path)
 
 SDL_Texture* texture::get(std::string filename)
 {
-	if (loaded->find(filename) == loaded->end())
+	if (m_loaded->find(filename) == m_loaded->end())
 	{
-		SDL_Texture *t = loadTexture(filename);
+		SDL_Texture *t = load_texture(filename);
 		if (t != nullptr)
-			loaded->insert_or_assign(filename, t);
+			m_loaded->insert_or_assign(filename, t);
 		return t;
 	}
 	else
-		return loaded->at(filename);
+		return m_loaded->at(filename);
 }
 
 SDL_Texture* texture::get_texture(std::string filename)
 {
-	if (instance.get() == nullptr)
-		instance = std::unique_ptr<texture>(new texture());
+	if (m_instance.get() == nullptr)
+		m_instance = std::unique_ptr<texture>(new texture());
 
-	return instance.get()->get(filename);
+	return m_instance.get()->get(filename);
 }
