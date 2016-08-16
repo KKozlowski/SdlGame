@@ -13,6 +13,9 @@ protected:
 	tile *current_tile;
 	tile *destination_tile;
 
+	point current_tile_indices;
+	point destination_tile_indices;
+
 	point previous_dir;
 	float movement_progress;
 
@@ -52,6 +55,7 @@ protected:
 	///<para />It calls falling, calls taking gold, calls level end, depending on what the tile is.
 	///</summary>
 	void set_current_tile(tile *t);
+	void set_destination_tile(tile *t);
 	///<summary>
 	///Moves the character between current tile and destination tile. After reaching the destination_tile,
 	///it calls set_current_tile.
@@ -91,4 +95,13 @@ public:
     /// Also starts falling process when it's possible and wanted by player.
 	///</summary>
 	point read_and_apply_input();
+
+	///<summary>
+	/// Reloads key tiles (current and destination) right from level grid,
+	/// according to indices saved before.
+	/// <para/>Should be called right after major changes in levelgrid.
+	/// <para/>For example, after showing the final ladder, hero can be
+	/// on one of destroyed tiles!
+	///</summary>
+	void reload_key_tiles();
 };

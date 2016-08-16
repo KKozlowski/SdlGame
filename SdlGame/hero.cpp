@@ -36,20 +36,25 @@ void hero::set_direction(point dir, bool with_jump = false)
 		set_current_tile(destination_tile);
 		movement_progress -= 1;
 	}
-	destination_tile = current_tile->get_neighbor(dir);
+	set_destination_tile(current_tile->get_neighbor(dir));
 }
 
 void hero::set_current_tile(tile* t)
 {
 	if (t->get_gold() != nullptr)
 	{
+		point new_indices = t->get_indices();
+
 		add_points(t->get_gold()->get_value());
 		t->pop_gold();
 
 		std::cout << "HERO TAKES GOLD\n";
 		m_levelgrid->on_hero_gold_take(m_points);
+
+		t = m_levelgrid->get(new_indices.x, new_indices.y);
 	}
 
+	
 	if (t->ends_the_level())
 	{
 		m_winning = true;
@@ -65,8 +70,14 @@ void hero::set_current_tile(tile* t)
 		m_falling = false;
 	}
 		
-
 	current_tile = t;
+	current_tile_indices = current_tile->get_indices();
+}
+
+void hero::set_destination_tile(tile* t)
+{
+	destination_tile = t;
+	destination_tile_indices = destination_tile->get_indices();
 }
 
 void hero::continue_movement()
@@ -178,7 +189,7 @@ void hero::update()
 	if (m_falling)
 	{
 		dir = { 0,1 };
-		destination_tile = current_tile->get_down();
+		set_destination_tile(current_tile->get_down());
 	}
 	else if (is_alive() && !is_digging())
 	{
@@ -271,4 +282,10 @@ point hero::read_and_apply_input()
 	}
 
 	return result;
+}
+
+void hero::reload_key_tiles()
+{
+	current_tile = m_levelgrid->get(current_tile_indices.x, current_tile_indices.y);
+	destination_tile = m_levelgrid->get(destination_tile_indices.x, destination_tile_indices.y);
 }
