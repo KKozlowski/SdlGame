@@ -98,6 +98,30 @@ tile* enemy::find_vertical_passage(point dir)
 	return nullptr;
 }
 
+tile* enemy::find_closest_vertical_passage(point dir)
+{
+	tile *passage_one = find_vertical_passage({ -1, dir.y });
+	tile *passage_two = find_vertical_passage({ 1, dir.y });
+
+	if (passage_one == nullptr)
+		return passage_two;
+	
+	if (passage_two == nullptr)
+		return passage_one;
+
+	if (passage_one != nullptr && passage_two != nullptr)
+	{
+		if (abs(current_tile->get_Xpos() - passage_one->get_Xpos()) 
+			< abs(current_tile->get_Xpos() - passage_two->get_Xpos()))
+		{
+			return passage_one;
+		}
+		return passage_two;
+	}
+
+	return nullptr;
+}
+
 point enemy::get_2d_distance_to_tile(tile* t)
 {
 	return point(
@@ -157,20 +181,15 @@ point enemy::find_move_to(tile* t)
 
 			else
 			{
-				passage = find_vertical_passage({ where_to_go.x,-1 });
-				if (passage == nullptr)
-					passage = find_vertical_passage({ -where_to_go.x,-1 });
+				passage = find_closest_vertical_passage({ 0,-1 });
 			}
 		}
-
 		else
 		{
 			if (current_tile->can_down()) result = { 0,1 };
 			else
 			{
-				passage = find_vertical_passage({ where_to_go.x,1 });
-				if (passage == nullptr)
-					passage = find_vertical_passage({ -where_to_go.x,1 });
+				passage = find_closest_vertical_passage({ 0,1 });
 			}
 		}
 

@@ -27,8 +27,11 @@ private:
 
 	bool try_steal_gold(tile *t);
 	bool try_drop_gold(tile *t);
+	
+
 
 	tile *find_vertical_passage(point dir);
+	tile *find_closest_vertical_passage(point dir);
 
 	point get_2d_distance_to_tile(tile *t);
 	point find_move_to(tile *t);
