@@ -72,6 +72,7 @@ void hero::set_current_tile(tile* t)
 void hero::continue_movement()
 {
 	movement_progress += engine::get_delta_time() * movement_speed;
+
 	if (destination_tile == nullptr)
 		get_transform()->position = current_tile->get_transform()->position;
 	else
@@ -80,8 +81,7 @@ void hero::continue_movement()
 		{
 			set_current_tile(destination_tile);
 			get_transform()->position = destination_tile->get_transform()->position;
-			if (m_falling)
-				movement_progress -=1.f;
+			movement_progress -=1.f;
 		}
 		else
 			get_transform()->position = tile::position_lerp(current_tile, destination_tile, movement_progress);
@@ -201,13 +201,6 @@ void hero::update()
 	}
 
 	else if (previous_dir != dir && (previous_dir * dir) != zero) { //direction has changed, but not the axis.
-		if (movement_progress > 0.96f) //For situations when we stand very close to the wall.
-									   //In some cases movement prograss gets >0.995 value without current_tile change, 
-									   //and causes glitches.
-		{
-			movement_progress = 0;
-		}
-		else
 			movement_progress = -movement_progress;
 	} else //nothing changed
 	{

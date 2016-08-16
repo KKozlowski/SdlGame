@@ -36,8 +36,6 @@ void enemy::set_current_tile(tile* t)
 
 	current_tile = t;
 
-	//std::cout << "TILE NOWWW: " << current_tile->get_indices().to_string() << std::endl;
-
 	movement_progress -= 1;
 }
 
@@ -238,7 +236,7 @@ void enemy::update()
 	}
 
 	movement_progress += m_speed * engine::get_delta_time();
-	if (movement_progress > 1 && destination_tile != nullptr) {
+	if (movement_progress >= 1 && destination_tile != nullptr) {
 		set_current_tile(destination_tile);
 		if (!falling_into_trap)
 			destination_tile = current_tile->get_neighbor(previous_dir);
