@@ -13,20 +13,20 @@ class tile : public actor
 private:
 	level_grid *m_level;
 	gold *m_gold;
-protected:
-	point indices;
-	tile_type m_type;
-public:
-	int get_Xpos() const
-	{ return indices.x; }
-	int get_Ypos() const
-	{ return indices.y; }
-	point get_indices() const { return indices; }
+	point m_indices;
 
-	level_grid *get_level() const
-	{
-		return m_level;
-	}
+protected:
+	tile_type m_type;
+
+public:
+	///<summary> Returns horizontal index of the tile in the grid. </summary>
+	int get_Xpos() const { return m_indices.x; }
+	///<summary> Returns vertical index of the tile in the grid. </summary>
+	int get_Ypos() const { return m_indices.y; }
+	///<summary> Returns horizontal (x) and vertical (y) indices of the tile in the grid. </summary>
+	point get_indices() const { return m_indices; }
+
+	level_grid *get_levelgrid() const { return m_level; }
 
 	tile(int x, int y, level_grid* l);
 
@@ -37,7 +37,7 @@ public:
 		return false;
 	}
 
-	draw_texture *get_tex_draw() const
+	draw_texture *get_tex_draw() const //All the tiles have draw_texture as their basic draw.
 	{
 		return static_cast<draw_texture*>(m_draw);
 	}

@@ -8,7 +8,10 @@ private:
 	renderer *m_renderer;
 	
 public:
+	///<summary>Center of the area camera "sees".</summary>
 	point center;
+
+	///<summary>Amount of units "seen" by camera from the center of the view to the top/bottom edge of the view.</summary>
 	float view_radius = 360.f;
 
 	camera(point center, float view_radius, renderer *rend)
@@ -18,11 +21,12 @@ public:
 		m_renderer = rend;
 	}
 
-	float get_scale()
+	float get_scale() const
 	{
 		return  (m_renderer->SCREEN_HEIGHT / 2)/ view_radius;
 	}
 
+	///<summary>Transforms given rect (origin) from world space to view space.</summary>
 	SDL_Rect translate_rect(SDL_Rect origin)
 	{
 		float scal = get_scale();

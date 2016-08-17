@@ -7,7 +7,7 @@
 
 tile::tile(int x, int y, level_grid* l)
 {
-	indices = point(x, y);
+	m_indices = point(x, y);
 	m_level = l;
 	m_draw = new draw_texture(this, "");
 	get_tex_draw()->centered = true;
@@ -16,27 +16,27 @@ tile::tile(int x, int y, level_grid* l)
 
 tile* tile::get_up()
 {
-	return m_level->get(indices.x, indices.y - 1);
+	return m_level->get(m_indices.x, m_indices.y - 1);
 }
 
 tile* tile::get_down()
 {
-	return m_level->get(indices.x, indices.y + 1);
+	return m_level->get(m_indices.x, m_indices.y + 1);
 }
 
 tile* tile::get_left()
 {
-	return m_level->get(indices.x - 1, indices.y);
+	return m_level->get(m_indices.x - 1, m_indices.y);
 }
 
 tile* tile::get_right()
 {
-	return m_level->get(indices.x + 1, indices.y);
+	return m_level->get(m_indices.x + 1, m_indices.y);
 }
 
 tile* tile::get_neighbor(point offset)
 {
-	return m_level->get(indices.x + offset.x, indices.y + offset.y);
+	return m_level->get(m_indices.x + offset.x, m_indices.y + offset.y);
 }
 
 bool tile::can_up(bool for_ai)

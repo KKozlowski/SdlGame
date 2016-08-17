@@ -11,16 +11,15 @@ class camera;
 class renderer
 {
 private:
-	SDL_Renderer* mainRenderer = nullptr;
-	SDL_Window* mainWindow = nullptr;
-	SDL_Surface* screenSurface = nullptr;
+	SDL_Renderer* m_sdlRenderer = nullptr;
+	SDL_Window* m_window = nullptr;
 	static bool sdl_initialized;
 
-	TTF_Font* font = nullptr;
+	TTF_Font* m_font = nullptr;
 
 	camera *m_camera;
 
-	std::set<draw_base *> *drawed;
+	std::set<draw_base *> *m_draws;
 public:
 	const int SCREEN_WIDTH = 1280;
 	const int SCREEN_HEIGHT = 720;
@@ -40,7 +39,9 @@ public:
 	void clear(Uint8 r, Uint8 g, Uint8 b);
 	void set_color(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
+	///<summary>Add a draw_base object to the list of objects drawn every frame. </summary>
 	bool add_draw(draw_base *);
+	///<summary>Remove a draw_base object from the list of objects drawn every frame. </summary>
 	bool remove_draw(draw_base *);
 
 	std::string bottom_text = "";
