@@ -34,6 +34,27 @@ void level_grid::set_score_text(int pts)
 	engine::get_instance()->get_renderer()->bottom_text = ss.str();
 }
 
+void level_grid::kill_disposable_enemies()
+{
+	for (enemy *e : enemies_to_kill)
+	{
+		std::vector<enemy *>::iterator looking_for_instance = std::find(enemies.begin(), enemies.end(), e);
+		if (looking_for_instance != enemies.end())
+		{
+			engine::get_instance()->get_scene()->remove_actor(*looking_for_instance);
+			delete *looking_for_instance;
+			enemies.erase(looking_for_instance);
+
+			get_hero()->add_killer_points(120);
+
+			set_score_text(get_hero()->get_total_points());
+
+			//put_enemy_on_tile(get_respawner_tile());
+			call_respawn();
+		}
+	}
+}
+
 tile* level_grid::get_respawner_tile()
 {
 	return get(spawner.x, spawner.y);
@@ -256,24 +277,12 @@ void level_grid::on_gold_disappearance(gold *g)
 
 void level_grid::on_enemy_death(enemy* e)
 {
-	std::vector<enemy *>::iterator looking_for_instance = std::find(enemies.begin(), enemies.end(), e);
-	if (looking_for_instance != enemies.end())
-	{
-		engine::get_instance()->get_scene()->remove_actor(*looking_for_instance);
-		delete *looking_for_instance;
-		enemies.erase(looking_for_instance);
-
-		get_hero()->add_killer_points(120);
-
-		set_score_text(get_hero()->get_total_points());
-
-		//put_enemy_on_tile(get_respawner_tile());
-		call_respawn();
-	}
+	enemies_to_kill.push_back(e);
 		
 }
 
 void level_grid::update()
 {
+	kill_disposable_enemies();
 	handle_respawns();
 }

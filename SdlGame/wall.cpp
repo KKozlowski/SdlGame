@@ -10,11 +10,11 @@ void wall::refill()
 	get_draw()->set_visible(true);
 	digged = false;
 
-	if (enemy_in_the_hole)
-		enemy_in_the_hole->die();
+	//if (enemy_in_the_hole)
+	//	enemy_in_the_hole->die();
 
-	//if (get_levelgrid()->get_hero()->get_current_tile() == this)
-	//	get_levelgrid()->get_hero()->die();
+	if (get_levelgrid()->get_hero()->get_current_tile() == this)
+		get_levelgrid()->get_hero()->die();
 }
 
 wall::wall(int x, int y, level_grid* l, bool destructible)
@@ -48,7 +48,7 @@ bool wall::is_empty()
 
 bool wall::is_death_trap()
 {
-	return !is_empty();
+	return !digged;
 }
 
 void wall::update()

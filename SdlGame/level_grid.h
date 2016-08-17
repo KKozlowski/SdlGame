@@ -29,6 +29,7 @@ private:
 	std::vector<point> hidden_ladders;
 	std::vector<gold *> gold_piles;
 	std::vector<enemy *> enemies;
+	std::vector<enemy *> enemies_to_kill;
 	point final_ladder;
 	point spawner;
 
@@ -43,6 +44,8 @@ private:
 	void unhide_ladder(point indices, bool finalizing);
 
 	void set_score_text(int pts);
+
+	void kill_disposable_enemies();
 
 	tile *get_respawner_tile();
 	void call_respawn();

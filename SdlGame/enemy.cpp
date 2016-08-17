@@ -266,8 +266,13 @@ enemy::~enemy()
 
 }
 
-void enemy::update()
-{
+void enemy::update(){
+
+	if (!m_gettingOutOfTrap && m_currentTile->is_death_trap())
+	{
+		die();
+		return;
+	}
 
 	hero *he = m_levelgrid->get_hero();
 	if ((get_transform()->position - he->get_transform()->position).length() < m_killingRange*m_levelgrid->get_tilesize())
