@@ -54,7 +54,6 @@ void level_grid::handle_respawns()
 	if (!m_respawnMoments.empty())
 	{
 		float respawn_moment = m_respawnMoments.front();
-		//std::cout << engine::get_time_from_start() << " -> " << respawn_moment << std::endl;
 		if (respawn_moment < engine::get_time_from_start())
 		{
 			m_respawnMoments.pop_front();
@@ -80,7 +79,7 @@ level_grid::level_grid(file_reader_line_by_line *li, float tilesize, level_manag
 		{
 			bool add_gold = false;
 			bool add_enemy = false;
-			//w << c;
+
 			tile *tile = nullptr;
 
 			switch(c)
@@ -144,7 +143,6 @@ level_grid::level_grid(file_reader_line_by_line *li, float tilesize, level_manag
 			++col;
 		}
 
-		//std::cout << std::endl;
 		++row;
 	}
 

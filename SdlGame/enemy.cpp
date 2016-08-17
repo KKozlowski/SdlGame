@@ -7,28 +7,34 @@
 
 void enemy::set_current_tile(tile* t)
 {
-	if (t->can_down() && !t->can_down(true)) //TRAP!
-	{
-		falling_into_trap = true;
-		try_drop_gold(t);
-
-		set_destination_tile(t->get_down());
-		wall *our_doom = static_cast<wall *>(m_destinationTile);
-		if (our_doom != nullptr)
-			our_doom->enemy_in_the_hole = this;
-	}
-	if (!falling_into_trap)
+	if (!m_fellIntoTrap)
 	{
 		if (t->can_down(true) && t->empty_over_empty())
 		{
-			falling = true;
+			m_falling = true;
 			set_destination_tile(t->get_down());
 		}
 
-		if (falling && !t->empty_over_empty())
+		if (m_falling && !t->empty_over_empty())
 		{
-			falling = false;
+			m_falling = false;
 		}
+	}
+	else
+	{
+		if (m_gettingOutOfTrap)
+		{
+			std::cout << "GETTING OUT OF TRAP\n";
+			
+			m_gettingOutOfTrap = false;
+			m_fellIntoTrap = false;
+		}
+		//std::cout << "IN TRAP\n";
+	}
+
+	if (t->can_down() && !t->can_down(true)) //TRAP!
+	{
+		fall_into_trap(t);
 	}
 
 	try_steal_gold(t);
@@ -38,11 +44,50 @@ void enemy::set_current_tile(tile* t)
 	tile_traveller::set_current_tile(t);
 }
 
+void enemy::fall_into_trap(tile* tile_youre_on)
+{
+	m_fellIntoTrap = true;
+	try_drop_gold(tile_youre_on);
+
+	set_destination_tile(tile_youre_on->get_down());
+	trap_tile = static_cast<wall *>(m_destinationTile);
+	if (trap_tile != nullptr)
+	{
+		trap_tile->enemy_in_the_hole = this;
+	}
+		
+
+	m_unstunTime = engine::get_time_from_start() + m_trapStunTime;
+}
+
+void enemy::get_out_of_trap()
+{
+	if (!m_gettingOutOfTrap)
+	{
+		m_movementProgress = 0;
+
+		if (trap_tile != nullptr)
+			trap_tile->enemy_in_the_hole = nullptr;
+
+		//Look for a good destination
+		point distance = get_2d_distance_to_tile(m_levelgrid->get_hero()->get_current_tile());
+		tile *up = m_currentTile->get_up();
+		if (distance.x > 0 && up->can_right())
+			set_destination_tile(up->get_right());
+		else if (distance.x < 0 && up->can_left())
+			set_destination_tile(m_currentTile->get_up()->get_left());
+		else return;
+
+		m_gettingOutOfTrap = true;
+	}
+	
+}
+
 bool enemy::try_steal_gold(tile* t)
 {
-	if (!falling_into_trap && t->get_gold() != nullptr)
+	if (!m_fellIntoTrap && t->get_gold() != nullptr)
 	{
-		held_points += t->get_gold()->get_value();
+		m_heldPoints += t->get_gold()->get_value();
 		t->pop_gold();
 		return true;
 	}
@@ -52,11 +97,9 @@ bool enemy::try_steal_gold(tile* t)
 
 bool enemy::try_drop_gold(tile* t)
 {
-
-	if (held_points > 0)
+	if (m_heldPoints > 0)
 	{
-		//wwwstd::cout << held_points << std::endl;
-		m_levelgrid->put_gold_on_tile(t, held_points);
+		m_levelgrid->put_gold_on_tile(t, m_heldPoints);
 		return true;
 	}
 	return false;
@@ -78,20 +121,16 @@ tile* enemy::find_vertical_passage(point dir)
 
 		if (dir.y<0 && next_tile->can_up(true))
 		{
-			//std::cout << next_tile->get_indices().to_string() << std::endl;
 			return next_tile;
 		}
-			
 
 		if (dir.y>0 && next_tile->can_down(true))
 		{
-			//std::cout << next_tile->get_indices().to_string() << std::endl;
 			return next_tile;
 		}
 			
 	} while (true);
 
-	//std::cout << "null" << std::endl;
 	return nullptr;
 }
 
@@ -131,7 +170,7 @@ point enemy::find_move_to(tile* t)
 {
 	point result(0, 0);
 	point where_to_go = get_2d_distance_to_tile(t);
-	if (falling)
+	if (m_falling)
 		return{ 0,1 };
 	if (where_to_go.y == 0) //WE ARE ON THE SAME LEVEL!
 	{
@@ -196,12 +235,7 @@ point enemy::find_move_to(tile* t)
 				result = { 1,0 };
 			if (passage->get_Xpos() < m_currentTile->get_Xpos()) //; in memory of the most evil semicolon ever.
 				result = { -1,0 };
-
-				//std::cout << "\n\nPASSAGE LOCATION: " << passage->get_indices().to_string() << "\nCURRENT TILE: " << current_tile->get_indices().to_string() << "\nRESULT: " << result.to_string() << std::endl;
 		}
-
-
-		//std::cout << result.to_string() << std::endl;
 	}
 
 	return result;
@@ -225,10 +259,18 @@ enemy::enemy(tile* start_tile, level_grid* lg)
 	get_transform()->position = start_tile->get_transform()->position;
 }
 
+enemy::~enemy()
+{
+	if (trap_tile != nullptr && trap_tile->enemy_in_the_hole == this)
+		trap_tile->enemy_in_the_hole = nullptr;
+
+}
+
 void enemy::update()
 {
+
 	hero *he = m_levelgrid->get_hero();
-	if ((get_transform()->position - he->get_transform()->position).length() < killing_range*m_levelgrid->get_tilesize())
+	if ((get_transform()->position - he->get_transform()->position).length() < m_killingRange*m_levelgrid->get_tilesize())
 	{
 		he->die();
 	}
@@ -236,7 +278,7 @@ void enemy::update()
 	m_movementProgress += m_movementSpeed * engine::get_delta_time();
 	if (m_movementProgress >= 1 && m_destinationTile != nullptr) {
 		set_current_tile(m_destinationTile);
-		if (!falling_into_trap)
+		if (!m_fellIntoTrap && !m_gettingOutOfTrap)
 			set_destination_tile(m_currentTile->get_neighbor(m_previousDirection));
 		get_transform()->position = m_currentTile->get_transform()->position;
 	}
@@ -246,7 +288,12 @@ void enemy::update()
 		get_transform()->position = tile::position_lerp(m_currentTile, m_destinationTile, m_movementProgress);
 	}
 
-	if (!falling_into_trap)
+	if (m_fellIntoTrap)
+	{
+		if (engine::get_time_from_start() > m_unstunTime)
+			get_out_of_trap();
+	}
+	else if (!m_gettingOutOfTrap)
 	{
 		tile *hero_tile = he->get_current_tile();
 		point dir = find_move_to(hero_tile);

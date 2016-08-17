@@ -57,7 +57,6 @@ bool level_manager::reset_level()
 void level_manager::reset_level_after_time(float delay)
 {
 	m_timeOfReset = engine::get_time_from_start() + delay;
-	std::cout << engine::get_time_from_start() << " " << m_timeOfReset << std::endl;
 }
 
 bool level_manager::load_next_level()

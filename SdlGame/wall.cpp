@@ -3,7 +3,7 @@
 #include "engine.h"
 #include "enemy.h"
 
-float wall::rebuilding_time = 4.f;
+float wall::rebuilding_time = 4.2f;
 
 void wall::refill()
 {

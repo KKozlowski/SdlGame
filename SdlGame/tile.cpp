@@ -95,7 +95,6 @@ bool tile::set_gold(gold* g)
 {
 	if (m_gold == nullptr)
 	{
-		//std::cout << "PUTTING GOLD " << indices.to_string() << std::endl;
 		m_gold = g;
 		return true;
 	}
@@ -112,7 +111,6 @@ void tile::pop_gold()
 {
 	if (m_gold != nullptr)
 	{
-		//std::cout << "POPPING GOLD " << indices.to_string() << std::endl;
 		engine::get_instance()->get_scene()->remove_actor(m_gold);
 		delete m_gold;
 		m_gold = nullptr;
