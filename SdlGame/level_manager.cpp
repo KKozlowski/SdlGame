@@ -77,7 +77,10 @@ void level_manager::update()
 	{
 		hero *he = nullptr;
 		if (get_current())
+		{
 			he = get_current()->get_hero();
+			get_current()->update();
+		}
 		if (he != nullptr)
 		{
 			if (!he->is_alive() && m_timeOfReset == 0)

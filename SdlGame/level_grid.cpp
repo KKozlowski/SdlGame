@@ -27,16 +27,40 @@ void level_grid::unhide_ladder(point indices, bool finalizing)
 	l->get_tex_draw()->set_width_height(m_tilesize, m_tilesize);
 }
 
-tile* level_grid::get_respawner_tile()
-{
-	return get(spawner.x, spawner.y);
-}
-
 void level_grid::set_score_text(int pts)
 {
 	std::stringstream ss;
 	ss << "SCORE: " << pts;
 	engine::get_instance()->get_renderer()->bottom_text = ss.str();
+}
+
+tile* level_grid::get_respawner_tile()
+{
+	return get(spawner.x, spawner.y);
+}
+
+void level_grid::call_respawn()
+{
+	float respawn_moment = engine::get_time_from_start() + m_enemyRespawnTime;
+	if (!m_respawnMoments.empty() 
+		&& (respawn_moment - m_respawnMoments.back() < m_minimumTimeBetweenEnemyRespawns))
+		respawn_moment = m_respawnMoments.back() + m_minimumTimeBetweenEnemyRespawns;
+
+	m_respawnMoments.push_back(respawn_moment);
+}
+
+void level_grid::handle_respawns()
+{
+	if (!m_respawnMoments.empty())
+	{
+		float respawn_moment = m_respawnMoments.front();
+		//std::cout << engine::get_time_from_start() << " -> " << respawn_moment << std::endl;
+		if (respawn_moment < engine::get_time_from_start())
+		{
+			m_respawnMoments.pop_front();
+			put_enemy_on_tile(get_respawner_tile());
+		}
+	}
 }
 
 level_grid::level_grid(file_reader_line_by_line *li, float tilesize, level_manager *manager)
@@ -229,9 +253,7 @@ void level_grid::on_gold_disappearance(gold *g)
 		{
 			gold_piles.erase(looking_for_instance);
 		}
-			
 	}
-	
 }
 
 void level_grid::on_enemy_death(enemy* e)
@@ -247,7 +269,13 @@ void level_grid::on_enemy_death(enemy* e)
 
 		set_score_text(get_hero()->get_total_points());
 
-		put_enemy_on_tile(get_respawner_tile());
+		//put_enemy_on_tile(get_respawner_tile());
+		call_respawn();
 	}
 		
+}
+
+void level_grid::update()
+{
+	handle_respawns();
 }

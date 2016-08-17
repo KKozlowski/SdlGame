@@ -157,9 +157,12 @@ void hero::stop_digging()
 
 void hero::die()
 {
-	m_alive = false;
-	m_draw->set_visible(false);
-	std::cout << "DEATH";
+	if (m_alive)
+	{
+		m_alive = false;
+		m_draw->set_visible(false);
+		std::cout << "DEATH";
+	}
 }
 
 tile* hero::get_current_tile() const
