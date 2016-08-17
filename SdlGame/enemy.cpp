@@ -46,6 +46,7 @@ void enemy::set_current_tile(tile* t)
 
 void enemy::fall_into_trap(tile* tile_youre_on)
 {
+	std::cout << "FALLING INTO TRAP\n";
 	m_fellIntoTrap = true;
 	try_drop_gold(tile_youre_on);
 
@@ -100,6 +101,7 @@ bool enemy::try_drop_gold(tile* t)
 	if (m_heldPoints > 0)
 	{
 		m_levelgrid->put_gold_on_tile(t, m_heldPoints);
+		m_heldPoints = 0;
 		return true;
 	}
 	return false;
@@ -243,6 +245,8 @@ point enemy::find_move_to(tile* t)
 
 void enemy::die()
 {
+	std::cout << "ENEMY DIES\n";
+	try_drop_gold(m_currentTile);
 	m_levelgrid->on_enemy_death(this);
 }
 

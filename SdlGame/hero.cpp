@@ -84,7 +84,8 @@ void hero::continue_movement()
 		{
 			set_current_tile(m_destinationTile);
 			get_transform()->position = m_destinationTile->get_transform()->position;
-			m_movementProgress -=1.f;
+			if (m_previousDirection.x != 0 || m_falling)
+				m_movementProgress -=1.f;
 		}
 		else
 			get_transform()->position = tile::position_lerp(m_currentTile, m_destinationTile, m_movementProgress);
@@ -213,6 +214,7 @@ void hero::update()
 			m_movementProgress = -m_movementProgress;
 	} else //nothing changed
 	{
+		m_previousDirection = dir;
 		continue_movement();
 	}
 

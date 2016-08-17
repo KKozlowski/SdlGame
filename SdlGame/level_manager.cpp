@@ -61,6 +61,7 @@ void level_manager::reset_level_after_time(float delay)
 
 bool level_manager::load_next_level()
 {
+	std::cout << "LOADING NEXT LEVEL\n";
 	return load_level(m_currentLevelID + 1);
 }
 

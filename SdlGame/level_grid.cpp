@@ -218,8 +218,7 @@ void level_grid::put_gold_on_tile(tile* tile, int value)
 	if (go->set_tile(tile, this))
 	{
 		engine::get_instance()->get_scene()->add_actor(go);
-		
-		
+
 		gold_piles.push_back(go);
 	}
 	else
@@ -242,7 +241,7 @@ bool level_grid::on_hero_gold_take(int golden_points, int killer_points)
 {
 	set_score_text(golden_points + killer_points);
 
-	if (golden_points == required_gold)
+	if (golden_points >= required_gold)
 	{
 		std::cout << "UNLOCK\n";
 	

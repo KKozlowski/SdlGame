@@ -235,6 +235,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="level_four.txt" />
     <Text Include="level_one.txt">
       <DeploymentContent>false</DeploymentContent>
     </Text>

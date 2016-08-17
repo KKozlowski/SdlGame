@@ -21,8 +21,8 @@ class level_grid
 private:
 	level_manager *m_levelmanager;
 	float m_tilesize;
-	float m_enemyRespawnTime = 4.f;
-	float m_minimumTimeBetweenEnemyRespawns = 1.f;
+	float m_enemyRespawnTime = 6.f;
+	float m_minimumTimeBetweenEnemyRespawns = 1.2f;
 
 	hero *m_hero;
 
