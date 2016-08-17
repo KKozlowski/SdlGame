@@ -3,7 +3,7 @@
 #include "engine.h"
 #include "draw_title_screen.h"
 
-std::vector<std::string> level_manager::filenames {"level_one.txt", "level_two.txt" };
+std::vector<std::string> level_manager::filenames {"level_one.txt", "level_two.txt", "level_three.txt" };
 
 bool level_manager::load_level(int id)
 {

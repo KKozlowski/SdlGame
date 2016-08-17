@@ -10,7 +10,8 @@ void tile_traveller::set_current_tile(tile* t)
 void tile_traveller::set_destination_tile(tile* t)
 {
 	m_destinationTile = t;
-	m_destinationTileIndices = m_destinationTile->get_indices();
+	if (m_destinationTile != nullptr)
+		m_destinationTileIndices = m_destinationTile->get_indices();
 }
 
 tile_traveller::tile_traveller(level_grid* lg, float speed)

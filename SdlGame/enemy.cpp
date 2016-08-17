@@ -213,7 +213,7 @@ void enemy::die()
 }
 
 enemy::enemy(tile* start_tile, level_grid* lg)
-	:tile_traveller(lg, 2.f)
+	:tile_traveller(lg, 1.5f)
 {
 	m_levelgrid = lg;
 	draw_texture *dt = new draw_texture(this, "enemy.png");
