@@ -71,7 +71,7 @@ void level_manager::update()
 		engine::get_instance()->get_renderer()->bottom_text = "PRESS 'ENTER' TO START";
 
 		if (engine::get_instance()->get_input()->get_key_down(SDLK_RETURN))
-			load_level(0);
+			load_level(1);
 	} else
 	{
 		hero *he = nullptr;

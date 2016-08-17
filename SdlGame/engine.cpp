@@ -72,7 +72,6 @@ void engine::run()
 	
 	level_manager *levels = new level_manager(160);
 	m_actormanager->add_actor(levels);
-	//levels->load_level(0, 160);
 
 	//MAIN LOOP
 	while (!quit)

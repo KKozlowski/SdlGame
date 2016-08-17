@@ -6,7 +6,6 @@
 #include "gold.h"
 #include "tile.h"
 #include "level_grid.h"
-#include "level_manager.h"
 #include <iostream>
 
 void hero::reduce_offset()
@@ -161,7 +160,7 @@ void hero::die()
 	{
 		m_alive = false;
 		m_draw->set_visible(false);
-		std::cout << "DEATH";
+		std::cout << "DEATH\n";
 	}
 }
 
@@ -218,8 +217,6 @@ void hero::update()
 	}
 
 	m_previousDirection = dir;
-
-	
 }
 
 point hero::read_and_apply_input()
@@ -229,6 +226,8 @@ point hero::read_and_apply_input()
 	vector2f position = get_transform()->position;
 	vector2f current_tile_position = m_currentTile->get_transform()->position;
 
+	bool prepared_for_adjustment_jump = can_jump_to_destination() && !m_destinationTile->empty_over_empty();
+
 	point result;
 
 	if (inp->get_key(SDLK_q))
@@ -237,22 +236,22 @@ point hero::read_and_apply_input()
 		dig({ 1,0 });
 	else if (inp->get_key(SDLK_w))
 	{
-		if (can_jump_to_destination() && !m_destinationTile->empty_over_empty() && m_destinationTile->can_up())
+		if (prepared_for_adjustment_jump && m_destinationTile->can_up()) //Movement with distance skip, when near the tile that allows movement in given direction.
 		{
 			set_direction(result = { 0,-1 }, true);
 		}
-		else if (m_currentTile->can_up() || position.y > current_tile_position.y)
+		else if (position.y > current_tile_position.y || m_currentTile->can_up()) //Standard movement to the next tile, or back to the current tile.
 		{
 			set_direction(result = { 0,-1 });
 		}
 	}
 	else if (inp->get_key(SDLK_s))
 	{
-		if (can_jump_to_destination() && !m_destinationTile->empty_over_empty() && m_destinationTile->can_down())
+		if (prepared_for_adjustment_jump && m_destinationTile->can_down())
 		{
 			set_direction(result = { 0,1 }, true);
 		}
-		else if (m_currentTile->can_down() || position.y < current_tile_position.y)
+		else if (position.y < current_tile_position.y || m_currentTile->can_down())
 		{
 			set_direction(result = { 0,1 });
 			if (m_destinationTile->is_empty())
@@ -261,22 +260,22 @@ point hero::read_and_apply_input()
 	}
 	else if (inp->get_key(SDLK_a))
 	{
-		if (can_jump_to_destination() && !m_destinationTile->empty_over_empty() && m_destinationTile->can_left())
+		if (prepared_for_adjustment_jump && m_destinationTile->can_left())
 		{
 			set_direction(result = { -1,0 }, true);
 		}
-		else if (m_currentTile->can_left() || position.x > current_tile_position.x)
+		else if (position.x > current_tile_position.x || m_currentTile->can_left())
 		{
 			set_direction(result = { -1,0 });
 		}
 	}
 	else if (inp->get_key(SDLK_d))
 	{
-		if (can_jump_to_destination() && !m_destinationTile->empty_over_empty() && m_destinationTile->can_left())
+		if (prepared_for_adjustment_jump && m_destinationTile->can_left())
 		{
 			set_direction(result = { 1,0 }, true);
 		}
-		else if (m_currentTile->can_right() || position.x < current_tile_position.x)
+		else if (position.x < current_tile_position.x || m_currentTile->can_right())
 		{
 			set_direction(result = { 1,0 });
 		}
