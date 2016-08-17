@@ -172,6 +172,8 @@ tile* hero::get_current_tile() const
 
 void hero::update()
 {
+	if (get_current_tile()->is_death_trap())
+		die();
 	reduce_offset();
 	point zero;
 	
@@ -216,6 +218,8 @@ void hero::update()
 	}
 
 	m_previousDirection = dir;
+
+	
 }
 
 point hero::read_and_apply_input()

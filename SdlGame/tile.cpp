@@ -91,6 +91,11 @@ bool tile::over_solid()
 	return get_down() == nullptr || get_down()->get_type() == tile_type::wall || get_down()->get_type() == tile_type::ladder;
 }
 
+bool tile::is_death_trap()
+{
+	return false;
+}
+
 bool tile::set_gold(gold* g)
 {
 	if (m_gold == nullptr)

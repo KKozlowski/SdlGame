@@ -67,6 +67,9 @@ public:
 	bool empty_over_empty();
 	bool over_solid();
 
+	///<summary>If it returns true, traveller standing inside such tile should die immediately.</summery>
+	virtual bool is_death_trap();
+
 	bool set_gold(gold *);
 	gold *get_gold() const;
 	void pop_gold();

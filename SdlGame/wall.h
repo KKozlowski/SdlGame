@@ -19,5 +19,6 @@ public:
 	bool dig(float delay = 0);
 	bool is_empty() override;
 	bool is_destructible() const { return destructible; }
+	bool is_death_trap() override;
 	void update() override;
 };
