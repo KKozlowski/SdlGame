@@ -72,6 +72,8 @@ renderer::~renderer()
 
 	SDL_DestroyRenderer(m_sdlRenderer);
 	m_sdlRenderer = nullptr;
+
+	TTF_CloseFont(m_font);
 }
 
 SDL_Renderer* renderer::get_renderer() const

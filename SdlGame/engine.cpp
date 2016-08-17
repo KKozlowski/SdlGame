@@ -23,10 +23,9 @@ engine::~engine()
 	delete m_input;
 	m_input = nullptr;
 
-	renderer::close_sdl();
 	delete m_renderer;
 	m_renderer == nullptr;
-	
+	renderer::close_sdl();
 }
 
 engine* engine::get_instance()

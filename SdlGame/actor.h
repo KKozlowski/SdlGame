@@ -1,6 +1,12 @@
 ﻿#pragma once
 #include "draw_base.h"
 #include "transform.h"
+
+///<summary>
+/// Basic class of an active object, that contains transform data,
+/// and is updated every frame. To become active, it needs to be added
+/// to scene object.
+///</summary>
 class actor
 {
 private:
@@ -10,9 +16,8 @@ protected:
 public:
 	actor();
 	virtual ~actor();
-	///<summary>
-	///Called every frame. In this method, actor's state should be modified.
-	///</summary>
+
+	///<summary> Called every frame. In this method, actor's state should be modified. </summary>
 	virtual void update();
 
 	inline draw_base *get_draw() const;

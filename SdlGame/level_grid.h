@@ -20,17 +20,23 @@ class level_grid
 {
 private:
 	level_manager *m_levelmanager;
+
+	std::vector<std::vector<tile*> *> *tile_grid = new std::vector<std::vector<tile*>*>();
+
 	float m_tilesize;
 	float m_enemyRespawnTime = 6.f;
 	float m_minimumTimeBetweenEnemyRespawns = 1.2f;
 
 	hero *m_hero;
 
+	///<summary>Indices of ladders to appear after collecting all gold.</summary>
 	std::vector<point> hidden_ladders;
+	///<summary>Indices of a hidden ladder, that will appear after collecting all gold.<para />Stepping on it will end the level.</summary>
+	point final_ladder;
+
 	std::vector<gold *> gold_piles;
 	std::vector<enemy *> enemies;
 	std::vector<enemy *> enemies_to_kill;
-	point final_ladder;
 	point spawner;
 
 	int required_gold;
@@ -38,8 +44,6 @@ private:
 	std::deque<float> m_respawnMoments;
 
 	bool during_deconstruction = false;
-
-	std::vector<std::vector<tile*> *> *tile_grid = new std::vector<std::vector<tile*>*>();
 
 	void unhide_ladder(point indices, bool finalizing);
 

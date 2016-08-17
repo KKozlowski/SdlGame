@@ -6,14 +6,14 @@ class actor;
 class transform
 {
 private:
-	actor *lActor;
-	SDL_Rect *rekt;
+	actor *m_actor;
+	SDL_Rect *m_rekt;
 public:
 	explicit transform(actor *a);
 
 	vector2f position;
-	vector2f scale;
-	float rotation;
+	//vector2f scale;
+	//float rotation;
 
 	///<summary>
 	///Returns an SDL_Rect object with zero width/height, but a proper x/y position.

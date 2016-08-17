@@ -11,7 +11,12 @@ actor::actor()
 actor::~actor()
 {
 	delete m_transform;
-	engine::get_instance()->get_renderer()->remove_draw(m_draw);
+	if (m_draw != nullptr)
+	{
+		delete m_draw;
+		m_draw = nullptr;
+	}
+
 }
 
 void actor::update()

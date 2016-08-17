@@ -7,7 +7,17 @@
 
 void enemy::set_current_tile(tile* t)
 {
-	if (!m_fellIntoTrap)
+	if (m_fellIntoTrap)
+	{
+		if (m_gettingOutOfTrap)
+		{
+			std::cout << "ENEMY GETS OUT OF TRAP\n";
+
+			m_gettingOutOfTrap = false;
+			m_fellIntoTrap = false;
+		}
+	}
+	else
 	{
 		if (t->can_down(true) && t->empty_over_empty())
 		{
@@ -19,17 +29,6 @@ void enemy::set_current_tile(tile* t)
 		{
 			m_falling = false;
 		}
-	}
-	else
-	{
-		if (m_gettingOutOfTrap)
-		{
-			std::cout << "GETTING OUT OF TRAP\n";
-			
-			m_gettingOutOfTrap = false;
-			m_fellIntoTrap = false;
-		}
-		//std::cout << "IN TRAP\n";
 	}
 
 	if (t->can_down() && !t->can_down(true)) //TRAP!
@@ -46,7 +45,7 @@ void enemy::set_current_tile(tile* t)
 
 void enemy::fall_into_trap(tile* tile_youre_on)
 {
-	std::cout << "FALLING INTO TRAP\n";
+	std::cout << "ENEMY FALLS INTO TRAP\n";
 	m_fellIntoTrap = true;
 	try_drop_gold(tile_youre_on);
 

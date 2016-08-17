@@ -8,6 +8,12 @@
 
 class camera;
 
+
+///<summary>
+/// Class that calles draw() on all the visible draw_base objects. <para />
+/// It holds the SDL_Renderer and SDL_Window objects, cotrolling
+/// all the graphics oriented stuff.
+///</summary>
 class renderer
 {
 private:
@@ -44,6 +50,7 @@ public:
 	///<summary>Remove a draw_base object from the list of objects drawn every frame. </summary>
 	bool remove_draw(draw_base *);
 
+	///<summary>Text that is displayed at the bottom of the screen. Good for score displaying. </summary>
 	std::string bottom_text = "";
 
 	void draw();

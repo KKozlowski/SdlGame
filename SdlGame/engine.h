@@ -35,7 +35,14 @@ public:
 	///</summary>
 	static float get_delta_time();
 
+	///<summary>
+	///Returns time (in seconds) that passed from start start of the game
+	///<para/>It is accurate to nanoseconds.
+	///</summary>
 	static float get_time_from_start();
 
+	///<summary>
+	///Runs the main loop of the game. It returns when the game is over.
+	///</summary>
 	void run();
 };

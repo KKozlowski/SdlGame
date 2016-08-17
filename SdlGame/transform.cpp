@@ -3,20 +3,20 @@
 
 actor* transform::get_actor() const
 {
-	return lActor;
+	return m_actor;
 }
 
 transform::transform(actor* a)
 {
-	lActor = a;
-	rekt = new SDL_Rect();
+	m_actor = a;
+	m_rekt = new SDL_Rect();
 }
 
 SDL_Rect* transform::get_rekt()
 {
-	rekt->x = floor(position.x);
-	rekt->y = floor(position.y);
-	rekt->w = 0;
-	rekt->h = 0;
-	return rekt;
+	m_rekt->x = floor(position.x);
+	m_rekt->y = floor(position.y);
+	m_rekt->w = 0;
+	m_rekt->h = 0;
+	return m_rekt;
 }
