@@ -83,7 +83,7 @@ bool tile::over_empty()
 
 bool tile::empty_over_empty()
 {
-	return is_empty() && get_down() != nullptr && get_down()->is_empty();
+	return is_empty() && get_down() != nullptr && (get_down()->is_empty() || get_down()->get_type() == tile_type::pipe);
 }
 
 bool tile::over_solid()
