@@ -22,6 +22,7 @@ private:
 	wall *trap_tile = nullptr;
 
 	void set_current_tile(tile *t) override;
+	void set_destination_tile(tile *t) override;
 	void fall_into_trap(tile *tile_youre_on);
 	void get_out_of_trap();
 
@@ -33,11 +34,11 @@ private:
 
 	point get_2d_distance_to_tile(tile *t);
 	point find_move_to(tile *t);
-
-	
 public:
 	void die();
 	enemy(tile *start_tile, level_grid *lg);
 	~enemy();
 	void update() override;
+
+	bool is_during_regular_movement() const { return !m_fellIntoTrap && !m_falling&& !m_gettingOutOfTrap; }
 };

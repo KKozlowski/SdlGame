@@ -7,6 +7,7 @@
 
 void enemy::set_current_tile(tile* t)
 {
+
 	if (m_fellIntoTrap)
 	{
 		if (m_gettingOutOfTrap)
@@ -41,6 +42,22 @@ void enemy::set_current_tile(tile* t)
 	m_movementProgress -= 1;
 
 	tile_traveller::set_current_tile(t);
+}
+
+void enemy::set_destination_tile(tile* t)
+{
+	if (m_destinationTile != nullptr && m_destinationTile->enemy_destined_here == this) // "Free" the previous destination tile
+		m_destinationTile->enemy_destined_here = nullptr;
+
+	if (is_during_regular_movement() 
+		&& t->enemy_destined_here != nullptr) // It the new destination tile is taken, and you aren't doing anything special, stop for a moment.
+		return;
+	
+
+	tile_traveller::set_destination_tile(t);
+
+	if (is_during_regular_movement())
+		m_destinationTile->enemy_destined_here = this;
 }
 
 void enemy::fall_into_trap(tile* tile_youre_on)
@@ -244,6 +261,8 @@ point enemy::find_move_to(tile* t)
 
 void enemy::die()
 {
+	if (m_destinationTile->enemy_destined_here == this)
+		m_destinationTile->enemy_destined_here = nullptr;
 	std::cout << "ENEMY DIES\n";
 	try_drop_gold(m_currentTile);
 

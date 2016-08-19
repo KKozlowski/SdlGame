@@ -47,7 +47,6 @@ void level_grid::kill_disposable_enemies()
 
 			set_score_text(get_hero()->get_total_points());
 
-			//put_enemy_on_tile(get_respawner_tile());
 			call_respawn();
 		}
 	}

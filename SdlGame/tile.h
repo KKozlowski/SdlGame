@@ -6,6 +6,7 @@
 #include <iostream>
 
 class gold;
+class enemy;
 class level_grid;
 
 class tile : public actor
@@ -73,6 +74,8 @@ public:
 	bool set_gold(gold *);
 	gold *get_gold() const;
 	void pop_gold();
+
+	enemy *enemy_destined_here;
 
 	static vector2f position_lerp(tile *start, tile *end, float percent);
 };
