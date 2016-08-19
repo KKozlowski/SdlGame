@@ -10,6 +10,13 @@ scene::scene()
 
 void scene::update()
 {
+	for (actor *a : *actors)
+		if (to_delete->find(a) == to_delete->end())
+			a->update();
+
+	for (actor *a : *to_add)
+		actors->insert(a);
+
 	for (actor *a : *to_delete)
 	{
 		if (actors->find(a) != actors->end())
@@ -19,21 +26,9 @@ void scene::update()
 		}
 
 	}
-	for (actor *a : *to_add)
-		actors->insert(a);
 
 	to_add->clear();
 	to_delete->clear();
-
-	for (actor *a : *actors)
-		if (to_delete->find(a) == to_delete->end())
-			a->update();
-
-	
-
-	
-
-	
 }
 
 bool scene::add_actor(actor* a)

@@ -181,7 +181,10 @@ level_grid::~level_grid()
 			engine::get_instance()->get_scene()->remove_actor(*it);
 		}
 		tile_grid->at(i)->clear();
+		delete tile_grid->at(i);
 	}
+	tile_grid->clear();
+	delete tile_grid;
 
 	//REMOVE GOLD
 	for (std::vector<gold *>::iterator it = gold_piles.begin(); it != gold_piles.end(); ++it) {
