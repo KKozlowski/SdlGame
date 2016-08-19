@@ -72,9 +72,9 @@ void enemy::get_out_of_trap()
 		//Look for a good destination
 		point distance = get_2d_distance_to_tile(m_levelgrid->get_hero()->get_current_tile());
 		tile *up = m_currentTile->get_up();
-		if (distance.x > 0 && up->can_right())
+		if (distance.x > 0 && up->can_right(true))
 			set_destination_tile(up->get_right());
-		else if (distance.x < 0 && up->can_left())
+		else if (distance.x < 0 && up->can_left(true))
 			set_destination_tile(m_currentTile->get_up()->get_left());
 		else return;
 
@@ -97,7 +97,7 @@ bool enemy::try_steal_gold(tile* t)
 
 bool enemy::try_drop_gold(tile* t)
 {
-	if (m_heldPoints > 0)
+	if (m_heldPoints > 0 && m_levelgrid != nullptr)
 	{
 		m_levelgrid->put_gold_on_tile(t, m_heldPoints);
 		m_heldPoints = 0;
@@ -214,7 +214,7 @@ point enemy::find_move_to(tile* t)
 		tile *passage = nullptr;
 		if (where_to_go.y < 0)
 		{
-			if (m_currentTile->can_up()) result = { 0,-1 };
+			if (m_currentTile->can_up(true)) result = { 0,-1 };
 
 			else
 			{
@@ -223,7 +223,7 @@ point enemy::find_move_to(tile* t)
 		}
 		else
 		{
-			if (m_currentTile->can_down()) result = { 0,1 };
+			if (m_currentTile->can_down(true)) result = { 0,1 };
 			else
 			{
 				passage = find_closest_vertical_passage({ 0,1 });
@@ -246,7 +246,9 @@ void enemy::die()
 {
 	std::cout << "ENEMY DIES\n";
 	try_drop_gold(m_currentTile);
-	m_levelgrid->on_enemy_death(this);
+
+	if (m_levelgrid != nullptr)
+		m_levelgrid->on_enemy_death(this);
 }
 
 enemy::enemy(tile* start_tile, level_grid* lg)
@@ -277,7 +279,9 @@ void enemy::update(){
 		return;
 	}
 
+	if (m_levelgrid == nullptr) return;
 	hero *he = m_levelgrid->get_hero();
+	
 	if ((get_transform()->position - he->get_transform()->position).length() < m_killingRange*m_levelgrid->get_tilesize())
 	{
 		he->die();

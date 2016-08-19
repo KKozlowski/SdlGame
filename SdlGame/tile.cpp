@@ -117,7 +117,6 @@ void tile::pop_gold()
 	if (m_gold != nullptr)
 	{
 		engine::get_instance()->get_scene()->remove_actor(m_gold);
-		delete m_gold;
 		m_gold = nullptr;
 	}
 }

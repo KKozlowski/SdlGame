@@ -17,7 +17,6 @@ void level_grid::unhide_ladder(point indices, bool finalizing)
 	engine::get_instance()->get_scene()->remove_actor(
 		get(indices.x, indices.y)
 		);
-	delete get(indices.x, indices.y);
 
 	ladder *l = new ladder(indices.x, indices.y, this, finalizing);
 
@@ -42,7 +41,6 @@ void level_grid::kill_disposable_enemies()
 		if (looking_for_instance != enemies.end())
 		{
 			engine::get_instance()->get_scene()->remove_actor(*looking_for_instance);
-			delete *looking_for_instance;
 			enemies.erase(looking_for_instance);
 
 			get_hero()->add_killer_points(120);
@@ -182,26 +180,22 @@ level_grid::~level_grid()
 	{
 		for (std::vector<tile *>::iterator it = tile_grid->at(i)->begin(); it != tile_grid->at(i)->end(); ++it) {
 			engine::get_instance()->get_scene()->remove_actor(*it);
-			delete *it;
 		}
 		tile_grid->at(i)->clear();
 	}
 
 	//REMOVE GOLD
-
 	for (std::vector<gold *>::iterator it = gold_piles.begin(); it != gold_piles.end(); ++it) {
 			engine::get_instance()->get_scene()->remove_actor(*it);
-			delete *it;
 	}
 
 	//REMOVE ENEMIES
 	for (std::vector<enemy *>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
 		engine::get_instance()->get_scene()->remove_actor(*it);
-		delete *it;
 	}
 
 	engine::get_instance()->get_scene()->remove_actor(m_hero);
-	delete m_hero;
+	m_hero == nullptr;
 }
 
 tile* level_grid::get(int column, int row)

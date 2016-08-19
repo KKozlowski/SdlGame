@@ -167,6 +167,9 @@ void hero::die()
 
 void hero::update()
 {
+	if (m_levelgrid == nullptr)
+		return;
+
 	if (get_current_tile()->is_death_trap())
 		die();
 	reduce_offset();
