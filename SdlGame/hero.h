@@ -84,7 +84,6 @@ public:
 	int get_total_points() const { return m_goldenPoints + m_killerPoints; }
 
 	void die();
-	tile *get_current_tile() const;
 
 	virtual void update() override;
 

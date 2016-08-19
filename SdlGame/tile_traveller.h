@@ -26,6 +26,8 @@ public:
 	tile_traveller(level_grid *lg, float speed);
 	virtual ~tile_traveller();
 
+	tile *get_current_tile() const;
+
 	///<summary>
 	/// Reloads key tiles (current and destination) right from level grid,
 	/// according to indices saved before.

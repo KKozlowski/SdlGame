@@ -24,6 +24,11 @@ tile_traveller::~tile_traveller()
 {
 }
 
+tile* tile_traveller::get_current_tile() const
+{
+	return m_currentTile;
+}
+
 void tile_traveller::reload_key_tiles()
 {
 	m_currentTile = m_levelgrid->get(m_currentTileIndices.x, m_currentTileIndices.y);

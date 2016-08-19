@@ -165,11 +165,6 @@ void hero::die()
 	}
 }
 
-tile* hero::get_current_tile() const
-{
-	return m_currentTile;
-}
-
 void hero::update()
 {
 	if (get_current_tile()->is_death_trap())
