@@ -194,6 +194,9 @@
     <ClInclude Include="tile_traveller.h">
       <Filter>actors</Filter>
     </ClInclude>
+    <ClInclude Include="updateable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="texture.png">

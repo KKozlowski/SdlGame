@@ -181,6 +181,12 @@ point hero::move_up()
 	return result;
 }
 
+point hero::move_idle()
+{
+
+	return { 0,0 };
+}
+
 void hero::handle_direction_change(point dir)
 {
 	point zero;
@@ -319,6 +325,8 @@ point hero::read_and_apply_input()
 	{
 		result = move_side(1);
 	}
+	else 
+		result = move_idle();
 
 	return result;
 }

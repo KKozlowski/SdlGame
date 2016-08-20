@@ -62,6 +62,7 @@ protected:
 	point move_side(int side);
 	point move_down();
 	point move_up();
+	point move_idle();
 
 	void handle_direction_change(point dir);
 

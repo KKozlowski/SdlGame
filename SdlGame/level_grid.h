@@ -16,7 +16,7 @@ class enemy;
 /// At destruction, it removes all its child actors, inluding hero.
 /// Destruction should be called after hero death.
 ///</summary>
-class level_grid
+class level_grid : public updateable
 {
 private:
 	level_manager *m_levelmanager;
@@ -71,5 +71,5 @@ public:
 	void on_enemy_death(enemy *e);
 
 	//Remember that level_grid is not an actor.
-	void update();
+	void update() override;
 };
