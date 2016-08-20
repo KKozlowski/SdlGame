@@ -4,13 +4,14 @@
 #include "scene.h"
 #include "text_render.h"
 #include "title_screen.h"
+#include "ui.h"
 
 std::vector<std::string> level_manager::filenames {"level_one.txt", "level_two.txt", "level_three.txt", "level_four.txt" };
 
 bool level_manager::load_level(int id)
 {
 	m_atTitleScreen = false;
-	engine::get_instance()->get_scene()->remove_actor(m_titleScreen);
+	engine::get_instance()->get_ui()->hide_title_screen();
 	if (current_level != nullptr)
 		close_level();
 
@@ -30,12 +31,6 @@ bool level_manager::load_level(int id)
 level_manager::level_manager(int tilesize)
 {
 	m_tilesize = tilesize;
-	//m_draw = new draw_title_screen(this);
-	m_titleScreen = new title_screen();
-	engine::get_instance()->get_scene()->add_actor(m_titleScreen);
-
-	m_bottomText = new text_render("FFFFFFFFFFFFFFFFFFFFFFF", point(10, engine::get_instance()->get_renderer()->SCREEN_HEIGHT - 50), 50);
-	engine::get_instance()->get_scene()->add_actor(m_bottomText);
 }
 
 bool level_manager::close_level()
@@ -76,7 +71,7 @@ void level_manager::update()
 {
 	if (m_atTitleScreen)
 	{
-		m_bottomText->content = "PRESS 'ENTER' TO START";
+		engine::get_instance()->get_ui()->set_bottom_text("PRESS 'ENTER' TO START");
 
 		if (engine::get_instance()->get_input()->get_key_down(SDLK_RETURN))
 			load_level(1);
@@ -99,7 +94,7 @@ void level_manager::update()
 				if (!load_next_level())
 				{
 					m_timeOfExit = engine::get_time_from_start() + 3.f;
-					m_bottomText->content = "GOOD JOB!";
+					engine::get_instance()->get_ui()->set_bottom_text("GOOD JOB!");
 				}
 					
 			}

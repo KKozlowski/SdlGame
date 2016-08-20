@@ -8,6 +8,7 @@
 
 class scene;
 class level_manager;
+class ui;
 
 class engine
 {
@@ -21,11 +22,13 @@ private:
 	renderer *m_renderer;
 	input *m_input;
 	scene *m_actormanager;
+	ui *m_ui;
 public:
 	~engine();
 	static engine* get_instance();
 	static scene* get_scene();
 
+	ui *get_ui() const;
 	renderer *get_renderer() const;
 	input* get_input() const;
 	

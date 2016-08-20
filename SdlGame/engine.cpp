@@ -8,18 +8,20 @@
 #include "hero.h"
 #include "level_grid.h"
 #include "level_manager.h"
+#include "ui.h"
 
 engine::engine()
 {
 	m_renderer = new renderer();
 	m_input = new input();
+	
 
 	m_actormanager = new scene();
-	
 }
 
 engine::~engine()
 {
+
 	delete m_input;
 	m_input = nullptr;
 
@@ -37,6 +39,11 @@ engine* engine::get_instance()
 scene* engine::get_scene()
 {
 	return get_instance()->m_actormanager;
+}
+
+ui* engine::get_ui() const
+{
+	return m_ui;
 }
 
 renderer* engine::get_renderer() const
@@ -69,6 +76,8 @@ void engine::run()
 	const double num = std::chrono::high_resolution_clock::period::num;
 	const double den = std::chrono::high_resolution_clock::period::den;
 	
+	m_ui = new ui();
+
 	level_manager *levels = new level_manager(160);
 	m_actormanager->add_actor(levels);
 

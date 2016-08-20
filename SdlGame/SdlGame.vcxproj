@@ -172,7 +172,6 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="draw_base.cpp" />
     <ClCompile Include="draw_texture.cpp" />
-    <ClCompile Include="draw_title_screen.cpp" />
     <ClCompile Include="empty_tile.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="engine.cpp" />
@@ -209,7 +208,6 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="draw_base.h" />
     <ClInclude Include="draw_texture.h" />
-    <ClInclude Include="draw_title_screen.h" />
     <ClInclude Include="empty_tile.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="engine.h" />

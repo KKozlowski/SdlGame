@@ -22,8 +22,9 @@ title_screen::title_screen()
 title_screen::~title_screen()
 {
 	
-	for (actor *t : texts)
+	for (text_render *t : texts)
 	{
+		t->get_draw()->set_visible(false);
 		engine::get_instance()->get_scene()->remove_actor(t);
 	}
 

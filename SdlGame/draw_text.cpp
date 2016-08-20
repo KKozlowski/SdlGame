@@ -10,5 +10,6 @@ draw_text::draw_text(text_render *a, renderer* r)
 
 void draw_text::draw(SDL_Renderer* renderer, camera* cam)
 {
-	m_renderer->print_text(text_data->content, text_data->position, text_data->height);
+	if (text_data->content != "")
+		m_renderer->print_text(text_data->content, text_data->position, text_data->height);
 }
