@@ -134,6 +134,7 @@ point hero::move_side(int side)
 		set_direction(result = { side,0 });
 	}
 
+	handle_direction_change(result);
 	return result;
 }
 
@@ -157,6 +158,7 @@ point hero::move_down()
 			m_falling = true;
 	}
 
+	handle_direction_change(result);
 	return result;
 }
 
@@ -178,12 +180,13 @@ point hero::move_up()
 		set_direction(result = { 0,-1 });
 	}
 
+	handle_direction_change(result);
 	return result;
 }
 
 point hero::move_idle()
 {
-
+	handle_direction_change({0,0});
 	return { 0,0 };
 }
 
@@ -290,13 +293,13 @@ void hero::update()
 	{
 		dir = { 0,1 };
 		set_destination_tile(m_currentTile->get_down());
+
+		handle_direction_change(dir);
 	}
 	else if (is_alive() && !is_digging())
 	{
-		dir = read_and_apply_input();
+		read_and_apply_input();
 	}
-
-	handle_direction_change(dir);
 }
 
 point hero::read_and_apply_input()
