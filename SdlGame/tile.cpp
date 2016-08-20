@@ -76,6 +76,19 @@ bool tile::can_right(bool for_ai)
 	return false;
 }
 
+bool tile::can(point dir, bool for_ai)
+{
+	if (dir.x > 0)
+		return can_right(for_ai);
+	if (dir.x < 0)
+		return can_left(for_ai);
+	
+	if (dir.y > 0)
+		return can_down(for_ai);
+	if (dir.y < 0)
+		return can_up(for_ai);
+}
+
 bool tile::over_empty()
 {
 	return get_down() != nullptr && get_down()->is_empty();

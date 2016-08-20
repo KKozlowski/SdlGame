@@ -62,6 +62,8 @@ public:
 	virtual bool can_left(bool for_ai = false);
 	virtual bool can_right(bool for_ai = false);
 
+	virtual bool can(point dir, bool for_ai = false);
+
 	virtual bool ends_the_level() const { return false; }
 
 	bool over_empty();

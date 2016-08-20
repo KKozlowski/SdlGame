@@ -80,6 +80,7 @@ public:
 	bool is_alive() const { return m_alive; }
 	bool is_digging() const { return m_timeOfDiggingStop != 0; }
 	bool has_won() const { return m_winning; }
+	bool can_take_input() const { return is_alive() && !is_digging() && !m_falling; }
 
 	void stop_digging();
 
