@@ -190,9 +190,13 @@
     <ClCompile Include="rigidbody.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="texture.cpp" />
+    <ClCompile Include="draw_text.cpp" />
+    <ClCompile Include="text_render.cpp" />
     <ClCompile Include="tile.cpp" />
     <ClCompile Include="tile_traveller.cpp" />
+    <ClCompile Include="title_screen.cpp" />
     <ClCompile Include="transform.cpp" />
+    <ClCompile Include="ui.cpp" />
     <ClCompile Include="vector2.cpp" />
     <ClCompile Include="wall.cpp" />
   </ItemGroup>
@@ -219,15 +223,19 @@
     <ClInclude Include="pipe.h" />
     <ClInclude Include="rigidbody.h" />
     <ClInclude Include="scene.h" />
+    <ClInclude Include="draw_text.h" />
+    <ClInclude Include="text_render.h" />
     <ClInclude Include="tile.h" />
     <ClInclude Include="tileset.h" />
     <ClInclude Include="tile_traveller.h" />
     <ClInclude Include="tile_type.h" />
+    <ClInclude Include="title_screen.h" />
     <ClInclude Include="type_check.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="transform.h" />
+    <ClInclude Include="ui.h" />
     <ClInclude Include="updateable.h" />
     <ClInclude Include="vector2.h" />
     <ClInclude Include="wall.h" />

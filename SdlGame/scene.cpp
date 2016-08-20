@@ -24,7 +24,6 @@ void scene::update()
 			actors->erase(a);
 			delete a;
 		}
-
 	}
 
 	to_add->clear();

@@ -8,6 +8,7 @@
 #include "gold.h"
 #include "level_manager.h"
 #include "enemy.h"
+#include "text_render.h"
 
 void level_grid::unhide_ladder(point indices, bool finalizing)
 {
@@ -30,7 +31,7 @@ void level_grid::set_score_text(int pts)
 {
 	std::stringstream ss;
 	ss << "SCORE: " << pts;
-	engine::get_instance()->get_renderer()->bottom_text = ss.str();
+	m_levelmanager->m_bottomText->content = ss.str();
 }
 
 void level_grid::kill_disposable_enemies()

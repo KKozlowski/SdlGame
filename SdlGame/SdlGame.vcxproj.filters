@@ -19,6 +19,9 @@
     <Filter Include="actors\tiles">
       <UniqueIdentifier>{dfcd273d-0b02-499f-bd38-1fd3d0b35456}</UniqueIdentifier>
     </Filter>
+    <Filter Include="actors\ui">
+      <UniqueIdentifier>{6a356442-81fa-48a9-839a-4c5f1a927af7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -104,6 +107,18 @@
     </ClCompile>
     <ClCompile Include="hero_input.cpp">
       <Filter>actors</Filter>
+    </ClCompile>
+    <ClCompile Include="draw_text.cpp">
+      <Filter>actors\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="text_render.cpp">
+      <Filter>actors\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="title_screen.cpp">
+      <Filter>actors\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui.cpp">
+      <Filter>actors\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -202,6 +217,18 @@
     </ClInclude>
     <ClInclude Include="hero_input.h">
       <Filter>actors</Filter>
+    </ClInclude>
+    <ClInclude Include="draw_text.h">
+      <Filter>actors\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="text_render.h">
+      <Filter>actors\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="title_screen.h">
+      <Filter>actors\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui.h">
+      <Filter>actors\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

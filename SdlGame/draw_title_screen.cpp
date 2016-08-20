@@ -1,9 +1,12 @@
 ﻿#include "draw_title_screen.h"
 #include "engine.h"
+#include "text_render.h"
+#include "scene.h"
 
 draw_title_screen::draw_title_screen(actor* a)
 	:draw_base(a)
 {
+	engine::get_instance()->get_scene()->add_actor(new text_render("NOM", point(), 120));
 }
 
 void draw_title_screen::draw(SDL_Renderer* renderer, camera* cam)

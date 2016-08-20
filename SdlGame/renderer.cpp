@@ -163,9 +163,8 @@ void renderer::draw()
 		if (d->is_visible())
 			d->draw(m_sdlRenderer, m_camera);
 
+	to_draw->clear();
 	delete to_draw;
-	if (bottom_text != "")
-		print_text(bottom_text, point(10,SCREEN_HEIGHT-50), 50);
 
 	SDL_RenderPresent(m_sdlRenderer);
 }

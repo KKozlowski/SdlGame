@@ -50,8 +50,5 @@ public:
 	///<summary>Remove a draw_base object from the list of objects drawn every frame. </summary>
 	bool remove_draw(draw_base *);
 
-	///<summary>Text that is displayed at the bottom of the screen. Good for score displaying. </summary>
-	std::string bottom_text = "";
-
 	void draw();
 };

@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "level_grid.h"
+#include "title_screen.h"
 
 ///<summary>
 /// Object of this class initializes level grids. 
@@ -21,7 +22,12 @@ private:
 
 	bool m_finished = false;
 
+	title_screen *m_titleScreen;
+
 public:
+	///<summary>Text that is displayed at the bottom of the screen. Good for score displaying. </summary>
+	text_render *m_bottomText;
+
 	level_manager(int tilesize);
 
 	///<summary>
