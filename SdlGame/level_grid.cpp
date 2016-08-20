@@ -1,5 +1,6 @@
 ﻿#include "level_grid.h"
 #include <fstream>
+#include <sstream>
 #include <iostream>
 #include "engine.h"
 #include "scene.h"
@@ -31,7 +32,14 @@ void level_grid::set_score_text(int pts)
 {
 	std::stringstream ss;
 	ss << "SCORE: " << pts;
-	engine::get_instance()->get_ui()->set_bottom_text(ss.str());
+	engine::get_instance()->get_ui()->set_score_text(ss.str());
+}
+
+void level_grid::set_gold_text(int pts)
+{
+	std::stringstream ss;
+	ss << "REMAINING GOLD: " << pts;
+	engine::get_instance()->get_ui()->set_gold_text(ss.str());
 }
 
 void level_grid::kill_disposable_enemies()
@@ -173,6 +181,7 @@ level_grid::level_grid(file_reader_line_by_line *li, float tilesize, level_manag
 		required_gold += g->get_value();
 
 	set_score_text(0);
+	set_gold_text(required_gold);
 }
 
 level_grid::~level_grid()
@@ -205,6 +214,8 @@ level_grid::~level_grid()
 
 	engine::get_instance()->get_scene()->remove_actor(m_hero);
 	m_hero == nullptr;
+
+	engine::get_instance()->get_ui()->set_gold_text("");
 }
 
 tile* level_grid::get(int column, int row)
@@ -243,6 +254,7 @@ int level_grid::get_required_gold()
 bool level_grid::on_hero_gold_take(int golden_points, int killer_points)
 {
 	set_score_text(golden_points + killer_points);
+	set_gold_text(get_required_gold() - golden_points);
 
 	if (golden_points >= required_gold)
 	{

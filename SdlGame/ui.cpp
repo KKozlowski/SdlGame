@@ -7,6 +7,9 @@ ui::ui()
 	m_titleScreen = new title_screen();
 	engine::get_instance()->get_scene()->add_actor(m_titleScreen);
 
+	m_goldLeftText = new text_render("", point(10, engine::get_instance()->get_renderer()->SCREEN_HEIGHT - 76), 24);
+	engine::get_instance()->get_scene()->add_actor(m_goldLeftText);
+
 	m_bottomText = new text_render("", point(10, engine::get_instance()->get_renderer()->SCREEN_HEIGHT - 50), 50);
 	engine::get_instance()->get_scene()->add_actor(m_bottomText);
 }

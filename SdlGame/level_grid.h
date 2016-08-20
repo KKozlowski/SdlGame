@@ -50,6 +50,7 @@ private:
 	void unhide_ladder(point indices, bool finalizing);
 
 	void set_score_text(int pts);
+	void set_gold_text(int pts);
 
 	void kill_disposable_enemies();
 

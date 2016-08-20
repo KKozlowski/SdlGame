@@ -4,6 +4,7 @@
 
 class ui
 {
+	text_render *m_goldLeftText = nullptr;
 	///<summary>Text that is displayed at the bottom of the screen. Good for score displaying. </summary>
 	text_render *m_bottomText = nullptr;
 
@@ -11,7 +12,7 @@ class ui
 public:
 	ui();
 	~ui();
-
-	void set_bottom_text(std::string content) { m_bottomText->content = content; }
+	void set_gold_text(std::string content) { m_goldLeftText->content = content; }
+	void set_score_text(std::string content) { m_bottomText->content = content; }
 	bool hide_title_screen();
 };

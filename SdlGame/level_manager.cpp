@@ -71,7 +71,7 @@ void level_manager::update()
 {
 	if (m_atTitleScreen)
 	{
-		engine::get_instance()->get_ui()->set_bottom_text("PRESS 'ENTER' TO START");
+		engine::get_instance()->get_ui()->set_score_text("PRESS 'ENTER' TO START");
 
 		if (engine::get_instance()->get_input()->get_key_down(SDLK_RETURN))
 			load_level(1);
@@ -94,7 +94,7 @@ void level_manager::update()
 				if (!load_next_level())
 				{
 					m_timeOfExit = engine::get_time_from_start() + 3.f;
-					engine::get_instance()->get_ui()->set_bottom_text("GOOD JOB!");
+					engine::get_instance()->get_ui()->set_score_text("GOOD JOB!");
 				}
 					
 			}
