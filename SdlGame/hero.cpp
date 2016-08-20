@@ -36,6 +36,7 @@ void hero::set_direction(point dir, bool with_jump = false)
 		m_movementProgress -= 1;
 	}
 	set_destination_tile(m_currentTile->get_neighbor(dir));
+	handle_direction_change(dir);
 }
 
 void hero::set_current_tile(tile* t)
@@ -143,7 +144,6 @@ point hero::move_side(int side)
 		}
 	}
 
-	handle_direction_change(result);
 	return result;
 }
 
@@ -169,8 +169,6 @@ point hero::move_down()
 				m_falling = true;
 		}
 	}
-
-	handle_direction_change(result);
 	return result;
 }
 
@@ -194,8 +192,6 @@ point hero::move_up()
 			set_direction(result = { 0,-1 });
 		}
 	}
-
-	handle_direction_change(result);
 	return result;
 }
 
@@ -306,9 +302,6 @@ void hero::update()
 
 	if (m_falling)
 	{
-		dir = { 0,1 };
-		set_destination_tile(m_currentTile->get_down());
-
-		handle_direction_change(dir);
+		set_direction({ 0,1 });
 	}
 }
