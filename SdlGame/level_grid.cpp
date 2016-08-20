@@ -120,6 +120,9 @@ level_grid::level_grid(file_reader_line_by_line *li, float tilesize, level_manag
 				{
 					m_hero = new hero(tile, this);
 					engine::get_instance()->get_scene()->add_actor(m_hero);
+
+					m_heroinput = new hero_input(m_hero, engine::get_instance()->get_input());
+					engine::get_instance()->get_scene()->add_actor(m_heroinput);
 				}
 				break;
 			case 'S': //ENEMY SPAWNER (RESPAWNER?)
@@ -195,6 +198,9 @@ level_grid::~level_grid()
 	for (std::vector<enemy *>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
 		engine::get_instance()->get_scene()->remove_actor(*it);
 	}
+
+	engine::get_instance()->get_scene()->remove_actor(m_heroinput);
+	m_heroinput = nullptr;
 
 	engine::get_instance()->get_scene()->remove_actor(m_hero);
 	m_hero == nullptr;

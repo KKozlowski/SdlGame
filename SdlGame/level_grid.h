@@ -6,6 +6,7 @@
 #include <vector>
 #include "file_reader_line_by_line.h"
 #include <queue>
+#include "hero_input.h"
 
 class level_manager;
 class enemy;
@@ -28,6 +29,7 @@ private:
 	float m_minimumTimeBetweenEnemyRespawns = 1.2f;
 
 	hero *m_hero;
+	hero_input *m_heroinput;
 
 	///<summary>Indices of ladders to appear after collecting all gold.</summary>
 	std::vector<point> hidden_ladders;

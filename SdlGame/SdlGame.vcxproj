@@ -178,6 +178,7 @@
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="gold.cpp" />
     <ClCompile Include="hero.cpp" />
+    <ClCompile Include="hero_input.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="ladder.cpp" />
     <ClCompile Include="level_grid.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="engine.h" />
     <ClInclude Include="gold.h" />
     <ClInclude Include="hero.h" />
+    <ClInclude Include="hero_input.h" />
     <ClInclude Include="ladder.h" />
     <ClInclude Include="level_grid.h" />
     <ClInclude Include="file_reader_line_by_line.h" />

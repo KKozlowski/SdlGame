@@ -311,38 +311,4 @@ void hero::update()
 
 		handle_direction_change(dir);
 	}
-
-	read_and_apply_input();
-}
-
-point hero::read_and_apply_input()
-{
-	input *inp = engine::get_instance()->get_input();
-
-	point result;
-
-	if (inp->get_key(SDLK_q))
-		dig({ -1,0 });
-	else if (inp->get_key(SDLK_e))
-		dig({ 1,0 });
-	else if (inp->get_key(SDLK_w))
-	{
-		result = move_up();
-	}
-	else if (inp->get_key(SDLK_s))
-	{
-		result = move_down();
-	}
-	else if (inp->get_key(SDLK_a))
-	{
-		result = move_side(-1);
-	}
-	else if (inp->get_key(SDLK_d))
-	{
-		result = move_side(1);
-	}
-	else 
-		result = move_idle();
-
-	return result;
 }

@@ -56,6 +56,9 @@ protected:
 	///</summary>
 	void continue_movement();
 
+	void handle_direction_change(point dir);
+
+public:
 	bool dig(point direction);
 
 	///<summary>Calls character to move horizontally. side = 1 - right; side = -1 = left</summary>
@@ -64,9 +67,6 @@ protected:
 	point move_up();
 	point move_idle();
 
-	void handle_direction_change(point dir);
-
-public:
 	hero(tile *start_tile, level_grid * lg);
 	~hero();
 	///<summary>
@@ -95,11 +95,4 @@ public:
 	void die();
 
 	virtual void update() override;
-
-	///<summary>
-	/// Reads player input, calculates wanted direction from input.
-	/// Calls set_direction for calculated direction.
-    /// Also starts falling process when it's possible and wanted by player.
-	///</summary>
-	point read_and_apply_input();
 };
