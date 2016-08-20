@@ -54,7 +54,6 @@ void hero::set_current_tile(tile* t)
 		t = m_levelgrid->get(new_indices.x, new_indices.y);
 	}
 
-	
 	if (t->ends_the_level())
 	{
 		m_winning = true;
@@ -127,18 +126,36 @@ point hero::move_side(int side)
 		vector2f position = get_transform()->position;
 		vector2f current_tile_position = m_currentTile->get_transform()->position;
 
-		bool prepared_for_adjustment_jump = can_jump_to_destination() && !m_destinationTile->empty_over_empty();
-
 		point wanted_reult = { side,0 };
 
+		bool prepared_for_adjustment_jump = can_jump_to_destination() && !m_destinationTile->empty_over_empty();
+		bool prepared_for_standard_movement = position.x > current_tile_position.x || m_currentTile->can(wanted_reult);
 
-		if (prepared_for_adjustment_jump
+		//WHAT CAN HAPPEN NOW? (condition order)
+		// 1. hero is ON FLOOR (or on a solid pipe; or just not on ladder), so he just moves 
+		//    horizontally without anything special
+		if (prepared_for_standard_movement 
+			&& (m_currentTile->get_type() != tile_type::ladder
+				|| m_currentTile->can_down() == false
+				|| m_currentTile->get_type() == tile_type::pipe
+				))
+		{
+			set_direction(result = wanted_reult);
+		}
+
+		// 2. hero is not of floor, and he is very close to his destination tile.
+		//    If he will move now, we will check if the destination tile allows his movement
+		//    in given direction. If it does, his current tile will be overwritten with his destiantion tile.
+		//    Offset will be set. "ADJUSTMENT JUMP" will be performed.
+		else if (prepared_for_adjustment_jump
 			&& m_destinationTile->can(wanted_reult))
 		{
 			set_direction(result = wanted_reult, true);
 		}
-		else if (position.x > current_tile_position.x
-			|| m_currentTile->can(wanted_reult))
+
+		// 3. Hero is not on floor, and he cannot perform "ADJUSTMENT JUMP" to achieve his new direction.
+		//    Hero moves in the most normal way.
+		else if (prepared_for_standard_movement)
 		{
 			set_direction(result = wanted_reult);
 		}
@@ -203,6 +220,7 @@ point hero::move_idle()
 
 void hero::handle_direction_change(point dir)
 {
+	
 	point zero;
 
 	if (dir == zero)
@@ -221,6 +239,7 @@ void hero::handle_direction_change(point dir)
 	}
 
 	else if (m_previousDirection != dir && (m_previousDirection * dir) != zero) { //direction has changed, but not the axis.
+		std::cout << m_movementProgress << std::endl;
 		m_movementProgress = -m_movementProgress;
 	}
 	else //nothing changed
