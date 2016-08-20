@@ -37,9 +37,14 @@ void level_grid::set_score_text(int pts)
 
 void level_grid::set_gold_text(int pts)
 {
-	std::stringstream ss;
-	ss << "REMAINING GOLD: " << pts;
-	engine::get_instance()->get_ui()->set_gold_text(ss.str());
+	if (pts == 0)
+		engine::get_instance()->get_ui()->set_gold_text("PASSAGE UNLOCKED");
+	else
+	{
+		std::stringstream ss;
+		ss << "REMAINING GOLD: " << pts;
+		engine::get_instance()->get_ui()->set_gold_text(ss.str());
+	}
 }
 
 void level_grid::kill_disposable_enemies()
