@@ -114,6 +114,104 @@ bool hero::dig(point direction)
 	return success;
 }
 
+point hero::move_side(int side)
+{
+	vector2f position = get_transform()->position;
+	vector2f current_tile_position = m_currentTile->get_transform()->position;
+
+	bool prepared_for_adjustment_jump = can_jump_to_destination() && !m_destinationTile->empty_over_empty();
+
+	point result;
+
+	if (prepared_for_adjustment_jump
+		&& (side == -1 && m_destinationTile->can_left() || side == 1 && m_destinationTile->can_right()))
+	{
+		set_direction(result = { side,0 }, true);
+	}
+	else if (position.x > current_tile_position.x
+		|| ((side == -1 && m_currentTile->can_left() || side == 1 && m_currentTile->can_right())))
+	{
+		set_direction(result = { side,0 });
+	}
+
+	return result;
+}
+
+point hero::move_down()
+{
+	vector2f position = get_transform()->position;
+	vector2f current_tile_position = m_currentTile->get_transform()->position;
+
+	bool prepared_for_adjustment_jump = can_jump_to_destination() && !m_destinationTile->empty_over_empty();
+
+	point result;
+
+	if (prepared_for_adjustment_jump && m_destinationTile->can_down())
+	{
+		set_direction(result = { 0,1 }, true);
+	}
+	else if (position.y < current_tile_position.y || m_currentTile->can_down())
+	{
+		set_direction(result = { 0,1 });
+		if (m_destinationTile->is_empty())
+			m_falling = true;
+	}
+
+	return result;
+}
+
+point hero::move_up()
+{
+	vector2f position = get_transform()->position;
+	vector2f current_tile_position = m_currentTile->get_transform()->position;
+
+	bool prepared_for_adjustment_jump = can_jump_to_destination() && !m_destinationTile->empty_over_empty();
+
+	point result;
+
+	if (prepared_for_adjustment_jump && m_destinationTile->can_up()) //Movement with distance skip, when near the tile that allows movement in given direction.
+	{
+		set_direction(result = { 0,-1 }, true);
+	}
+	else if (position.y > current_tile_position.y || m_currentTile->can_up()) //Standard movement to the next tile, or back to the current tile.
+	{
+		set_direction(result = { 0,-1 });
+	}
+
+	return result;
+}
+
+void hero::handle_direction_change(point dir)
+{
+	point zero;
+
+	if (dir == zero)
+		return;
+
+	if ((m_previousDirection * dir) == zero) { //movement direction changed completely.
+
+		position_offset = m_currentTile->get_transform()->position - get_transform()->position;
+
+		if (can_jump_to_destination())
+		{
+			set_direction(dir = { 0,0 }, true);
+		}
+
+		m_movementProgress = 0;
+	}
+
+	else if (m_previousDirection != dir && (m_previousDirection * dir) != zero) { //direction has changed, but not the axis.
+		m_movementProgress = -m_movementProgress;
+	}
+	else //nothing changed
+	{
+		m_previousDirection = dir;
+		continue_movement();
+	}
+
+	m_previousDirection = dir;
+}
+
 hero::hero(tile *start_tile, level_grid *lg)
 	: tile_traveller(lg, 4.f)
 {
@@ -173,7 +271,6 @@ void hero::update()
 	if (get_current_tile()->is_death_trap())
 		die();
 	reduce_offset();
-	point zero;
 	
 	engine::get_instance()->get_renderer()->get_camera()->center = point(get_transform()->position.x, get_transform()->position.y);
 
@@ -193,40 +290,12 @@ void hero::update()
 		dir = read_and_apply_input();
 	}
 
-	if (dir == zero)
-		return;
-
-	if ((m_previousDirection * dir) == zero) { //movement direction changed completely.
-
-		position_offset = m_currentTile->get_transform()->position - get_transform()->position;
-
-		if (can_jump_to_destination()) 
-		{
-			set_direction(dir = { 0,0 }, true);
-		}
-
-		m_movementProgress = 0;
-	}
-
-	else if (m_previousDirection != dir && (m_previousDirection * dir) != zero) { //direction has changed, but not the axis.
-			m_movementProgress = -m_movementProgress;
-	} else //nothing changed
-	{
-		m_previousDirection = dir;
-		continue_movement();
-	}
-
-	m_previousDirection = dir;
+	handle_direction_change(dir);
 }
 
 point hero::read_and_apply_input()
 {
 	input *inp = engine::get_instance()->get_input();
-
-	vector2f position = get_transform()->position;
-	vector2f current_tile_position = m_currentTile->get_transform()->position;
-
-	bool prepared_for_adjustment_jump = can_jump_to_destination() && !m_destinationTile->empty_over_empty();
 
 	point result;
 
@@ -236,49 +305,19 @@ point hero::read_and_apply_input()
 		dig({ 1,0 });
 	else if (inp->get_key(SDLK_w))
 	{
-		if (prepared_for_adjustment_jump && m_destinationTile->can_up()) //Movement with distance skip, when near the tile that allows movement in given direction.
-		{
-			set_direction(result = { 0,-1 }, true);
-		}
-		else if (position.y > current_tile_position.y || m_currentTile->can_up()) //Standard movement to the next tile, or back to the current tile.
-		{
-			set_direction(result = { 0,-1 });
-		}
+		result = move_up();
 	}
 	else if (inp->get_key(SDLK_s))
 	{
-		if (prepared_for_adjustment_jump && m_destinationTile->can_down())
-		{
-			set_direction(result = { 0,1 }, true);
-		}
-		else if (position.y < current_tile_position.y || m_currentTile->can_down())
-		{
-			set_direction(result = { 0,1 });
-			if (m_destinationTile->is_empty())
-				m_falling = true;
-		}
+		result = move_down();
 	}
 	else if (inp->get_key(SDLK_a))
 	{
-		if (prepared_for_adjustment_jump && m_destinationTile->can_left())
-		{
-			set_direction(result = { -1,0 }, true);
-		}
-		else if (position.x > current_tile_position.x || m_currentTile->can_left())
-		{
-			set_direction(result = { -1,0 });
-		}
+		result = move_side(-1);
 	}
 	else if (inp->get_key(SDLK_d))
 	{
-		if (prepared_for_adjustment_jump && m_destinationTile->can_left())
-		{
-			set_direction(result = { 1,0 }, true);
-		}
-		else if (position.x < current_tile_position.x || m_currentTile->can_right())
-		{
-			set_direction(result = { 1,0 });
-		}
+		result = move_side(1);
 	}
 
 	return result;

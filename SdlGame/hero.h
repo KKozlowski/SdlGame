@@ -58,6 +58,13 @@ protected:
 
 	bool dig(point direction);
 
+	///<summary>Calls character to move horizontally. side = 1 - right; side = -1 = left</summary>
+	point move_side(int side);
+	point move_down();
+	point move_up();
+
+	void handle_direction_change(point dir);
+
 public:
 	hero(tile *start_tile, level_grid * lg);
 	~hero();
