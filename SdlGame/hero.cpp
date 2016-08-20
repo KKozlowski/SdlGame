@@ -132,16 +132,16 @@ point hero::move_side(int side)
 		point wanted_reult = { side,0 };
 
 		bool prepared_for_adjustment_jump = can_jump_to_destination() && !m_destinationTile->empty_over_empty();
-		bool prepared_for_standard_movement = position.x > current_tile_position.x || m_currentTile->can(wanted_reult);
+		bool prepared_for_standard_movement = m_currentTile->can(wanted_reult);
+		if (side < 0)
+			prepared_for_standard_movement = prepared_for_standard_movement || position.x > current_tile_position.x;
+		else if (side > 0)
+			prepared_for_standard_movement = prepared_for_standard_movement || position.x < current_tile_position.x;
 
 		//WHAT CAN HAPPEN NOW? (condition order)
-		// 1. hero is ON FLOOR (or on a solid pipe; or just not on ladder), so he just moves 
-		//    horizontally without anything special
+		// 1. hero just continues horizontal movement.
 		if (prepared_for_standard_movement 
-			&& (m_currentTile->get_type() != tile_type::ladder
-				|| m_currentTile->can_down() == false
-				|| m_currentTile->get_type() == tile_type::pipe
-				))
+			&& m_previousDirection.y == 0)
 		{
 			set_direction(result = wanted_reult);
 		}
@@ -230,7 +230,7 @@ void hero::handle_direction_change(point dir)
 		return;
 
 	if ((m_previousDirection * dir) == zero) { //movement direction changed completely.
-
+		
 		position_offset = m_currentTile->get_transform()->position - get_transform()->position;
 
 		if (can_jump_to_destination())
@@ -242,7 +242,7 @@ void hero::handle_direction_change(point dir)
 	}
 
 	else if (m_previousDirection != dir && (m_previousDirection * dir) != zero) { //direction has changed, but not the axis.
-		std::cout << m_movementProgress << std::endl;
+		
 		m_movementProgress = -m_movementProgress;
 	}
 	else //nothing changed
