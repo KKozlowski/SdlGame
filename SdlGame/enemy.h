@@ -17,7 +17,7 @@ private:
 
 	bool m_fellIntoTrap = false;
 	bool m_gettingOutOfTrap = false;
-	bool m_falling = false;
+	bool m_naturalFalling = false;
 	float m_unstunTime = 0;
 	wall *trap_tile = nullptr;
 
@@ -40,5 +40,5 @@ public:
 	~enemy();
 	void update() override;
 
-	bool is_during_regular_movement() const { return !m_fellIntoTrap && !m_falling&& !m_gettingOutOfTrap; }
+	bool is_during_regular_movement() const { return !m_fellIntoTrap && !m_naturalFalling&& !m_gettingOutOfTrap; }
 };

@@ -20,15 +20,15 @@ void enemy::set_current_tile(tile* t)
 	}
 	else
 	{
-		if (t->can_down(true) && t->empty_over_empty())
+		if (t->can_down(true) && t->empty_over_empty() && t->get_down()->get_type() != tile_type::wall)
 		{
-			m_falling = true;
+			m_naturalFalling = true;
 			set_destination_tile(t->get_down());
 		}
 
-		if (m_falling && !t->empty_over_empty())
+		if (m_naturalFalling && (!t->empty_over_empty() || t->get_down()->get_type() == tile_type::wall))
 		{
-			m_falling = false;
+			m_naturalFalling = false;
 		}
 	}
 
@@ -62,12 +62,18 @@ void enemy::set_destination_tile(tile* t)
 
 void enemy::fall_into_trap(tile* tile_youre_on)
 {
+	wall *trap = static_cast<wall *>(tile_youre_on->get_down());
+
+	if (trap->enemy_in_the_hole != nullptr)
+		return;
+
 	std::cout << "ENEMY FALLS INTO TRAP\n";
 	m_fellIntoTrap = true;
 	try_drop_gold(tile_youre_on);
 
-	set_destination_tile(tile_youre_on->get_down());
-	trap_tile = static_cast<wall *>(m_destinationTile);
+	set_destination_tile(trap);
+	trap_tile = trap;
+
 	if (trap_tile != nullptr)
 	{
 		trap_tile->enemy_in_the_hole = this;
@@ -178,17 +184,14 @@ tile* enemy::find_closest_vertical_passage(point dir)
 
 point enemy::get_2d_distance_to_tile(tile* t)
 {
-	return point(
-		t->get_Xpos() - m_currentTile->get_Xpos(),
-		t->get_Ypos() - m_currentTile->get_Ypos()
-		);
+	return t->get_indices() - m_currentTile->get_indices();
 }
 
 point enemy::find_move_to(tile* t)
 {
 	point result(0, 0);
 	point where_to_go = get_2d_distance_to_tile(t);
-	if (m_falling)
+	if (m_naturalFalling)
 		return{ 0,1 };
 	if (where_to_go.y == 0) //WE ARE ON THE SAME LEVEL!
 	{
