@@ -58,6 +58,9 @@ protected:
 
 	void handle_direction_change(point dir);
 
+	///<summary>It is set true once every frame.<para/> Every call of set_direction sets it true.<para/> All the input methods only work when it's false</summary>
+	bool direction_has_changed_this_frame = false;
+
 public:
 	bool dig(point direction);
 
@@ -80,7 +83,7 @@ public:
 	bool is_alive() const { return m_alive; }
 	bool is_digging() const { return m_timeOfDiggingStop != 0; }
 	bool has_won() const { return m_winning; }
-	bool can_take_input() const { return is_alive() && !is_digging() && !m_falling; }
+	bool can_take_input() const { return is_alive() && !is_digging() && !m_falling && !direction_has_changed_this_frame; }
 
 	void stop_digging();
 

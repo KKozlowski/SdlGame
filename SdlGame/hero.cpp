@@ -37,6 +37,8 @@ void hero::set_direction(point dir, bool with_jump = false)
 	}
 	set_destination_tile(m_currentTile->get_neighbor(dir));
 	handle_direction_change(dir);
+
+	direction_has_changed_this_frame = true;
 }
 
 void hero::set_current_tile(tile* t)
@@ -229,7 +231,9 @@ point hero::move_idle()
 
 void hero::handle_direction_change(point dir)
 {
-	
+	if (direction_has_changed_this_frame)
+		return;
+
 	point zero;
 
 	if (dir == zero)
@@ -332,4 +336,6 @@ void hero::update()
 	{
 		set_direction({ 0,1 });
 	}
+
+	direction_has_changed_this_frame = false;
 }
