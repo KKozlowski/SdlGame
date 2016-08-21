@@ -19,6 +19,8 @@ private:
 
 	engine();
 
+	bool paused = false;
+
 	renderer *m_renderer;
 	input *m_input;
 	scene *m_actormanager;
@@ -31,6 +33,10 @@ public:
 	ui *get_ui() const;
 	renderer *get_renderer() const;
 	input* get_input() const;
+
+	void pause() { paused = true; }
+	void unpause() { paused = false; }
+	bool is_paused() const { return paused; }
 	
 	///<summary>
 	///Returns time (in seconds) that passed from start to end of the previous frame.

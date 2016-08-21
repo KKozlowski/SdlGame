@@ -106,14 +106,28 @@ void engine::run()
 		
 		if (levels->is_finished()) quit = true;
 		if (m_input->get_key(SDLK_ESCAPE)) quit = true;
+		if (m_input->get_key_down(SDLK_SPACE))
+		{
+			is_paused() ? unpause() : pause();
+		}
 		
 		//////////////////////
 		// AND ABOVE THIS LINE
 
 		// Calculating delta time.
+		
 		time_since_epoch_temp = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-		delta_time = (time_since_epoch_temp - time_since_epoch) * num / den;
-		time_from_start += delta_time;
+			
+		if (paused)
+		{
+			delta_time = 0;
+		}
+		else
+		{
+			delta_time = (time_since_epoch_temp - time_since_epoch) * num / den;
+			time_from_start += delta_time;
+		}
+				
 		time_since_epoch = time_since_epoch_temp;
 	}
 }
