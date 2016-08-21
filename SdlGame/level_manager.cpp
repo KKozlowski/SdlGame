@@ -12,6 +12,7 @@ bool level_manager::load_level(int id)
 {
 	m_atTitleScreen = false;
 	engine::get_instance()->get_ui()->hide_title_screen();
+
 	if (current_level != nullptr)
 		close_level();
 
@@ -47,10 +48,13 @@ bool level_manager::close_level()
 
 bool level_manager::reset_level()
 {
+	m_timeOfReset = 0;
+
 	if (current_level != nullptr)
 	{
 		close_level();
 		load_level(m_currentLevelID);
+
 		return true;
 	}
 	return false;
@@ -103,7 +107,6 @@ void level_manager::update()
 		if (m_timeOfReset != 0 && m_timeOfReset < engine::get_time_from_start())
 		{
 			reset_level();
-			m_timeOfReset = 0;
 		}
 
 		if (m_timeOfExit != 0 && m_timeOfExit < engine::get_time_from_start())
