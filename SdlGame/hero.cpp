@@ -99,7 +99,12 @@ bool hero::dig(point direction)
 	if (!can_take_input())
 		return false;
 
-	tile *one = m_currentTile->get_neighbor(direction);
+	tile *considered_tile = get_current_tile();
+
+	if (can_jump_to_destination())
+		considered_tile = m_destinationTile;
+
+	tile *one = considered_tile->get_neighbor(direction);
 	if (one == nullptr || !(one->is_empty() || one->get_type() == tile_type::ladder || one->get_type() == tile_type::pipe))
 		return false;
 
@@ -110,11 +115,12 @@ bool hero::dig(point direction)
 	bool success = static_cast<wall *>(two)->dig(m_diggingTime);
 	if (success)
 	{
-		position_offset = m_currentTile->get_transform()->position - get_transform()->position;
-		m_movementProgress = 0;
-
 		m_timeOfDiggingStop = engine::get_time_from_start() + 0.25f;
 		static_cast<draw_texture *>(get_draw())->set_texture("texture_shovel.png");
+
+		set_current_tile(considered_tile);
+		position_offset = m_currentTile->get_transform()->position - get_transform()->position;
+		m_movementProgress = 0;
 	}
 
 	return success;

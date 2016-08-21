@@ -10,8 +10,8 @@ void wall::refill()
 	get_draw()->set_visible(true);
 	digged = false;
 
-	//if (enemy_in_the_hole)
-	//	enemy_in_the_hole->die();
+	if (enemy_in_the_hole)
+		enemy_in_the_hole->die();
 
 	if (get_levelgrid()->get_hero()->get_current_tile() == this)
 		get_levelgrid()->get_hero()->die();

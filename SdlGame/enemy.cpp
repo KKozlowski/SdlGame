@@ -288,11 +288,11 @@ enemy::~enemy()
 
 void enemy::update(){
 
-	if (!m_gettingOutOfTrap && m_currentTile->is_death_trap())
-	{
-		die();
-		return;
-	}
+	//if (!m_gettingOutOfTrap && m_currentTile->is_death_trap())
+	//{
+	//	die();
+	//	return;
+	//}
 
 	if (m_levelgrid == nullptr) return;
 	hero *he = m_levelgrid->get_hero();
