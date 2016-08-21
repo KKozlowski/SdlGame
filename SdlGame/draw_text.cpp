@@ -6,6 +6,7 @@
 draw_text::draw_text(text_render *a, renderer* r)
 	: draw_base(a), m_renderer(r), text_data(a)
 {
+	set_depth(-1000);
 }
 
 void draw_text::draw(SDL_Renderer* renderer, camera* cam)
