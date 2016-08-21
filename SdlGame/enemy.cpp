@@ -232,22 +232,15 @@ point enemy::find_move_to(tile* t)
 	else //WE HAVE TO MOVE VERTICALLY!
 	{
 		tile *passage = nullptr;
-		if (where_to_go.y < 0)
-		{
-			if (m_currentTile->can_up(true)) result = { 0,-1 };
+		point direction = { 0, 
+			                where_to_go.y > 0 ? 1 : -1 
+		                  };
 
-			else
-			{
-				passage = find_closest_vertical_passage({ 0,-1 });
-			}
-		}
+		if (m_currentTile->can(direction, true)) 
+			result = direction;
 		else
 		{
-			if (m_currentTile->can_down(true)) result = { 0,1 };
-			else
-			{
-				passage = find_closest_vertical_passage({ 0,1 });
-			}
+			passage = find_closest_vertical_passage(direction);
 		}
 
 		if (passage != nullptr)
