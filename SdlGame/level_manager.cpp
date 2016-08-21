@@ -4,6 +4,7 @@
 #include "scene.h"
 #include "text_render.h"
 #include "title_screen.h"
+#include <sstream>
 #include "ui.h"
 
 std::vector<std::string> level_manager::filenames {"level_one.txt", "level_two.txt", "level_three.txt", "level_four.txt" };
@@ -11,6 +12,7 @@ std::vector<std::string> level_manager::filenames {"level_one.txt", "level_two.t
 bool level_manager::load_level(int id)
 {
 	m_atTitleScreen = false;
+	m_timeOfLevelLoad = 0;
 	engine::get_instance()->get_ui()->hide_title_screen();
 
 	if (current_level != nullptr)
@@ -19,12 +21,34 @@ bool level_manager::load_level(int id)
 	if (id >= filenames.size())
 		return false;
 
+	m_timeOfReset = 0;
+
 	file_reader_line_by_line *li = new file_reader_line_by_line(filenames[id]);
 	if (li->is_empty()) 
 		return false;
 
 	current_level = new level_grid(li, m_tilesize, this);
 	m_currentLevelID = id;
+
+	return true;
+}
+
+bool level_manager::load_level(int id, float delay)
+{
+	if (id >= filenames.size())
+		return load_level(id);
+
+	engine::get_instance()->get_ui()->hide_title_screen();
+	m_atTitleScreen = false;
+
+	close_level();
+	m_nextLevelLoadId = id;
+	m_timeOfLevelLoad = engine::get_time_from_start() + delay;
+
+	std::stringstream ss;
+	ss << "LEVEL " << id;
+
+	engine::get_instance()->get_ui()->set_score_text(ss.str());
 
 	return true;
 }
@@ -68,7 +92,8 @@ void level_manager::reset_level_after_time(float delay)
 bool level_manager::load_next_level()
 {
 	std::cout << "LOADING NEXT LEVEL\n";
-	return load_level(m_currentLevelID + 1);
+
+	return load_level(m_currentLevelID + 1, 1.f);
 }
 
 void level_manager::update()
@@ -78,7 +103,7 @@ void level_manager::update()
 		engine::get_instance()->get_ui()->set_score_text("PRESS 'ENTER' TO START");
 
 		if (engine::get_instance()->get_input()->get_key_down(SDLK_RETURN))
-			load_level(1);
+			load_level(1, 1.f);
 	} else
 	{
 		hero *he = nullptr;
@@ -112,6 +137,11 @@ void level_manager::update()
 		if (m_timeOfExit != 0 && m_timeOfExit < engine::get_time_from_start())
 		{
 			m_finished = true;
+		}
+
+		if (m_timeOfLevelLoad != 0 && m_timeOfLevelLoad < engine::get_time_from_start())
+		{
+			load_level(m_nextLevelLoadId);
 		}
 	}
 }

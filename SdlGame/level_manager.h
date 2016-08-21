@@ -20,6 +20,9 @@ private:
 	float m_timeOfReset = 0;
 	float m_timeOfExit = 0;
 
+	float m_timeOfLevelLoad = 0;
+	float m_nextLevelLoadId = 0;
+
 	bool m_finished = false;
 
 public:
@@ -32,6 +35,9 @@ public:
 
 	///<summary> Loads new level with given id. If level with this id doesn't exist, it returns false. </summary>
 	bool load_level(int id);
+
+	bool load_level(int id, float delay);
+
 	///<summary> Unloads current level. If no level is loaded, it returns false. </summary>
 	bool close_level();
 	///<summary> Resets current level. If no level is loaded, it returns false. </summary>
