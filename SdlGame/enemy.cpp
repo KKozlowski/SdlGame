@@ -7,7 +7,6 @@
 
 void enemy::set_current_tile(tile* t)
 {
-
 	if (m_fellIntoTrap)
 	{
 		if (m_gettingOutOfTrap)
@@ -270,6 +269,7 @@ enemy::enemy(tile* start_tile, level_grid* lg)
 	:tile_traveller(lg, 1.5f)
 {
 	m_levelgrid = lg;
+
 	draw_texture *dt = new draw_texture(this, "enemy.png");
 	dt->set_width_height(lg->get_tilesize(), lg->get_tilesize());
 	dt->centered = true;
@@ -281,35 +281,37 @@ enemy::enemy(tile* start_tile, level_grid* lg)
 
 enemy::~enemy()
 {
+	//Clearing the trap you are in
 	if (trap_tile != nullptr && trap_tile->enemy_in_the_hole == this)
 		trap_tile->enemy_in_the_hole = nullptr;
-
 }
 
 void enemy::update(){
+	if (m_levelgrid == nullptr) 
+		return;
 
-	//if (!m_gettingOutOfTrap && m_currentTile->is_death_trap())
-	//{
-	//	die();
-	//	return;
-	//}
-
-	if (m_levelgrid == nullptr) return;
 	hero *he = m_levelgrid->get_hero();
 	
+	//KILLING HERO
 	if ((get_transform()->position - he->get_transform()->position).length() < m_killingRange*m_levelgrid->get_tilesize())
 	{
 		he->die();
 	}
 
+	//CONTINUING MOVEMENT
 	m_movementProgress += m_movementSpeed * engine::get_delta_time();
-	if (m_movementProgress >= 1 && m_destinationTile != nullptr) {
+
+	if (m_movementProgress >= 1 && m_destinationTile != nullptr) 
+	{
 		set_current_tile(m_destinationTile);
+
 		if (!m_fellIntoTrap && !m_gettingOutOfTrap)
 			set_destination_tile(m_currentTile->get_neighbor(m_previousDirection));
+
 		get_transform()->position = m_currentTile->get_transform()->position;
 	}
 
+	// *LERPING BETWEEN CURRENT AND DESTINATION TILES
 	if (m_destinationTile != nullptr)
 	{
 		get_transform()->position = tile::position_lerp(m_currentTile, m_destinationTile, m_movementProgress);
@@ -317,19 +319,25 @@ void enemy::update(){
 
 	if (m_fellIntoTrap)
 	{
+		//Checking if I can go out of trap yet
 		if (engine::get_time_from_start() > m_unstunTime)
 			get_out_of_trap();
 	}
 	else if (!m_gettingOutOfTrap)
 	{
+		//Looking for a right move to get to the hero position
 		tile *hero_tile = he->get_current_tile();
 		point dir = find_move_to(hero_tile);
 
 		tile * new_destination = m_currentTile->get_neighbor(dir);
 
-		if (dir * m_previousDirection == point())
+
+		point zero(0, 0);
+
+		//Handling direction change
+		if (dir * m_previousDirection == zero) //Complete change
 			m_movementProgress = 0;
-		else if (m_destinationTile != new_destination && dir * m_previousDirection != point())
+		else if (m_destinationTile != new_destination && dir * m_previousDirection != zero) //Direction changed, but not the axis
 		{
 			m_movementProgress = -m_movementProgress;
 		}
