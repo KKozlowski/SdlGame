@@ -193,8 +193,14 @@ point hero::move_down()
 		else if (position.y < current_tile_position.y || m_currentTile->can_down())
 		{
 			set_direction(result = { 0,1 });
+
 			if (m_destinationTile->is_empty())
-				m_falling = true;
+			{
+				if (m_currentTile->get_type() != tile_type::ladder    
+					|| (m_currentTile->get_type() == tile_type::ladder  //Special case for falling down the last step of the ladder
+						&& can_jump_to_destination()))
+					m_falling = true;
+			}
 		}
 	}
 	return result;
